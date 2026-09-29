@@ -11,7 +11,12 @@ config_version=5
 [application]
 
 config/name="PogoPete"
-config/features=PackedStringArray("4.7", "GL Compatibility")
+run/main_scene="uid://byy7le0385u7q"
+config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
+
+[autoload]
+
+PokiSDK="*uid://c72j1j6g10y8w"
 
 [display]
 
@@ -21,6 +26,10 @@ window/stretch/aspect="expand"
 [dotnet]
 
 project/assembly_name="PogoPete"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/poki-sdk/plugin.cfg")
 
 [physics]
 
