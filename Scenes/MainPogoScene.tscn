@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://cjkboxom1btjl"]
+
+[ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://character_body_2d.gd" id="1_4gny4"]
+[ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://PogoSheet.png" id="2_d1i6h"]
+[ext_resource type="Script" uid="uid://b167cj5qxlc4i" path="res://Scenes/color_rect.gd" id="3_dyi31"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pkxqk"]
+size = Vector2(185, 528)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dyi31"]
+atlas = ExtResource("2_d1i6h")
+region = Rect2(30, 121, 195, 588)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_34170"]
+atlas = ExtResource("2_d1i6h")
+region = Rect2(225, 121, 195, 588)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ci86"]
+atlas = ExtResource("2_d1i6h")
+region = Rect2(420, 121, 195, 588)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xlgu7"]
+atlas = ExtResource("2_d1i6h")
+region = Rect2(615, 121, 195, 588)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lglm"]
+atlas = ExtResource("2_d1i6h")
+region = Rect2(810, 121, 195, 588)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wqcyg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dyi31")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_34170")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ci86")
+}],
+"loop": 0,
+"name": &"charge",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dyi31")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xlgu7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5lglm")
+}],
+"loop": 0,
+"name": &"jump",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kfot5"]
+size = Vector2(4498.5, 58.5)
+
+[node name="Node2D" type="Node2D" unique_id=1397552547]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1333437535]
+script = ExtResource("1_4gny4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=885882796]
+position = Vector2(-9.5, -1)
+shape = SubResource("RectangleShape2D_pkxqk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1463111871]
+position = Vector2(-6, 23)
+sprite_frames = SubResource("SpriteFrames_wqcyg")
+animation = &"jump"
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=824016962]
+zoom = Vector2(0.5, 0.5)
+position_smoothing_enabled = true
+
+[node name="Ground" type="StaticBody2D" parent="." unique_id=730497362]
+position = Vector2(118, 454)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=216586502]
+shape = SubResource("RectangleShape2D_kfot5")
+
+[node name="ColorRect" type="ColorRect" parent="Ground" unique_id=382040681]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 1, 0, 1)
+script = ExtResource("3_dyi31")
