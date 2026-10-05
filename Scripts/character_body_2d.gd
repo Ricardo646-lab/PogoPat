@@ -111,3 +111,10 @@ func respawn() -> void:
 	velocity = Vector2.ZERO
 	is_charging = false
 	current_jump_charge = 0.0
+
+
+func _on_finish_button_body_entered(body: Node2D) -> void:
+	# Controleer of het daadwerkelijk de speler is die de knop raakt
+	if body.is_in_group("Player") or body is CharacterBody2D:
+		# Laad het volgende level (pas het pad aan naar jouw MapScene2.tscn)
+		get_tree().change_scene_to_file("res://Scenes/MapScene2.tscn")
