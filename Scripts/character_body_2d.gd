@@ -23,6 +23,11 @@ var is_charging = false
 # --- animations ---
 @onready var anim_sprite = $AnimatedSprite2D
 
+func _ready():
+	# Vertel Poki dat de actie begint zodra het level is ingeladen
+	if has_node("/root/PokiSDK"):
+		get_node("/root/PokiSDK").call("gameplayStart")
+
 func _physics_process(delta):
 	# 1. Zwaartekracht toepassen (als speler in de lucht is)
 	if not is_on_floor():
@@ -107,13 +112,26 @@ func check_trap_collision() -> void:
 					respawn()
 
 func respawn() -> void:
+	# 1. Speler is af: Stop Poki gameplay
+	if has_node("/root/PokiSDK"):
+		get_node("/root/PokiSDK").call("gameplayStop")
+		
+	# 2. Reset de positie en status van de speler
 	global_position = spawn_position
 	velocity = Vector2.ZERO
 	is_charging = false
 	current_jump_charge = 0.0
+	
+	# 3. Speler is gerespawned en klaar om weer te spelen: Start Poki gameplay
+	if has_node("/root/PokiSDK"):
+		get_node("/root/PokiSDK").call("gameplayStart")
 
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
 	if body == self or body is CharacterBody2D:
+		# Level is gehaald! Stop de actie.
+		if has_node("/root/PokiSDK"):
+			get_node("/root/PokiSDK").call("gameplayStop")
+			
 		# Gebruik call_deferred om de scene veilig te wisselen na het physics-frame
 		get_tree().call_deferred("change_scene_to_file", "res://Scenes/MapScene2.tscn")

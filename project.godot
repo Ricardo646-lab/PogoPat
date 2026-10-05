@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="PogoPete"
-run/main_scene="uid://cjkboxom1btjl"
+run/main_scene="uid://dgqfx6ovlrb0s"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [autoload]
