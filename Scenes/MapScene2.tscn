@@ -568,3 +568,5 @@ position = Vector2(5665, 515)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FinishButton" unique_id=398881668]
 position = Vector2(5.5, 5)
 shape = SubResource("RectangleShape2D_bh87f")
+
+[connection signal="body_entered" from="FinishButton" to="Player" method="_on_finish_button_body_entered"]

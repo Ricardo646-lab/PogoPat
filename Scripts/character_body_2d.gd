@@ -114,7 +114,6 @@ func respawn() -> void:
 
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
-	# Controleer of het daadwerkelijk de speler is die de knop raakt
-	if body.is_in_group("Player") or body is CharacterBody2D:
-		# Laad het volgende level (pas het pad aan naar jouw MapScene2.tscn)
-		get_tree().change_scene_to_file("res://Scenes/MapScene2.tscn")
+	if body == self or body is CharacterBody2D:
+		# Gebruik call_deferred om de scene veilig te wisselen na het physics-frame
+		get_tree().call_deferred("change_scene_to_file", "res://Scenes/MapScene2.tscn")
