@@ -6,13 +6,13 @@ extends CharacterBody2D
 # --- Gravity ---
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-# --- speed & movement ---
-@export var move_speed = 500.0        # Topspeed in air
+# --- Speed & Movement ---
+@export var move_speed = 500.0        # Top speed in the air
 @export var air_acceleration = 2000.0 
 @export var air_friction = 400.0      
-@export var ground_friction = 3000.0  # braking on the ground 
+@export var ground_friction = 3000.0  # Braking force on the ground 
 
-# --- jumping ---
+# --- Jumping ---
 @export var min_jump_force = -300.0
 @export var max_jump_force = -1000.0
 @export var charge_rate = 1200.0     
@@ -20,24 +20,28 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var current_jump_charge = 0.0
 var is_charging = false
 
-# --- animations ---
+# --- Animations ---
 @onready var anim_sprite = $AnimatedSprite2D
 
 func _ready():
-	# Vertel Poki dat de actie begint zodra het level is ingeladen
+	# Tell Poki that the game has finished loading (hides the Poki loading screen)
 	if has_node("/root/PokiSDK"):
-		get_node("/root/PokiSDK").call("gameplayStart")
+		var poki = get_node("/root/PokiSDK")
+		poki.call("gameLoadingFinished")
+		
+		# Tell Poki that the gameplay action is starting
+		poki.call("gameplayStart")
 
 func _physics_process(delta):
-	# 1. Zwaartekracht toepassen (als speler in de lucht is)
+	# 1. Apply gravity (if the player is in the air)
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# 2.Behavior on ground
+	# 2. Behavior on the ground
 	if is_on_floor():
 		velocity.x = move_toward(velocity.x, 0, ground_friction * delta)
 		
-		# Start Charging
+		# Start charging the jump
 		if Input.is_action_just_pressed("charge_jump"):
 			is_charging = true
 			current_jump_charge = min_jump_force
@@ -69,9 +73,9 @@ func _physics_process(delta):
 			# No input, apply air friction to slow down
 			velocity.x = move_toward(velocity.x, 0, air_friction * delta)
 
-	# 4. playing animations based on state
+	# 4. Play animations based on state
 	if not is_on_floor():
-		# In air play jump animation
+		# In the air, play the jump animation
 		if anim_sprite.animation != "jump":
 			anim_sprite.play("jump")
 	elif is_charging:
@@ -83,10 +87,10 @@ func _physics_process(delta):
 		if anim_sprite.animation != "idle":
 			anim_sprite.play("idle")
 
-	# 5. apply the calculated velocity to the character
+	# 5. Apply the calculated velocity to the character
 	move_and_slide()
 
-	# 6. Check for trap tiles (Methode 2)
+	# 6. Check for trap tiles (Method 2)
 	check_trap_collision()
 
 func check_trap_collision() -> void:
@@ -97,13 +101,13 @@ func check_trap_collision() -> void:
 		if collider is TileMapLayer:
 			var tile_map: TileMapLayer = collider
 			
-			# 1. Bepaal het exacte botsingspunt in het level
+			# 1. Determine the exact collision point in the level
 			var collision_point = collision.get_position() - (collision.get_normal() * 4.0)
 			
-			# 2. Zet de wereldpositie om naar tegelcoördinaten (Vector2i)
+			# 2. Convert world position to tilemap coordinates (Vector2i)
 			var tile_pos: Vector2i = tile_map.local_to_map(tile_map.to_local(collision_point))
 			
-			# 3. Haal de tegeldata op van dat specifieke vakje
+			# 3. Retrieve tile data for that specific cell
 			var tile_data = tile_map.get_cell_tile_data(tile_pos)
 			
 			if tile_data:
@@ -112,26 +116,26 @@ func check_trap_collision() -> void:
 					respawn()
 
 func respawn() -> void:
-	# 1. Speler is af: Stop Poki gameplay
+	# 1. Player died: Stop Poki gameplay tracking
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
 		
-	# 2. Reset de positie en status van de speler
+	# 2. Reset the player's position and status
 	global_position = spawn_position
 	velocity = Vector2.ZERO
 	is_charging = false
 	current_jump_charge = 0.0
 	
-	# 3. Speler is gerespawned en klaar om weer te spelen: Start Poki gameplay
+	# 3. Player respawned and ready to play: Start Poki gameplay tracking
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStart")
 
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
 	if body == self or body is CharacterBody2D:
-		# Level is gehaald! Stop de actie.
+		# Level completed! Stop gameplay tracking.
 		if has_node("/root/PokiSDK"):
 			get_node("/root/PokiSDK").call("gameplayStop")
 			
-		# Gebruik call_deferred om de scene veilig te wisselen na het physics-frame
+		# Use call_deferred to safely change the scene after the physics frame
 		get_tree().call_deferred("change_scene_to_file", "res://Scenes/MapScene2.tscn")
