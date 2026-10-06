@@ -24,13 +24,13 @@ var is_charging = false
 @onready var anim_sprite = $AnimatedSprite2D
 
 func _ready():
-	# Tell Poki that the game has finished loading (hides the Poki loading screen)
 	if has_node("/root/PokiSDK"):
+		print("SUCCES: PokiSDK is gevonden door Godot!")
 		var poki = get_node("/root/PokiSDK")
 		poki.call("gameLoadingFinished")
-		
-		# Tell Poki that the gameplay action is starting
 		poki.call("gameplayStart")
+	else:
+		print("FOUT: Godot kan /root/PokiSDK niet vinden!")
 
 func _physics_process(delta):
 	# 1. Apply gravity (if the player is in the air)
