@@ -3,6 +3,10 @@
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="1_lngpp"]
 [ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://PogoSheet.png" id="2_8xbvk"]
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="3_su3qq"]
+[ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_g2h7k"]
+[ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_dvbhf"]
+[ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_rr44d"]
+[ext_resource type="Texture2D" uid="uid://c82uy32ikc6q5" path="res://Sprites/pausebutton.png" id="7_dvbhf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("3_su3qq")
@@ -536,6 +540,18 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rr44d"]
+size = Vector2(350, 350)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vu3t0"]
+size = Vector2(350, 350)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aspjn"]
+size = Vector2(350, 350)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w2ktw"]
+size = Vector2(450, 450)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o4ewx"]
 size = Vector2(65, 80)
 
@@ -566,9 +582,39 @@ position_smoothing_enabled = true
 
 [node name="StartLabel" type="Label" parent="Player/CanvasLayer" unique_id=1356661909]
 unique_name_in_owner = true
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = -1002.0
+offset_top = -406.0
+offset_right = -904.0
+offset_bottom = -383.0
 text = "Click to start"
+metadata/_edit_use_anchors_ = true
+
+[node name="ButtonLeft" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=255186559]
+position = Vector2(-1210, 252.00002)
+scale = Vector2(0.6956522, 0.7514232)
+texture_normal = ExtResource("4_g2h7k")
+shape = SubResource("RectangleShape2D_rr44d")
+action = "move_left"
+
+[node name="ButtonRight" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=428470084]
+position = Vector2(-942, 260)
+scale = Vector2(0.73064685, 0.7267552)
+texture_normal = ExtResource("5_dvbhf")
+shape = SubResource("RectangleShape2D_vu3t0")
+action = "move_right"
+
+[node name="ButtonJump" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=1006879024]
+position = Vector2(497.00003, 247)
+scale = Vector2(0.69034994, 0.7457306)
+texture_normal = ExtResource("6_rr44d")
+shape = SubResource("RectangleShape2D_aspjn")
+action = "charge_jump"
+
+[node name="ButtonPause" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=679008150]
+position = Vector2(981, -648.99994)
+scale = Vector2(0.21392405, 0.282)
+texture_normal = ExtResource("7_dvbhf")
+shape = SubResource("RectangleShape2D_w2ktw")
 
 [node name="FinishButton" type="Area2D" parent="." unique_id=1415671248]
 position = Vector2(5665, 515)

@@ -4,7 +4,7 @@ extends CharacterBody2D
 @onready var spawn_position: Vector2 = global_position
 
 # --- Game State ---
-var has_started: bool = false # Tracks if the player has clicked to start
+var has_started: bool = false # Tracks if the player has clicked/tapped to start
 
 # --- Gravity ---
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -25,31 +25,62 @@ var is_charging = false
 
 # --- Animations & UI ---
 @onready var anim_sprite = $AnimatedSprite2D
-@onready var start_label = %StartLabel
+@onready var start_label = get_node_or_null("%StartLabel") # Crash-proof label check
 
 func _ready():
+	if start_label:
+		start_label.text = "Click to start"
+
+	# --- HIDE MOBILE BUTTONS ON DESKTOP ---
+	var is_mobile = OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("android") or OS.has_feature("ios")
+	
+	if not is_mobile:
+		var canvas = get_node_or_null("CanvasLayer")
+		if canvas:
+			if canvas.has_node("ButtonLeft"): canvas.get_node("ButtonLeft").hide()
+			if canvas.has_node("ButtonRight"): canvas.get_node("ButtonRight").hide()
+			if canvas.has_node("ButtonJump"): canvas.get_node("ButtonJump").hide()
+			if canvas.has_node("ButtonPause"): canvas.get_node("ButtonPause").hide()
+
+	# Tell Poki that the game has finished loading
 	if has_node("/root/PokiSDK"):
-		print("SUCCESS: PokiSDK found by Godot!")
 		var poki = get_node("/root/PokiSDK")
-		# 1. Tell Poki that the game has finished loading
 		poki.call("gameLoadingFinished")
-		# We DO NOT call gameplayStart here anymore!
 
 	# Make sure the player is in the idle animation while waiting
 	anim_sprite.play("idle")
 
-# Listen for a mouse click (or screen tap) to start playing
+# Listen for a mouse click or screen tap to start/resume, or ESC/Pause button to pause
 func _input(event):
-	if not has_started and event is InputEventMouseButton and event.pressed:
+	# 1. Pause with the Escape key or mobile Pause button (ui_cancel)
+	if has_started and event.is_action_pressed("ui_cancel"):
+		pause_game()
+		return
+		
+	# 2. Start or resume with a mouse click or screen touch
+	var is_click = event is InputEventMouseButton and event.pressed
+	var is_touch = event is InputEventScreenTouch and event.pressed
+	
+	if not has_started and (is_click or is_touch):
 		has_started = true
 		
 		# Hide the start text
 		if start_label:
 			start_label.hide()
 			
-		# 2. Now that the player has interacted, start the gameplay tracking
+		# Start the Poki gameplay tracking
 		if has_node("/root/PokiSDK"):
 			get_node("/root/PokiSDK").call("gameplayStart")
+
+# Function to pause the game and stop Poki tracking
+func pause_game():
+	has_started = false
+	if start_label:
+		start_label.text = "Paused! Click to resume"
+		start_label.show()
+		
+	if has_node("/root/PokiSDK"):
+		get_node("/root/PokiSDK").call("gameplayStop")
 
 func _physics_process(delta):
 	# Freeze all physics and movement if the game hasn't started yet
@@ -113,30 +144,29 @@ func _physics_process(delta):
 	# 5. Apply the calculated velocity to the character
 	move_and_slide()
 
-	# 6. Check for trap tiles (Method 2)
+	# 6. Check for trap tiles
 	check_trap_collision()
 
 func check_trap_collision() -> void:
+	# Do not check for traps if we are already dead or paused
+	if not has_started:
+		return
+		
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
 		
 		if collider is TileMapLayer:
 			var tile_map: TileMapLayer = collider
-			
-			# 1. Determine the exact collision point in the level
 			var collision_point = collision.get_position() - (collision.get_normal() * 4.0)
-			
-			# 2. Convert world position to tilemap coordinates (Vector2i)
 			var tile_pos: Vector2i = tile_map.local_to_map(tile_map.to_local(collision_point))
-			
-			# 3. Retrieve tile data for that specific cell
 			var tile_data = tile_map.get_cell_tile_data(tile_pos)
 			
 			if tile_data:
 				var is_trap_value = tile_data.get_custom_data("is_trap")
 				if is_trap_value == true:
 					respawn()
+					break # Ensures respawn triggers only once per frame
 
 func respawn() -> void:
 	# 1. Player died: Stop Poki gameplay tracking
@@ -152,6 +182,7 @@ func respawn() -> void:
 	# 3. Reset the game state so the player has to click again to continue
 	has_started = false
 	if start_label:
+		start_label.text = "Click to start"
 		start_label.show()
 	anim_sprite.play("idle")
 
