@@ -3,6 +3,9 @@ extends CharacterBody2D
 # --- Spawn / Checkpoint ---
 @onready var spawn_position: Vector2 = global_position
 
+# --- Game State ---
+var has_started: bool = false # Tracks if the player has clicked to start
+
 # --- Gravity ---
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -20,19 +23,39 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var current_jump_charge = 0.0
 var is_charging = false
 
-# --- Animations ---
+# --- Animations & UI ---
 @onready var anim_sprite = $AnimatedSprite2D
+@onready var start_label = %StartLabel
 
 func _ready():
 	if has_node("/root/PokiSDK"):
-		print("SUCCES: PokiSDK is gevonden door Godot!")
+		print("SUCCESS: PokiSDK found by Godot!")
 		var poki = get_node("/root/PokiSDK")
+		# 1. Tell Poki that the game has finished loading
 		poki.call("gameLoadingFinished")
-		poki.call("gameplayStart")
-	else:
-		print("FOUT: Godot kan /root/PokiSDK niet vinden!")
+		# We DO NOT call gameplayStart here anymore!
+
+	# Make sure the player is in the idle animation while waiting
+	anim_sprite.play("idle")
+
+# Listen for a mouse click (or screen tap) to start playing
+func _input(event):
+	if not has_started and event is InputEventMouseButton and event.pressed:
+		has_started = true
+		
+		# Hide the start text
+		if start_label:
+			start_label.hide()
+			
+		# 2. Now that the player has interacted, start the gameplay tracking
+		if has_node("/root/PokiSDK"):
+			get_node("/root/PokiSDK").call("gameplayStart")
 
 func _physics_process(delta):
+	# Freeze all physics and movement if the game hasn't started yet
+	if not has_started:
+		return
+
 	# 1. Apply gravity (if the player is in the air)
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -126,10 +149,11 @@ func respawn() -> void:
 	is_charging = false
 	current_jump_charge = 0.0
 	
-	# 3. Player respawned and ready to play: Start Poki gameplay tracking
-	if has_node("/root/PokiSDK"):
-		get_node("/root/PokiSDK").call("gameplayStart")
-
+	# 3. Reset the game state so the player has to click again to continue
+	has_started = false
+	if start_label:
+		start_label.show()
+	anim_sprite.play("idle")
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
 	if body == self or body is CharacterBody2D:

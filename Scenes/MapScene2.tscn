@@ -562,6 +562,15 @@ animation = &"jump"
 zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
 
+[node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=796430538]
+
+[node name="StartLabel" type="Label" parent="Player/CanvasLayer" unique_id=1786455929]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Click to start"
+metadata/_edit_use_anchors_ = true
+
 [node name="FinishButton" type="Area2D" parent="." unique_id=1566010786]
 position = Vector2(5665, 515)
 
