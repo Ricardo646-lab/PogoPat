@@ -192,5 +192,25 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 		if has_node("/root/PokiSDK"):
 			get_node("/root/PokiSDK").call("gameplayStop")
 			
-		# Use call_deferred to safely change the scene after the physics frame
-		get_tree().call_deferred("change_scene_to_file", "res://Scenes/MapScene2.tscn")
+		# 1. Haal het pad van de huidige scene op (bijv. "res://Scenes/Level1.tscn")
+		var current_scene_path: String = get_tree().current_scene.scene_file_path
+		
+		# 2. Haal het cijfer op uit de bestandsnaam
+		var regex = RegEx.new()
+		regex.compile("\\d+") # Zoekt naar het nummer in de naam
+		var result = regex.search(current_scene_path)
+		
+		if result:
+			var current_level_num: int = result.get_string().to_int()
+			var next_level_num: int = current_level_num + 1
+			
+			# 3. Bouw het nieuwe pad op met "Level"
+			var next_scene_path: String = "res://Scenes/Level" + str(next_level_num) + ".tscn"
+			
+			# 4. Check of het volgende level bestaat
+			if ResourceLoader.exists(next_scene_path):
+				get_tree().call_deferred("change_scene_to_file", next_scene_path)
+			else:
+				# Geen volgend level meer? Reset en ga terug naar Level 1!
+				print("Alle levels gehaald! Herstarten vanaf Level 1.")
+				get_tree().call_deferred("change_scene_to_file", "res://Scenes/Level1.tscn")

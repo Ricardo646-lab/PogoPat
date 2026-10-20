@@ -3,6 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_ms0wi"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_5awjf"]
 [ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://PogoSheet.png" id="3_n3cqh"]
+[ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_ehjmi"]
+[ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_p4u3k"]
+[ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_70df5"]
+[ext_resource type="Texture2D" uid="uid://c82uy32ikc6q5" path="res://Sprites/pausebutton.png" id="7_ejprb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_ms0wi")
@@ -536,10 +540,22 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_au75x"]
+size = Vector2(350, 350)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_62f1r"]
+size = Vector2(350, 350)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1je60"]
+size = Vector2(350, 350)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ycmr1"]
+size = Vector2(450, 450)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o4ewx"]
 size = Vector2(65, 80)
 
-[node name="Node2D" type="Node2D" unique_id=1397552547]
+[node name="Node2D2" type="Node2D" unique_id=1397552547]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1043154353]
 position = Vector2(-6, 0)
@@ -562,6 +578,74 @@ animation = &"jump"
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=824016962]
 zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=1057723827]
+
+[node name="StartLabel" type="Label" parent="Player/CanvasLayer" unique_id=750291594]
+unique_name_in_owner = true
+offset_left = -1002.0
+offset_top = -406.0
+offset_right = -904.0
+offset_bottom = -383.0
+text = "Click to start"
+metadata/_edit_use_anchors_ = true
+
+[node name="AnchorLinksonder" type="Control" parent="Player/CanvasLayer" unique_id=1359891108]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="ButtonLeft" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorLinksonder" unique_id=98061464]
+position = Vector2(-28.999998, -156)
+scale = Vector2(0.371, 0.4)
+texture_normal = ExtResource("4_ehjmi")
+shape = SubResource("RectangleShape2D_au75x")
+action = "move_left"
+
+[node name="ButtonRight" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorLinksonder" unique_id=112458681]
+position = Vector2(120.99999, -157)
+scale = Vector2(0.37115592, 0.40000007)
+texture_normal = ExtResource("5_p4u3k")
+shape = SubResource("RectangleShape2D_62f1r")
+action = "move_right"
+
+[node name="AnchorRechtsonder" type="Control" parent="Player/CanvasLayer" unique_id=1235198808]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="ButtonJump" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorRechtsonder" unique_id=1740992528]
+position = Vector2(-273.00003, -162)
+scale = Vector2(0.33404028, 0.37950668)
+texture_normal = ExtResource("6_70df5")
+shape = SubResource("RectangleShape2D_1je60")
+action = "charge_jump"
+
+[node name="AnchorRechtsboven" type="Control" parent="Player/CanvasLayer" unique_id=1103879050]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="ButtonPause" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorRechtsboven" unique_id=1496639810]
+position = Vector2(-16.000011, -1)
+scale = Vector2(0.06962024, 0.0910816)
+texture_normal = ExtResource("7_ejprb")
+shape = SubResource("RectangleShape2D_ycmr1")
 
 [node name="FinishButton" type="Area2D" parent="." unique_id=1415671248]
 position = Vector2(2300, -959)
