@@ -540,6 +540,9 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dvbhf"]
+size = Vector2(350, 350)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rr44d"]
 size = Vector2(350, 350)
 
@@ -547,9 +550,6 @@ size = Vector2(350, 350)
 size = Vector2(350, 350)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aspjn"]
-size = Vector2(350, 350)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_w2ktw"]
 size = Vector2(450, 450)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o4ewx"]
@@ -589,32 +589,62 @@ offset_bottom = -383.0
 text = "Click to start"
 metadata/_edit_use_anchors_ = true
 
-[node name="ButtonLeft" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=255186559]
-position = Vector2(-1210, 252.00002)
-scale = Vector2(0.6956522, 0.7514232)
+[node name="AnchorLinksonder" type="Control" parent="Player/CanvasLayer" unique_id=1970998114]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="ButtonLeft" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorLinksonder" unique_id=89689068]
+position = Vector2(-28.999998, -156)
+scale = Vector2(0.371, 0.4)
 texture_normal = ExtResource("4_g2h7k")
-shape = SubResource("RectangleShape2D_rr44d")
+shape = SubResource("RectangleShape2D_dvbhf")
 action = "move_left"
 
-[node name="ButtonRight" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=428470084]
-position = Vector2(-942, 260)
-scale = Vector2(0.73064685, 0.7267552)
+[node name="ButtonRight" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorLinksonder" unique_id=1795657639]
+position = Vector2(120.99999, -157)
+scale = Vector2(0.37115592, 0.40000007)
 texture_normal = ExtResource("5_dvbhf")
-shape = SubResource("RectangleShape2D_vu3t0")
+shape = SubResource("RectangleShape2D_rr44d")
 action = "move_right"
 
-[node name="ButtonJump" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=1006879024]
-position = Vector2(497.00003, 247)
-scale = Vector2(0.69034994, 0.7457306)
+[node name="AnchorRechtsonder" type="Control" parent="Player/CanvasLayer" unique_id=888930017]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="ButtonJump" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorRechtsonder" unique_id=496020955]
+position = Vector2(-273.00003, -162)
+scale = Vector2(0.33404028, 0.37950668)
 texture_normal = ExtResource("6_rr44d")
-shape = SubResource("RectangleShape2D_aspjn")
+shape = SubResource("RectangleShape2D_vu3t0")
 action = "charge_jump"
 
-[node name="ButtonPause" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=679008150]
-position = Vector2(981, -648.99994)
-scale = Vector2(0.21392405, 0.282)
+[node name="AnchorRechtsboven" type="Control" parent="Player/CanvasLayer" unique_id=1148154431]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="ButtonPause" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorRechtsboven" unique_id=1678491176]
+position = Vector2(-16.000011, -1)
+scale = Vector2(0.06962024, 0.0910816)
 texture_normal = ExtResource("7_dvbhf")
-shape = SubResource("RectangleShape2D_w2ktw")
+shape = SubResource("RectangleShape2D_aspjn")
 
 [node name="FinishButton" type="Area2D" parent="." unique_id=1415671248]
 position = Vector2(5665, 515)

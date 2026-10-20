@@ -37,10 +37,10 @@ func _ready():
 	if not is_mobile:
 		var canvas = get_node_or_null("CanvasLayer")
 		if canvas:
-			if canvas.has_node("ButtonLeft"): canvas.get_node("ButtonLeft").hide()
-			if canvas.has_node("ButtonRight"): canvas.get_node("ButtonRight").hide()
-			if canvas.has_node("ButtonJump"): canvas.get_node("ButtonJump").hide()
-			if canvas.has_node("ButtonPause"): canvas.get_node("ButtonPause").hide()
+			# Verberg de complete anker-mappen (en daarmee dus ook de knoppen die erin zitten)
+			if canvas.has_node("AnchorLinksonder"): canvas.get_node("AnchorLinksonder").hide()
+			if canvas.has_node("AnchorRechtsonder"): canvas.get_node("AnchorRechtsonder").hide()
+			if canvas.has_node("AnchorRechtsboven"): canvas.get_node("AnchorRechtsboven").hide()
 
 	# Tell Poki that the game has finished loading
 	if has_node("/root/PokiSDK"):

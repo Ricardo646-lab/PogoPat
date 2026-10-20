@@ -589,30 +589,61 @@ offset_bottom = -501.0
 text = "Click to start"
 metadata/_edit_use_anchors_ = true
 
-[node name="ButtonLeft" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=1155871698]
-position = Vector2(-1210, 252.00002)
-scale = Vector2(0.6956522, 0.7514232)
+[node name="AnchorLinksonder" type="Control" parent="Player/CanvasLayer" unique_id=475524107]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="ButtonLeft" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorLinksonder" unique_id=1155871698]
+position = Vector2(-28.999998, -156)
+scale = Vector2(0.371, 0.4)
 texture_normal = ExtResource("4_56h5r")
 shape = SubResource("RectangleShape2D_56h5r")
 action = "move_left"
 
-[node name="ButtonRight" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=370745570]
-position = Vector2(-942, 260)
-scale = Vector2(0.73064685, 0.7267552)
+[node name="ButtonRight" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorLinksonder" unique_id=370745570]
+position = Vector2(120.99999, -157)
+scale = Vector2(0.37115592, 0.40000007)
 texture_normal = ExtResource("5_p5ptc")
 shape = SubResource("RectangleShape2D_p5ptc")
 action = "move_right"
 
-[node name="ButtonJump" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=1286305373]
-position = Vector2(497.00003, 247)
-scale = Vector2(0.69034994, 0.7457306)
+[node name="AnchorRechtsonder" type="Control" parent="Player/CanvasLayer" unique_id=2047561760]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="ButtonJump" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorRechtsonder" unique_id=1286305373]
+position = Vector2(-273.00003, -162)
+scale = Vector2(0.33404028, 0.37950668)
 texture_normal = ExtResource("6_737bs")
 shape = SubResource("RectangleShape2D_737bs")
 action = "charge_jump"
 
-[node name="ButtonPause" type="TouchScreenButton" parent="Player/CanvasLayer" unique_id=1184408969]
-position = Vector2(981, -648.99994)
-scale = Vector2(0.21392405, 0.282)
+[node name="AnchorRechtsboven" type="Control" parent="Player/CanvasLayer" unique_id=987593027]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="ButtonPause" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorRechtsboven" unique_id=1184408969]
+position = Vector2(-16.000011, -1)
+scale = Vector2(0.06962024, 0.0910816)
 texture_normal = ExtResource("7_p5ptc")
 shape = SubResource("RectangleShape2D_kfot5")
 
