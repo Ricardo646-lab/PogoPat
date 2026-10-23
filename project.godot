@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="PogoPete"
+config/name="PogoPat"
 run/main_scene="uid://0rr5kof28ufw"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
