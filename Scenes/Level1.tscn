@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://b1tm7r4lv8v0a" path="res://Sprites/space_pressed_no_purple.png" id="9_06um6"]
 [ext_resource type="Texture2D" uid="uid://cim4aa6148wjn" path="res://Sprites/ArrowLeft.png" id="11_ubfni"]
 [ext_resource type="Texture2D" uid="uid://pwfjvyrar66w" path="res://Sprites/ArrowRight.png" id="12_ug0sv"]
+[ext_resource type="Texture2D" uid="uid://cwsdbux736q7c" path="res://Sprites/WallBackground.jpg" id="15_ubfni"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_joc8x")
@@ -714,5 +715,14 @@ position = Vector2(631, 271.99997)
 scale = Vector2(0.68785346, 0.62218535)
 sprite_frames = SubResource("SpriteFrames_06um6")
 autoplay = "default"
+
+[node name="Background" type="Parallax2D" parent="." unique_id=1421622748]
+z_index = -1
+scroll_scale = Vector2(0.3, 0.3)
+repeat_size = Vector2(1205, 880)
+repeat_times = 4
+
+[node name="WallImage" type="Sprite2D" parent="Background" unique_id=887304749]
+texture = ExtResource("15_ubfni")
 
 [connection signal="body_entered" from="FinishFlag" to="Player" method="_on_finish_button_body_entered"]
