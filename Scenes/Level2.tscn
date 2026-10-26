@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_ms0wi"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_5awjf"]
-[ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://PogoSheet.png" id="3_n3cqh"]
+[ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://Sprites/PogoSheet.png" id="3_n3cqh"]
 [ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_ehjmi"]
 [ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_p4u3k"]
 [ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_70df5"]
