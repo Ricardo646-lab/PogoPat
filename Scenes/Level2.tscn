@@ -583,15 +583,6 @@ position_smoothing_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=1057723827]
 
-[node name="StartLabel" type="Label" parent="Player/CanvasLayer" unique_id=750291594]
-unique_name_in_owner = true
-offset_left = -1002.0
-offset_top = -406.0
-offset_right = -904.0
-offset_bottom = -383.0
-text = "Click to start"
-metadata/_edit_use_anchors_ = true
-
 [node name="AnchorLinksonder" type="Control" parent="Player/CanvasLayer" unique_id=1359891108]
 layout_mode = 3
 anchors_preset = 2
@@ -600,6 +591,7 @@ anchor_bottom = 1.0
 offset_top = -40.0
 offset_right = 40.0
 grow_vertical = 0
+metadata/_edit_use_anchors_ = true
 
 [node name="ButtonLeft" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorLinksonder" unique_id=98061464]
 position = Vector2(-28.999998, -156)
@@ -626,6 +618,7 @@ offset_left = -40.0
 offset_top = -40.0
 grow_horizontal = 0
 grow_vertical = 0
+metadata/_edit_use_anchors_ = true
 
 [node name="ButtonJump" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorRechtsonder" unique_id=1740992528]
 position = Vector2(-273.00003, -162)
@@ -642,6 +635,7 @@ anchor_right = 1.0
 offset_left = -40.0
 offset_bottom = 40.0
 grow_horizontal = 0
+metadata/_edit_use_anchors_ = true
 
 [node name="ButtonPause" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorRechtsboven" unique_id=1496639810]
 position = Vector2(-16.000011, -1)

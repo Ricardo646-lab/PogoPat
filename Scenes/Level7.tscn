@@ -582,15 +582,6 @@ position_smoothing_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=407154769]
 
-[node name="StartLabel" type="Label" parent="Player/CanvasLayer" unique_id=1356661909]
-unique_name_in_owner = true
-offset_left = -1002.0
-offset_top = -406.0
-offset_right = -904.0
-offset_bottom = -383.0
-text = "Click to start"
-metadata/_edit_use_anchors_ = true
-
 [node name="AnchorLinksonder" type="Control" parent="Player/CanvasLayer" unique_id=1970998114]
 layout_mode = 3
 anchors_preset = 2

@@ -10,7 +10,7 @@ var has_started: bool = false # Tracks if the player has clicked/tapped to start
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 # --- Speed & Movement ---
-@export var move_speed = 500.0        # Top speed in the air
+@export var move_speed = 500.0       # Top speed in the air
 @export var air_acceleration = 2000.0 
 @export var air_friction = 400.0      
 @export var ground_friction = 3000.0  # Braking force on the ground 
@@ -18,7 +18,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 # --- Jumping ---
 @export var min_jump_force = -300.0
 @export var max_jump_force = -1000.0
-@export var charge_rate = 1200.0     
+@export var charge_rate = 1200.0    
 
 var current_jump_charge = 0.0
 var is_charging = false
@@ -26,10 +26,11 @@ var is_charging = false
 # --- Animations & UI ---
 @onready var anim_sprite = $AnimatedSprite2D
 @onready var start_label = get_node_or_null("%StartLabel") # Crash-proof label check
+@onready var start_overlay = get_node_or_null("CanvasLayer/StartOverlay") # Donkere overlay check
 
 func _ready():
 	if start_label:
-		start_label.text = "Click to start"
+		start_label.text = "Press any key or click to start"
 
 	# --- HIDE MOBILE BUTTONS ON DESKTOP ---
 	var is_mobile = OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("android") or OS.has_feature("ios")
@@ -37,7 +38,7 @@ func _ready():
 	if not is_mobile:
 		var canvas = get_node_or_null("CanvasLayer")
 		if canvas:
-			# Verberg de complete anker-mappen (en daarmee dus ook de knoppen die erin zitten)
+			# Verberg de complete anker-mappen op PC
 			if canvas.has_node("AnchorLinksonder"): canvas.get_node("AnchorLinksonder").hide()
 			if canvas.has_node("AnchorRechtsonder"): canvas.get_node("AnchorRechtsonder").hide()
 			if canvas.has_node("AnchorRechtsboven"): canvas.get_node("AnchorRechtsboven").hide()
@@ -50,22 +51,29 @@ func _ready():
 	# Make sure the player is in the idle animation while waiting
 	anim_sprite.play("idle")
 
-# Listen for a mouse click or screen tap to start/resume, or ESC/Pause button to pause
+# Listen for keyboard input, mouse click, or screen tap to start/resume
 func _input(event):
 	# 1. Pause with the Escape key or mobile Pause button (ui_cancel)
 	if has_started and event.is_action_pressed("ui_cancel"):
 		pause_game()
 		return
 		
-	# 2. Start or resume with a mouse click or screen touch
+	# 2. Start or resume met ELKE toetsaanslag, muisklik of touchscreen-tik
+	var is_key_press = event is InputEventKey and event.pressed and not event.echo
 	var is_click = event is InputEventMouseButton and event.pressed
 	var is_touch = event is InputEventScreenTouch and event.pressed
 	
-	if not has_started and (is_click or is_touch):
+	if not has_started and (is_key_press or is_click or is_touch):
+		# Voorkom dat de pauze-toets (Escape) direct de game start als hij daarvoor werd ingedrukt
+		if event is InputEventKey and event.keycode == KEY_ESCAPE:
+			return
+			
 		has_started = true
 		
-		# Hide the start text
-		if start_label:
+		# Hide the overlay & start text
+		if start_overlay:
+			start_overlay.hide()
+		elif start_label:
 			start_label.hide()
 			
 		# Start the Poki gameplay tracking
@@ -75,8 +83,10 @@ func _input(event):
 # Function to pause the game and stop Poki tracking
 func pause_game():
 	has_started = false
+	if start_overlay:
+		start_overlay.show()
 	if start_label:
-		start_label.text = "Paused! Click to resume"
+		start_label.text = "Paused! Press any key or click to resume"
 		start_label.show()
 		
 	if has_node("/root/PokiSDK"):
@@ -91,26 +101,29 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# 2. Behavior on the ground
+	# 2. Behavior on the ground (INCLUSIEF JUMP BUFFERING - PUNT 4)
 	if is_on_floor():
 		velocity.x = move_toward(velocity.x, 0, ground_friction * delta)
 		
-		# Start charging the jump
-		if Input.is_action_just_pressed("charge_jump"):
+		# Start direct met opladen als Spatie is ingedrukt (ook als je hem in de lucht al vasthield)
+		if Input.is_action_pressed("charge_jump") and not is_charging:
 			is_charging = true
 			current_jump_charge = min_jump_force
 			
-		# Keep charging while the button is held down
+		# Blijf opladen zolang Spatie ingedrukt blijft
 		if Input.is_action_pressed("charge_jump") and is_charging:
 			current_jump_charge -= charge_rate * delta
 			if current_jump_charge < max_jump_force:
 				current_jump_charge = max_jump_force
 				
-		# Jump when the button is released
+		# Spring wanneer Spatie wordt losgelaten
 		if Input.is_action_just_released("charge_jump") and is_charging:
 			velocity.y = current_jump_charge
 			is_charging = false
 			current_jump_charge = 0.0
+	else:
+		# Reset laad-status in de lucht om te voorkomen dat hij halverwege een sprong oplaadt
+		is_charging = false
 
 	# 3. Movement in the air
 	if not is_on_floor():
@@ -179,10 +192,12 @@ func respawn() -> void:
 	is_charging = false
 	current_jump_charge = 0.0
 	
-	# 3. Reset the game state so the player has to click again to continue
+	# 3. Reset the game state so the player has to press a key again to continue
 	has_started = false
+	if start_overlay:
+		start_overlay.show()
 	if start_label:
-		start_label.text = "Click to start"
+		start_label.text = "Press any key or click to start"
 		start_label.show()
 	anim_sprite.play("idle")
 
