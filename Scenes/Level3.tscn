@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_y6vx4"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_7tk33"]
-[ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://PogoSheet.png" id="3_44apn"]
+[ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://Sprites/PogoSheet.png" id="3_44apn"]
 [ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_43mlh"]
 [ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_cp0jt"]
 [ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_p6pjf"]
@@ -580,15 +580,6 @@ zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=1836059734]
-
-[node name="StartLabel" type="Label" parent="Player/CanvasLayer" unique_id=1012705882]
-unique_name_in_owner = true
-offset_left = -1002.0
-offset_top = -406.0
-offset_right = -904.0
-offset_bottom = -383.0
-text = "Click to start"
-metadata/_edit_use_anchors_ = true
 
 [node name="AnchorLinksonder" type="Control" parent="Player/CanvasLayer" unique_id=371209796]
 layout_mode = 3
