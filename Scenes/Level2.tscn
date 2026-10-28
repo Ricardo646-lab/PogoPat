@@ -559,7 +559,7 @@ size = Vector2(350, 350)
 size = Vector2(450, 450)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4u3k"]
-size = Vector2(257, 369)
+size = Vector2(396, 24.5)
 
 [node name="Node2D2" type="Node2D" unique_id=1397552547]
 
@@ -655,11 +655,11 @@ shape = SubResource("RectangleShape2D_2jwna")
 position = Vector2(2300, -959)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FinishFlag" unique_id=930394410]
-position = Vector2(5, -134)
+position = Vector2(11, 38.25)
 shape = SubResource("RectangleShape2D_p4u3k")
 
-[node name="FinishFlag" type="Sprite2D" parent="FinishFlag/CollisionShape2D" unique_id=1631025707]
-position = Vector2(-15, 4)
+[node name="FinishFlag" type="Sprite2D" parent="FinishFlag" unique_id=1631025707]
+position = Vector2(-10, -130)
 scale = Vector2(1.295164, 1.2225252)
 texture = ExtResource("8_p4u3k")
 
