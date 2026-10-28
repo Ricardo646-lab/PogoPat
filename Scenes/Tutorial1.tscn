@@ -3,7 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_0asl6"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_rkdpp"]
 [ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://PogoSheet.png" id="3_ppmam"]
+[ext_resource type="Texture2D" uid="uid://bqc3unx7wkik2" path="res://Sprites/ring4_slim_base.png" id="4_0asl6"]
 [ext_resource type="Texture2D" uid="uid://b3w4ofkgm1onf" path="res://Sprites/spacebar_spritesheet.png" id="4_sxd51"]
+[ext_resource type="Texture2D" uid="uid://b76v1ybk02hqq" path="res://Sprites/ring4_slim_full.png" id="5_rkdpp"]
+[ext_resource type="Script" uid="uid://b25jt4oqueh7f" path="res://Scenes/ProgressBar.gd" id="6_ppmam"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_0asl6")
@@ -602,6 +605,17 @@ position = Vector2(-6, 23)
 sprite_frames = SubResource("SpriteFrames_wqcyg")
 animation = &"jump"
 
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Player" unique_id=154852102]
+offset_left = -486.66666
+offset_top = -388.0
+offset_right = 466.66672
+offset_bottom = 450.66675
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("4_0asl6")
+texture_progress = ExtResource("5_rkdpp")
+script = ExtResource("6_ppmam")
+
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=824016962]
 zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
@@ -651,7 +665,7 @@ position = Vector2(-580, -711)
 scale = Vector2(1.5604985, 1.1717803)
 sprite_frames = SubResource("SpriteFrames_llox3")
 autoplay = "default"
-frame_progress = 0.38222098
+frame_progress = 0.07137601
 
 [node name="AnchorRechtsboven" type="Control" parent="Player/CanvasLayer" unique_id=1188886341]
 layout_mode = 3
