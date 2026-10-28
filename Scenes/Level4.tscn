@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_xgp81"]
 [ext_resource type="Texture2D" uid="uid://c82uy32ikc6q5" path="res://Sprites/pausebutton.png" id="7_nv5kp"]
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="8_6lrky"]
-[ext_resource type="Texture2D" uid="uid://b3tjn267oickt" path="res://Sprites/WallBackground.jpg" id="9_xgp81"]
+[ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="9_xgp81"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_fv7k0")
@@ -663,13 +663,16 @@ position = Vector2(3, -140)
 scale = Vector2(1.295164, 1.2225252)
 texture = ExtResource("8_6lrky")
 
-[node name="Background" type="Parallax2D" parent="." unique_id=906439975]
-z_index = -1
-scroll_scale = Vector2(0.3, 0.3)
-repeat_size = Vector2(1205, 880)
-repeat_times = 4
+[node name="SkyBackgroundLayer" type="CanvasLayer" parent="." unique_id=1911088416]
+layer = -10
 
-[node name="WallImage" type="Sprite2D" parent="Background" unique_id=871616878]
+[node name="TextureRect" type="TextureRect" parent="SkyBackgroundLayer" unique_id=209624467]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("9_xgp81")
+expand_mode = 1
 
 [connection signal="body_entered" from="FinishFlag" to="Player" method="_on_finish_button_body_entered"]
