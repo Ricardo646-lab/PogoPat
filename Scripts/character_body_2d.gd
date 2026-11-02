@@ -7,6 +7,9 @@ extends CharacterBody2D
 var has_started: bool = false # Tracks if the player has clicked/tapped to start
 var is_dead: bool = false     # NIEUW: Houdt bij of de speler bezig is met doodgaan
 
+# --- Charging Space Bar ---
+signal charge_changed(ratio: float)
+
 # --- Gravity ---
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -19,7 +22,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 # --- Jumping ---
 @export var min_jump_force = -300.0
 @export var max_jump_force = -1000.0
-@export var charge_rate = 1200.0    
+@export var charge_rate = 500.0     
 
 var current_jump_charge = 0.0
 var is_charging = false
@@ -116,15 +119,14 @@ func _physics_process(delta):
 			current_jump_charge -= charge_rate * delta
 			if current_jump_charge < max_jump_force:
 				current_jump_charge = max_jump_force
+			charge_changed.emit(inverse_lerp(min_jump_force, max_jump_force, current_jump_charge))
 				
 		# Spring wanneer Spatie wordt losgelaten
 		if Input.is_action_just_released("charge_jump") and is_charging:
 			velocity.y = current_jump_charge
 			is_charging = false
 			current_jump_charge = 0.0
-	else:
-		# Reset laad-status in de lucht om te voorkomen dat hij halverwege een sprong oplaadt
-		is_charging = false
+			charge_changed.emit(0.0)
 
 	# 3. Movement in the air
 	if not is_on_floor():
@@ -214,6 +216,7 @@ func respawn() -> void:
 	velocity = Vector2.ZERO
 	is_charging = false
 	current_jump_charge = 0.0
+	charge_changed.emit(0.0)
 	
 	# Herstel de speler graphics
 	if anim_sprite: 
