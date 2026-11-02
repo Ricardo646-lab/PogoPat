@@ -5,6 +5,7 @@ extends CharacterBody2D
 
 # --- Game State ---
 var has_started: bool = false # Tracks if the player has clicked/tapped to start
+var is_dead: bool = false     # NIEUW: Houdt bij of de speler bezig is met doodgaan
 
 # --- Gravity ---
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -54,7 +55,7 @@ func _ready():
 # Listen for keyboard input, mouse click, or screen tap to start/resume
 func _input(event):
 	# 1. Pause with the Escape key or mobile Pause button (ui_cancel)
-	if has_started and event.is_action_pressed("ui_cancel"):
+	if has_started and not is_dead and event.is_action_pressed("ui_cancel"):
 		pause_game()
 		return
 		
@@ -63,7 +64,7 @@ func _input(event):
 	var is_click = event is InputEventMouseButton and event.pressed
 	var is_touch = event is InputEventScreenTouch and event.pressed
 	
-	if not has_started and (is_key_press or is_click or is_touch):
+	if not has_started and not is_dead and (is_key_press or is_click or is_touch):
 		# Voorkom dat de pauze-toets (Escape) direct de game start als hij daarvoor werd ingedrukt
 		if event is InputEventKey and event.keycode == KEY_ESCAPE:
 			return
@@ -93,8 +94,8 @@ func pause_game():
 		get_node("/root/PokiSDK").call("gameplayStop")
 
 func _physics_process(delta):
-	# Freeze all physics and movement if the game hasn't started yet
-	if not has_started:
+	# Freeze all physics and movement if the game hasn't started yet OF als we dood zijn
+	if not has_started or is_dead:
 		return
 
 	# 1. Apply gravity (if the player is in the air)
@@ -162,7 +163,7 @@ func _physics_process(delta):
 
 func check_trap_collision() -> void:
 	# Do not check for traps if we are already dead or paused
-	if not has_started:
+	if not has_started or is_dead:
 		return
 		
 	for i in get_slide_collision_count():
@@ -178,10 +179,32 @@ func check_trap_collision() -> void:
 			if tile_data:
 				var is_trap_value = tile_data.get_custom_data("is_trap")
 				if is_trap_value == true:
-					respawn()
+					die() # NIEUW: Roep de sterf-animatie aan!
 					break # Ensures respawn triggers only once per frame
 
+# NIEUWE FUNCTIE: Handelt het sterven en de explosie af
+func die():
+	is_dead = true
+	
+	if has_node("/root/PokiSDK"):
+		get_node("/root/PokiSDK").call("gameplayStop")
+		
+	velocity = Vector2.ZERO # Stop direct in de lucht/op de grond
+	
+	# Verberg de sprite en start de explosie
+	if anim_sprite: 
+		anim_sprite.hide()
+	if has_node("DeathEffect"): 
+		$DeathEffect.trigger()
+	
+	# Wacht 1.5 seconden voordat het level reset
+	await get_tree().create_timer(1.5).timeout
+	
+	respawn()
+
 func respawn() -> void:
+	is_dead = false # We leven weer!
+	
 	# 1. Player died: Stop Poki gameplay tracking
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
@@ -191,6 +214,12 @@ func respawn() -> void:
 	velocity = Vector2.ZERO
 	is_charging = false
 	current_jump_charge = 0.0
+	
+	# Herstel de speler graphics
+	if anim_sprite: 
+		anim_sprite.show()
+	if has_node("DeathEffect"): 
+		$DeathEffect.hide_effect()
 	
 	# 3. Reset the game state so the player has to press a key again to continue
 	has_started = false
