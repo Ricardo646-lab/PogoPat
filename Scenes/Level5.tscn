@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_qh726"]
 [ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://Sprites/PogoSheet.png" id="3_wik46"]
 [ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_213sf"]
-[ext_resource type="Script" uid="uid://c7j53der766tl" path="res://Scripts/death_effect.gd" id="4_xnl3v"]
 [ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_rbgxu"]
 [ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_4kscp"]
 [ext_resource type="Texture2D" uid="uid://c82uy32ikc6q5" path="res://Sprites/pausebutton.png" id="7_xnl3v"]
@@ -589,9 +588,6 @@ position_smoothing_enabled = true
 [node name="PogoCollision" type="CollisionShape2D" parent="Player" unique_id=1356373586]
 position = Vector2(0.6666641, 188.66667)
 shape = SubResource("RectangleShape2D_2xldr")
-
-[node name="DeathEffect" type="Node2D" parent="Player" unique_id=991505430]
-script = ExtResource("4_xnl3v")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=1113418413]
 
