@@ -22,7 +22,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 # --- Jumping ---
 @export var min_jump_force = -300.0
 @export var max_jump_force = -1000.0
-@export var charge_rate = 500.0     
+@export var charge_rate = 1000.0     
 
 var current_jump_charge = 0.0
 var is_charging = false
