@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://pwfjvyrar66w" path="res://Sprites/ArrowRight.png" id="12_ug0sv"]
 [ext_resource type="Texture2D" uid="uid://b1tm7r4lv8v0a" path="res://Sprites/space_pressed_no_purple.png" id="13_06um6"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="16_ug0sv"]
+[ext_resource type="Script" uid="uid://dg8jx1tmkbrfr" path="res://Scripts/level_label.gd" id="17_0wsr5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_joc8x")
@@ -725,5 +726,17 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("16_ug0sv")
 expand_mode = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=132923407]
+layer = 3
+
+[node name="LevelLabel" type="Label" parent="CanvasLayer" unique_id=958842083]
+offset_left = 30.0
+offset_top = 30.0
+offset_right = 130.0
+offset_bottom = 130.0
+theme_override_colors/font_color = Color(0.984189, 0.94494605, 0.14307114, 1)
+theme_override_font_sizes/font_size = 45
+script = ExtResource("17_0wsr5")
 
 [connection signal="body_entered" from="FinishFlag" to="Player" method="_on_finish_button_body_entered"]

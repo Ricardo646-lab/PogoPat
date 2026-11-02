@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c82uy32ikc6q5" path="res://Sprites/pausebutton.png" id="7_m7vvj"]
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="8_cp0jt"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="9_p6pjf"]
+[ext_resource type="Script" uid="uid://dg8jx1tmkbrfr" path="res://Scripts/level_label.gd" id="10_m7vvj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_y6vx4")
@@ -674,5 +675,19 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_p6pjf")
 expand_mode = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=289263581]
+layer = 3
+
+[node name="LevelLabel" type="Label" parent="CanvasLayer" unique_id=1961369994]
+offset_left = 30.0
+offset_top = 30.0
+offset_right = 130.0
+offset_bottom = 130.0
+theme_override_colors/font_color = Color(0.984189, 0.94494605, 0.14307114, 1)
+theme_override_font_sizes/font_size = 45
+script = ExtResource("10_m7vvj")
+totaal_levels = 7
+huidig_level = 3
 
 [connection signal="body_entered" from="FinishFlag" to="Player" method="_on_finish_button_body_entered"]
