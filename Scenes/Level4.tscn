@@ -3,16 +3,12 @@
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_fv7k0"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_4w2qb"]
 [ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://Sprites/PogoSheet.png" id="3_glqn7"]
-[ext_resource type="Texture2D" uid="uid://t63i3nqoy2m7" path="res://Sprites/barA_pill_under.png" id="4_iv3jq"]
 [ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_rgu2x"]
 [ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_6lrky"]
-[ext_resource type="Texture2D" uid="uid://b2wohh2ioas32" path="res://Sprites/barA_pill_progress.png" id="5_edi5u"]
-[ext_resource type="Script" uid="uid://b25jt4oqueh7f" path="res://Scripts/ProgressBar.gd" id="6_ra572"]
 [ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_xgp81"]
 [ext_resource type="Texture2D" uid="uid://c82uy32ikc6q5" path="res://Sprites/pausebutton.png" id="7_nv5kp"]
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="8_6lrky"]
-[ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="9_xgp81"]
-[ext_resource type="Script" uid="uid://dg8jx1tmkbrfr" path="res://Scripts/level_label.gd" id="10_nv5kp"]
+[ext_resource type="Texture2D" uid="uid://b3tjn267oickt" path="res://Sprites/WallBackground.jpg" id="9_xgp81"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_fv7k0")
@@ -563,7 +559,7 @@ size = Vector2(350, 350)
 size = Vector2(450, 450)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6lrky"]
-size = Vector2(380, 23)
+size = Vector2(257, 369)
 
 [node name="Node2D2" type="Node2D" unique_id=1397552547]
 
@@ -584,16 +580,6 @@ shape = SubResource("CapsuleShape2D_xgp81")
 position = Vector2(-6.6666665, -28)
 sprite_frames = SubResource("SpriteFrames_nv5kp")
 animation = &"jump"
-
-[node name="JumpChargeBar" type="TextureProgressBar" parent="Player" unique_id=392091000]
-offset_left = -205.33333
-offset_top = -161.33333
-offset_right = -141.33333
-offset_bottom = 172.00002
-fill_mode = 3
-texture_under = ExtResource("4_iv3jq")
-texture_progress = ExtResource("5_edi5u")
-script = ExtResource("6_ra572")
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1806076590]
 zoom = Vector2(0.5, 0.5)
@@ -669,38 +655,21 @@ shape = SubResource("RectangleShape2D_2brj3")
 position = Vector2(1882, 305)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FinishFlag" unique_id=1384540528]
-position = Vector2(27, 32.5)
+position = Vector2(18, -144)
 shape = SubResource("RectangleShape2D_6lrky")
 
-[node name="FinishFlag" type="Sprite2D" parent="FinishFlag" unique_id=424119933]
-position = Vector2(3, -140)
+[node name="FinishFlag" type="Sprite2D" parent="FinishFlag/CollisionShape2D" unique_id=424119933]
+position = Vector2(-15, 4)
 scale = Vector2(1.295164, 1.2225252)
 texture = ExtResource("8_6lrky")
 
-[node name="SkyBackgroundLayer" type="CanvasLayer" parent="." unique_id=1911088416]
-layer = -10
+[node name="Background" type="Parallax2D" parent="." unique_id=906439975]
+z_index = -1
+scroll_scale = Vector2(0.3, 0.3)
+repeat_size = Vector2(1205, 880)
+repeat_times = 4
 
-[node name="TextureRect" type="TextureRect" parent="SkyBackgroundLayer" unique_id=209624467]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="WallImage" type="Sprite2D" parent="Background" unique_id=871616878]
 texture = ExtResource("9_xgp81")
-expand_mode = 1
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=595779532]
-layer = 3
-
-[node name="LevelLabel" type="Label" parent="CanvasLayer" unique_id=1390809622]
-offset_left = 30.0
-offset_top = 30.0
-offset_right = 130.0
-offset_bottom = 130.0
-theme_override_colors/font_color = Color(0.984189, 0.94494605, 0.14307114, 1)
-theme_override_font_sizes/font_size = 45
-script = ExtResource("10_nv5kp")
-totaal_levels = 7
-huidig_level = 4
 
 [connection signal="body_entered" from="FinishFlag" to="Player" method="_on_finish_button_body_entered"]
