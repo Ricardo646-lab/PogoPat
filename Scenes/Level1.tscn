@@ -4,9 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_joc8x"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_jghel"]
 [ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://Sprites/PogoSheet.png" id="3_slnnj"]
+[ext_resource type="Texture2D" uid="uid://t63i3nqoy2m7" path="res://Sprites/barA_pill_under.png" id="4_q1ws5"]
 [ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_ysn8j"]
 [ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_6ll4n"]
+[ext_resource type="Texture2D" uid="uid://b2wohh2ioas32" path="res://Sprites/barA_pill_progress.png" id="5_yji5v"]
 [ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_kylad"]
+[ext_resource type="Script" uid="uid://b25jt4oqueh7f" path="res://Scripts/ProgressBar.gd" id="6_ulvkb"]
 [ext_resource type="Texture2D" uid="uid://c82uy32ikc6q5" path="res://Sprites/pausebutton.png" id="7_bdlbp"]
 [ext_resource type="Script" uid="uid://gtwdnwvwhg1j" path="res://Scripts/tutorial_prompts.gd" id="8_06um6"]
 [ext_resource type="Texture2D" uid="uid://hy1kvj0ocq7g" path="res://Sprites/Akey.png" id="8_rpty4"]
@@ -601,6 +604,16 @@ shape = SubResource("CapsuleShape2D_2je8m")
 position = Vector2(-6.6666665, -28)
 sprite_frames = SubResource("SpriteFrames_wqcyg")
 animation = &"jump"
+
+[node name="JumpChargeBar" type="TextureProgressBar" parent="Player" unique_id=692584712]
+offset_left = -198.66669
+offset_top = -133.33333
+offset_right = -134.66669
+offset_bottom = 200.00002
+fill_mode = 3
+texture_under = ExtResource("4_q1ws5")
+texture_progress = ExtResource("5_yji5v")
+script = ExtResource("6_ulvkb")
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=824016962]
 zoom = Vector2(0.5, 0.5)
