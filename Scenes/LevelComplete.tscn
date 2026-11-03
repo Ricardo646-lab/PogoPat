@@ -1,0 +1,276 @@
+[gd_scene format=3 uid="uid://ctqumavwskd5o"]
+
+[ext_resource type="Texture2D" uid="uid://cf46isyxvm8e1" path="res://Sprites/UI/star-01-classic.svg" id="1_s5v0a"]
+[ext_resource type="StyleBox" uid="uid://bfyolk3lehbqw" path="res://Scripts/buttonPressed.tres" id="2_eqxnh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nlhux"]
+bg_color = Color(0.6666667, 0.6313726, 0.84705883, 1)
+corner_radius_top_left = 42
+corner_radius_top_right = 42
+corner_radius_bottom_right = 42
+corner_radius_bottom_left = 42
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vq7pl"]
+bg_color = Color(0.6117647, 0.9372549, 0.49803922, 1)
+border_width_left = 11
+border_width_top = 11
+border_width_right = 11
+border_width_bottom = 11
+border_color = Color(1, 0.85490197, 0.18039216, 1)
+corner_radius_top_left = 42
+corner_radius_top_right = 42
+corner_radius_bottom_right = 42
+corner_radius_bottom_left = 42
+expand_margin_right = 18.0
+shadow_color = Color(11.355705, 11.385859, 2.2832327, 0.6)
+shadow_size = 4
+
+[sub_resource type="FontFile" id="FontFile_ob4rb"]
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/17/0/ascent = 0.0
+cache/0/17/0/descent = 0.0
+cache/0/17/0/underline_position = 0.0
+cache/0/17/0/underline_thickness = 0.0
+cache/0/17/0/scale = 1.0
+
+[sub_resource type="Theme" id="Theme_s5v0a"]
+default_font = SubResource("FontFile_ob4rb")
+default_font_size = 0
+Button/fonts/font = SubResource("FontFile_ob4rb")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fwj43"]
+bg_color = Color(0.8121123, 0.9713711, 0.70811754, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.85490197, 0.18039216, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 12.0
+expand_margin_top = 1.0
+expand_margin_right = 12.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_llox3"]
+bg_color = Color(0.8121123, 0.9713711, 0.70811754, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.85490197, 0.18039216, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 12.0
+expand_margin_top = 2.0
+expand_margin_right = 12.0
+expand_margin_bottom = 3.0
+
+[node name="LevelCompletePanel" type="Control" unique_id=354982094]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=654417073]
+propagate_maximum_size = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.345
+offset_top = -1.0
+offset_right = -4.3449707
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopUpLayer" type="Control" parent="CenterContainer" unique_id=1488886948]
+custom_minimum_size = Vector2(523.705, 648.875)
+layout_mode = 2
+
+[node name="PanelShadow" type="Panel" parent="CenterContainer/PopUpLayer" unique_id=1106996913]
+layout_mode = 0
+offset_left = -105.65501
+offset_top = 191.00002
+offset_right = 84.34499
+offset_bottom = 261.0
+rotation = -0.0024755877
+scale = Vector2(1.8723805, 1.9602659)
+theme_override_styles/panel = SubResource("StyleBoxFlat_nlhux")
+
+[node name="MainPanel" type="PanelContainer" parent="CenterContainer/PopUpLayer" unique_id=1718193579]
+layout_mode = 0
+offset_left = -102.785
+offset_top = 8.0
+offset_right = 202.215
+offset_bottom = 305.7
+offset_transform_enabled = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_vq7pl")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PopUpLayer/MainPanel" unique_id=509220532]
+propagate_maximum_size = false
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = 70
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 35
+
+[node name="Content" type="VBoxContainer" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer" unique_id=507263435]
+layout_mode = 2
+alignment = 1
+
+[node name="LevelCompleteLabel" type="Label" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content" unique_id=853692502]
+custom_minimum_size = Vector2(-17.19, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -30.69)
+offset_transform_scale = Vector2(1.235, 1.235)
+theme_override_colors/font_color = Color(0.19215687, 0.33333334, 0.24313726, 1)
+theme_override_colors/font_shadow_color = Color(0.3392309, 0.32105172, 0.30536512, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 19
+text = "LEVEL COMPLETE!"
+vertical_alignment = 1
+visible_characters_behavior = 2
+
+[node name="TextLabel" type="Label" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content" unique_id=1991291681]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -19.425)
+offset_transform_scale = Vector2(1.205, 1.205)
+theme_override_colors/font_color = Color(0.3372549, 0.5137255, 0.30980393, 1)
+theme_override_constants/outline_size = 1
+text = "Great Job!"
+horizontal_alignment = 1
+
+[node name="Stars" type="HBoxContainer" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content" unique_id=578740857]
+layout_mode = 2
+size_flags_vertical = 3
+offset_transform_enabled = true
+offset_transform_position = Vector2(3.58, 2.01)
+offset_transform_scale = Vector2(1.005, 1.005)
+theme_override_constants/separation = -5
+alignment = 1
+
+[node name="StarHolder" type="Control" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars" unique_id=1653157763]
+custom_minimum_size = Vector2(60, 55)
+layout_mode = 2
+
+[node name="Star1" type="TextureRect" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars/StarHolder" unique_id=1870822840]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.869995
+offset_top = -2.0
+offset_right = -33.869995
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.0594815, 1.0064965)
+texture = ExtResource("1_s5v0a")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StarHolder2" type="Control" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars" unique_id=809114509]
+custom_minimum_size = Vector2(64.725, 58.75)
+layout_mode = 2
+
+[node name="Star2" type="TextureRect" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars/StarHolder2" unique_id=475290038]
+layout_mode = 0
+offset_left = -10.870003
+offset_top = -21.999996
+offset_right = 29.129997
+offset_bottom = 18.000004
+scale = Vector2(1.7347488, 1.6158513)
+texture = ExtResource("1_s5v0a")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StarHolder3" type="Control" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars" unique_id=932974571]
+custom_minimum_size = Vector2(60, 55)
+layout_mode = 2
+
+[node name="Star3" type="TextureRect" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars/StarHolder3" unique_id=132939583]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.130005
+offset_top = -4.0
+offset_right = 12.130005
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.0608529, 1.0064965)
+texture = ExtResource("1_s5v0a")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Actions" type="HBoxContainer" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content" unique_id=1619873951]
+custom_minimum_size = Vector2(-11.215, 0)
+propagate_maximum_size = false
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, 14.285)
+alignment = 1
+
+[node name="ReplayButton" type="Button" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Actions" unique_id=581040688]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-16.68, -8.26)
+offset_transform_scale = Vector2(1.025, 1.025)
+localize_numeral_system = false
+theme = SubResource("Theme_s5v0a")
+theme_override_colors/font_color = Color(0.19215687, 0.33333334, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.19215687, 0.33333334, 0.24313726, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/h_separation = 4
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_fwj43")
+theme_override_styles/pressed = ExtResource("2_eqxnh")
+theme_override_styles/hover = ExtResource("2_eqxnh")
+button_mask = 0
+text = "PLAY AGAIN"
+icon_alignment = 1
+expand_icon = true
+
+[node name="NextLevelButton" type="Button" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Actions" unique_id=258987283]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(19.745, -8.26)
+theme_override_colors/font_color = Color(0.19215687, 0.33333334, 0.24313726, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_llox3")
+theme_override_styles/pressed = ExtResource("2_eqxnh")
+theme_override_styles/hover = ExtResource("2_eqxnh")
+button_mask = 0
+text = "  NEXT LEVEL"
+autowrap_trim_flags = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1880826119]
