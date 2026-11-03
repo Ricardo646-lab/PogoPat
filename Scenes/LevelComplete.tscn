@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://ctqumavwskd5o"]
 
+[ext_resource type="Script" uid="uid://bh7hcmpgvwlqe" path="res://Scenes/level_complete.gd" id="1_ob4rb"]
 [ext_resource type="Texture2D" uid="uid://cf46isyxvm8e1" path="res://Sprites/UI/star-01-classic.svg" id="1_s5v0a"]
 [ext_resource type="StyleBox" uid="uid://bfyolk3lehbqw" path="res://Scripts/buttonPressed.tres" id="2_eqxnh"]
 
@@ -26,6 +27,9 @@ shadow_color = Color(11.355705, 11.385859, 2.2832327, 0.6)
 shadow_size = 4
 
 [sub_resource type="FontFile" id="FontFile_ob4rb"]
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
 cache/0/variation_coordinates = {}
 cache/0/face_index = 0
 cache/0/embolden = 0.0
@@ -90,6 +94,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ob4rb")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=654417073]
 propagate_maximum_size = false
@@ -177,6 +182,7 @@ theme_override_constants/separation = -5
 alignment = 1
 
 [node name="StarHolder" type="Control" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars" unique_id=1653157763]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(60, 55)
 layout_mode = 2
 
@@ -197,6 +203,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="StarHolder2" type="Control" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars" unique_id=809114509]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(64.725, 58.75)
 layout_mode = 2
 
@@ -212,6 +219,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="StarHolder3" type="Control" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars" unique_id=932974571]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(60, 55)
 layout_mode = 2
 
@@ -240,6 +248,7 @@ offset_transform_position = Vector2(0, 14.285)
 alignment = 1
 
 [node name="ReplayButton" type="Button" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Actions" unique_id=581040688]
+unique_name_in_owner = true
 layout_mode = 2
 offset_transform_enabled = true
 offset_transform_position = Vector2(-16.68, -8.26)

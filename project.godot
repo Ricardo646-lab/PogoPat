@@ -11,12 +11,13 @@ config_version=5
 [application]
 
 config/name="PogoPat"
-run/main_scene="uid://0rr5kof28ufw"
+run/main_scene="uid://ctqumavwskd5o"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [autoload]
 
 PokiSDK="*uid://c72j1j6g10y8w"
+GameManager="*uid://citn2ia4bo8kc"
 
 [display]
 
