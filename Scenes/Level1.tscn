@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="1_06um6"]
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_joc8x"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_jghel"]
-[ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://Sprites/PogoSheet.png" id="3_slnnj"]
 [ext_resource type="Texture2D" uid="uid://t63i3nqoy2m7" path="res://Sprites/barA_pill_under.png" id="4_q1ws5"]
 [ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_ysn8j"]
 [ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_6ll4n"]
@@ -498,65 +497,6 @@ sources/1 = SubResource("TileSetAtlasSource_dyi31")
 radius = 48.0
 height = 189.33334
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dyi31"]
-atlas = ExtResource("3_slnnj")
-region = Rect2(30, 121, 195, 588)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_34170"]
-atlas = ExtResource("3_slnnj")
-region = Rect2(225, 121, 195, 588)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8ci86"]
-atlas = ExtResource("3_slnnj")
-region = Rect2(420, 121, 195, 588)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xlgu7"]
-atlas = ExtResource("3_slnnj")
-region = Rect2(615, 121, 195, 588)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5lglm"]
-atlas = ExtResource("3_slnnj")
-region = Rect2(810, 121, 195, 588)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_wqcyg"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dyi31")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_34170")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8ci86")
-}],
-"loop": 0,
-"name": &"charge",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dyi31")
-}],
-"loop": 1,
-"name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xlgu7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5lglm")
-}],
-"loop": 0,
-"name": &"jump",
-"speed": 10.0
-}]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wqcyg"]
-size = Vector2(62.666668, 73.33334)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2h8qs"]
 size = Vector2(350, 350)
 
@@ -596,15 +536,13 @@ tile_set = SubResource("TileSet_dmjao")
 position = Vector2(-108, 135)
 scale = Vector2(0.75, 0.75)
 script = ExtResource("2_jghel")
+auto_hop_force = -150.0
+spin_acceleration = 12.0
+max_spin_speed = 5.0
 
 [node name="PlayerCollision" type="CollisionShape2D" parent="Player" unique_id=885882796]
 position = Vector2(-4, -38.666668)
 shape = SubResource("CapsuleShape2D_2je8m")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=1463111871]
-position = Vector2(-6.6666665, -28)
-sprite_frames = SubResource("SpriteFrames_wqcyg")
-animation = &"jump"
 
 [node name="JumpChargeBar" type="TextureProgressBar" parent="Player" unique_id=692584712]
 offset_left = -198.66669
@@ -619,10 +557,6 @@ script = ExtResource("6_ulvkb")
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=824016962]
 zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
-
-[node name="PogoCollision" type="CollisionShape2D" parent="Player" unique_id=1550493795]
-position = Vector2(0.6666641, 188.66667)
-shape = SubResource("RectangleShape2D_wqcyg")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=9238275]
 
