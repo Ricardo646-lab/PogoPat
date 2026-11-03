@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://cnvd2tjmvtkjl"]
+[gd_scene format=4 uid="uid://dkxs5gvt5hcx4"]
 
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_ms0wi"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_5awjf"]
@@ -547,9 +547,6 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kg31f"]
-size = Vector2(62.666668, 73.33334)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ncjpd"]
 size = Vector2(350, 350)
 
@@ -575,12 +572,16 @@ tile_set = SubResource("TileSet_dmjao")
 position = Vector2(358, 154)
 scale = Vector2(0.75, 0.75)
 script = ExtResource("2_5awjf")
+auto_hop_force = -150.0
+spin_acceleration = 12.0
+max_spin_speed = 5.0
 
 [node name="PlayerCollision" type="CollisionShape2D" parent="Player" unique_id=785296037]
 position = Vector2(-4, -38.666668)
 shape = SubResource("CapsuleShape2D_p6pjf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=125354775]
+visible = false
 position = Vector2(-6.6666665, -28)
 sprite_frames = SubResource("SpriteFrames_m7vvj")
 animation = &"jump"
@@ -598,10 +599,6 @@ script = ExtResource("6_ycmr1")
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=303062335]
 zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
-
-[node name="PogoCollision" type="CollisionShape2D" parent="Player" unique_id=2027168984]
-position = Vector2(0.6666641, 188.66667)
-shape = SubResource("RectangleShape2D_kg31f")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=1181459577]
 

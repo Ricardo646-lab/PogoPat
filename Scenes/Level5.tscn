@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://dgqfx6ovlrb0s"]
+[gd_scene format=4 uid="uid://ddoxakphm4leo"]
 
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_hurp7"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_qh726"]
@@ -548,9 +548,6 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tmtfn"]
-size = Vector2(62.666668, 73.33334)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k843i"]
 size = Vector2(350, 350)
 
@@ -576,12 +573,15 @@ tile_set = SubResource("TileSet_dmjao")
 position = Vector2(-94, 151)
 scale = Vector2(0.75, 0.75)
 script = ExtResource("2_qh726")
+spin_acceleration = 12.0
+max_spin_speed = 5.0
 
 [node name="PlayerCollision" type="CollisionShape2D" parent="Player" unique_id=303246661]
 position = Vector2(-4, -38.666668)
 shape = SubResource("CapsuleShape2D_ie467")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=1029131656]
+visible = false
 position = Vector2(-6.6666665, -28)
 sprite_frames = SubResource("SpriteFrames_hrrbo")
 animation = &"jump"
@@ -599,10 +599,6 @@ script = ExtResource("6_0hflc")
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1818755003]
 zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
-
-[node name="PogoCollision" type="CollisionShape2D" parent="Player" unique_id=1869716571]
-position = Vector2(0.6666641, 188.66667)
-shape = SubResource("RectangleShape2D_tmtfn")
 
 [node name="DeathEffect" type="Node2D" parent="Player" unique_id=2122959279]
 script = ExtResource("4_xnl3v")
