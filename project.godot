@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 [autoload]
 
 PokiSDK="*uid://c72j1j6g10y8w"
+GameManager="*uid://citn2ia4bo8kc"
 
 [display]
 

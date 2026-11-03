@@ -1,8 +1,7 @@
-[gd_scene format=4 uid="uid://doh6822srwmbt"]
+[gd_scene format=4 uid="uid://dkaa5inc7k8k7"]
 
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_fv7k0"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_4w2qb"]
-[ext_resource type="Texture2D" uid="uid://bo18pyopytm0w" path="res://Sprites/PogoSheet.png" id="3_glqn7"]
 [ext_resource type="Texture2D" uid="uid://t63i3nqoy2m7" path="res://Sprites/barA_pill_under.png" id="4_iv3jq"]
 [ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_rgu2x"]
 [ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_6lrky"]
@@ -14,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="8_6lrky"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="9_xgp81"]
 [ext_resource type="Script" uid="uid://dg8jx1tmkbrfr" path="res://Scripts/level_label.gd" id="10_nv5kp"]
+[ext_resource type="Script" uid="uid://lgi5ahmmmvkd" path="res://Scripts/timer_label.gd" id="15_uw8xp"]
+[ext_resource type="Script" uid="uid://bh20rythjx2i4" path="res://Scripts/stars_ui.gd" id="16_4upjg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_fv7k0")
@@ -508,62 +509,6 @@ sources/1 = SubResource("TileSetAtlasSource_dyi31")
 radius = 48.0
 height = 189.33334
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dyi31"]
-atlas = ExtResource("3_glqn7")
-region = Rect2(30, 121, 195, 588)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_34170"]
-atlas = ExtResource("3_glqn7")
-region = Rect2(225, 121, 195, 588)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8ci86"]
-atlas = ExtResource("3_glqn7")
-region = Rect2(420, 121, 195, 588)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xlgu7"]
-atlas = ExtResource("3_glqn7")
-region = Rect2(615, 121, 195, 588)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5lglm"]
-atlas = ExtResource("3_glqn7")
-region = Rect2(810, 121, 195, 588)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ds0xo"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dyi31")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_34170")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8ci86")
-}],
-"loop": 0,
-"name": &"charge",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dyi31")
-}],
-"loop": 1,
-"name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xlgu7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5lglm")
-}],
-"loop": 0,
-"name": &"jump",
-"speed": 10.0
-}]
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sxy6w"]
 size = Vector2(350, 350)
 
@@ -595,12 +540,6 @@ max_spin_speed = 5.0
 [node name="PlayerCollision" type="CollisionShape2D" parent="Player" unique_id=910103863]
 position = Vector2(-4, -38.666668)
 shape = SubResource("CapsuleShape2D_egu6v")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=974421095]
-visible = false
-position = Vector2(-6.6666665, -28)
-sprite_frames = SubResource("SpriteFrames_ds0xo")
-animation = &"jump"
 
 [node name="JumpChargeBar" type="TextureProgressBar" parent="Player" unique_id=335219638]
 offset_left = -205.33334
@@ -705,17 +644,42 @@ grow_vertical = 2
 texture = ExtResource("9_xgp81")
 expand_mode = 1
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=294214636]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1363328248]
 layer = 3
 
-[node name="LevelLabel" type="Label" parent="CanvasLayer" unique_id=1712752717]
+[node name="HUD" type="Control" parent="CanvasLayer" unique_id=2092153334]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LevelLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1110236338]
+layout_mode = 0
 offset_left = 30.0
 offset_top = 30.0
 offset_right = 130.0
 offset_bottom = 130.0
 theme_override_colors/font_color = Color(0.984189, 0.94494605, 0.14307114, 1)
-theme_override_font_sizes/font_size = 45
+theme_override_font_sizes/font_size = 30
 script = ExtResource("10_nv5kp")
-huidig_level = 4
+
+[node name="TimerLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1285862794]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 30.0
+offset_right = 450.0
+offset_bottom = 130.0
+theme_override_colors/font_color = Color(0.9843137, 0.94509804, 0.14117648, 1)
+theme_override_font_sizes/font_size = 30
+script = ExtResource("15_uw8xp")
+
+[node name="StarDisplay" type="Control" parent="CanvasLayer/HUD" unique_id=1548749156]
+anchors_preset = 0
+offset_left = 102.0
+offset_top = 17.0
+offset_right = 142.0
+offset_bottom = 57.0
+scale = Vector2(0.9, 0.9)
+script = ExtResource("16_4upjg")
 
 [connection signal="body_entered" from="FinishFlag" to="Player" method="_on_finish_button_body_entered"]
