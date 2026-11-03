@@ -117,7 +117,7 @@ theme_override_constants/v_separation = 40
 columns = 5
 
 [node name="Button" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=490480344]
-custom_minimum_size = Vector2(110, 80)
+custom_minimum_size = Vector2(110, 100)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
@@ -133,7 +133,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
 
 [node name="Button2" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=774228370]
-custom_minimum_size = Vector2(110, 80)
+custom_minimum_size = Vector2(110, 100)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
@@ -147,10 +147,10 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
-level_number = 2
+target_level_number = 2
 
 [node name="Button3" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1310472393]
-custom_minimum_size = Vector2(110, 80)
+custom_minimum_size = Vector2(110, 100)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
@@ -164,10 +164,10 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
-level_number = 3
+target_level_number = 3
 
 [node name="Button4" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1052113669]
-custom_minimum_size = Vector2(110, 80)
+custom_minimum_size = Vector2(110, 100)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
@@ -181,10 +181,10 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
-level_number = 4
+target_level_number = 4
 
 [node name="Button5" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1165114964]
-custom_minimum_size = Vector2(110, 80)
+custom_minimum_size = Vector2(110, 100)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
@@ -198,89 +198,4 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
-level_number = 5
-
-[node name="Button6" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1767394795]
-custom_minimum_size = Vector2(110, 80)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_y46r8")
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
-script = ExtResource("1_ampnh")
-level_number = 6
-
-[node name="Button7" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1176368968]
-custom_minimum_size = Vector2(110, 80)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_y46r8")
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
-script = ExtResource("1_ampnh")
-level_number = 7
-
-[node name="Button8" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=104083154]
-custom_minimum_size = Vector2(110, 80)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_y46r8")
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
-script = ExtResource("1_ampnh")
-level_number = 8
-
-[node name="Button9" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=2052576726]
-custom_minimum_size = Vector2(110, 80)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_y46r8")
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
-script = ExtResource("1_ampnh")
-level_number = 9
-
-[node name="Button10" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1201291479]
-custom_minimum_size = Vector2(110, 80)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_y46r8")
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
-script = ExtResource("1_ampnh")
-level_number = 10
+target_level_number = 5
