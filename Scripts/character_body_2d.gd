@@ -32,6 +32,11 @@ var is_charging = false
 @onready var start_label = get_node_or_null("%StartLabel") # Crash-proof label check
 @onready var start_overlay = get_node_or_null("CanvasLayer/StartOverlay") # Donkere overlay check
 
+# --- Sterren & Tijd Systeem ---
+var level_timer: float = 0.0
+@export var par_time: float = 30.0   # Tijdslimiet voor de 2e ster
+@export var fast_time: float = 15.0  # Tijdslimiet voor de 3e ster (extra snel!)
+
 func _ready():
 	if start_label:
 		start_label.text = "Press any key or click to start"
@@ -97,6 +102,8 @@ func pause_game():
 		get_node("/root/PokiSDK").call("gameplayStop")
 
 func _physics_process(delta):
+	if has_started and not is_dead:
+		level_timer += delta
 	# Freeze all physics and movement if the game hasn't started yet OF als we dood zijn
 	if not has_started or is_dead:
 		return
@@ -241,25 +248,50 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 		if has_node("/root/PokiSDK"):
 			get_node("/root/PokiSDK").call("gameplayStop")
 			
-		# 1. Haal het pad van de huidige scene op (bijv. "res://Scenes/Level1.tscn")
-		var current_scene_path: String = get_tree().current_scene.scene_file_path
+		# --- 1. STERREN BEREKENEN OP BASIS VAN TIJD ---
+		var earned_stars = 1 # 1e ster: Je hebt het level gehaald!
 		
-		# 2. Haal het cijfer op uit de bestandsnaam
+		# 2e ster: Binnen de normale par_time gehaald?
+		if level_timer <= par_time:
+			earned_stars += 1
+			
+		# 3e ster: Binnen de snelle fast_time gehaald?
+		if level_timer <= fast_time:
+			earned_stars += 1
+			
+		# --- 2. SLA DE SCORE OP ---
+		var current_scene_path: String = get_tree().current_scene.scene_file_path
+		var level_name = current_scene_path.get_file().get_basename() # Unieke naam zoals "Level1" of "Level2"
+		
+		if has_node("/root/GameManager"):
+			get_node("/root/GameManager").save_level_stars(level_name, earned_stars)
+			
+		# Update direct de UI op het scherm
+		var star_display = get_tree().current_scene.find_child("StarDisplay", true, false)
+		if star_display and star_display.has_method("update_stars"):
+			star_display.update_stars(earned_stars)
+			print("StarDisplay succesvol geüpdatet met sterren: ", earned_stars)
+		else: 
+			print("Waarschuwing: StarDisplay niet gevonden in deze scène!")
+			
+		print("Level gehaald in ", snapped(level_timer, 0.01), "s! Behaalde sterren: ", earned_stars)
+		# -------------------------
+			
+		# 3. Ga door naar het volgende level
 		var regex = RegEx.new()
-		regex.compile("\\d+") # Zoekt naar het nummer in de naam
+		regex.compile("\\d+") 
 		var result = regex.search(current_scene_path)
 		
 		if result:
 			var current_level_num: int = result.get_string().to_int()
 			var next_level_num: int = current_level_num + 1
-			
-			# 3. Bouw het nieuwe pad op met "Level"
 			var next_scene_path: String = "res://Scenes/Level" + str(next_level_num) + ".tscn"
 			
-			# 4. Check of het volgende level bestaat
+			# Wacht even 1 seconde zodat de speler zijn score ziet, ga dan door
+			await get_tree().create_timer(1.0).timeout
+			
 			if ResourceLoader.exists(next_scene_path):
 				get_tree().call_deferred("change_scene_to_file", next_scene_path)
 			else:
-				# Geen volgend level meer? Reset en ga terug naar Level 1!
 				print("Alle levels gehaald! Herstarten vanaf Level 1.")
 				get_tree().call_deferred("change_scene_to_file", "res://Scenes/Level1.tscn")
