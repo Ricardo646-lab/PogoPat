@@ -89,7 +89,6 @@ func _ready():
 		if canvas:
 			if canvas.has_node("AnchorLinksonder"): canvas.get_node("AnchorLinksonder").hide()
 			if canvas.has_node("AnchorRechtsonder"): canvas.get_node("AnchorRechtsonder").hide()
-			if canvas.has_node("AnchorRechtsboven"): canvas.get_node("AnchorRechtsboven").hide()
 
 	if has_node("/root/PokiSDK"):
 		var poki = get_node("/root/PokiSDK")
@@ -450,7 +449,7 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 		print("Level gehaald in ", snapped(level_timer, 0.01), "s! Behaalde sterren: ", earned_stars)
 		# -------------------------
 			
-		# 3. Ga door naar het volgende level
+		# 3. Ga door naar het volgende level of terug naar de Level Selector
 		var regex = RegEx.new()
 		regex.compile("\\d+") 
 		var result = regex.search(current_scene_path)
@@ -466,5 +465,6 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 			if ResourceLoader.exists(next_scene_path):
 				get_tree().call_deferred("change_scene_to_file", next_scene_path)
 			else:
-				print("Alle levels gehaald! Herstarten vanaf Level 1.")
-				get_tree().call_deferred("change_scene_to_file", "res://Scenes/Level1.tscn")
+				print("Alle levels gehaald! Terug naar de Level Selector.")
+				# Aangepast naar het pad van jouw Level Selector scène:
+				get_tree().call_deferred("change_scene_to_file", "res://Scenes/LevelSelector.tscn")

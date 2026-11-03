@@ -1,0 +1,286 @@
+[gd_scene format=3 uid="uid://tjah0x4su6l5"]
+
+[ext_resource type="Script" uid="uid://dgfanxlqp2g06" path="res://Scripts/level_button.gd" id="1_ampnh"]
+[ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="1_y46r8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4ewx"]
+bg_color = Color(0.9019608, 0.9490196, 0.9019608, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.95686275, 0.8156863, 0.24705882, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0.60784316, 0.6431373, 0.70980394, 1)
+shadow_offset = Vector2(0, 8)
+
+[sub_resource type="FontVariation" id="FontVariation_y46r8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3p2l"]
+bg_color = Color(0.8980392, 0.89411765, 0.9098039, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.95686275, 0.8156863, 0.24705882, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ulvkb"]
+bg_color = Color(0.46666667, 0.9411765, 0.3647059, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.95686275, 0.8156863, 0.24705882, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.11372549, 0.11372549, 0.11372549, 0.61960787)
+shadow_size = 4
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ampnh"]
+bg_color = Color(0.8980392, 0.89411765, 0.9098039, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="LevelSelect" type="Control" unique_id=326614377]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1519972520]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_y46r8")
+expand_mode = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1208850935]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CenterContainer" unique_id=276389077]
+custom_minimum_size = Vector2(900, 500)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o4ewx")
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/Panel" unique_id=1891374926]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 0
+offset_left = 324.0
+offset_top = 48.0
+offset_right = 583.0
+offset_bottom = 112.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.4506483, 0.4506483, 0.45064825, 1)
+theme_override_font_sizes/font_size = 46
+text = "Select Level"
+horizontal_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/Panel" unique_id=589355378]
+layout_mode = 0
+offset_top = 164.0
+offset_right = 900.0
+offset_bottom = 364.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/Panel/CenterContainer" unique_id=615941312]
+layout_mode = 2
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 40
+columns = 5
+
+[node name="Button" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=490480344]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+
+[node name="Button2" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=774228370]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+level_number = 2
+
+[node name="Button3" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1310472393]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+level_number = 3
+
+[node name="Button4" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1052113669]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+level_number = 4
+
+[node name="Button5" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1165114964]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+level_number = 5
+
+[node name="Button6" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1767394795]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+level_number = 6
+
+[node name="Button7" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1176368968]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+level_number = 7
+
+[node name="Button8" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=104083154]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+level_number = 8
+
+[node name="Button9" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=2052576726]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+level_number = 9
+
+[node name="Button10" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1201291479]
+custom_minimum_size = Vector2(110, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_y46r8")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_c3p2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
+script = ExtResource("1_ampnh")
+level_number = 10
