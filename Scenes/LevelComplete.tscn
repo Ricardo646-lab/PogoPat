@@ -1,30 +1,11 @@
-[gd_scene format=3 uid="uid://ctqumavwskd5o"]
+[gd_scene format=3 uid="uid://ds7wv2f6sgtgb"]
 
-[ext_resource type="Script" uid="uid://bh7hcmpgvwlqe" path="res://Scenes/level_complete.gd" id="1_ob4rb"]
+[ext_resource type="Script" uid="uid://bh7hcmpgvwlqe" path="res://Scripts/level_complete.gd" id="1_ob4rb"]
 [ext_resource type="Texture2D" uid="uid://cf46isyxvm8e1" path="res://Sprites/UI/star-01-classic.svg" id="1_s5v0a"]
-[ext_resource type="StyleBox" uid="uid://bfyolk3lehbqw" path="res://Scripts/buttonPressed.tres" id="2_eqxnh"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nlhux"]
-bg_color = Color(0.6666667, 0.6313726, 0.84705883, 1)
-corner_radius_top_left = 42
-corner_radius_top_right = 42
-corner_radius_bottom_right = 42
-corner_radius_bottom_left = 42
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vq7pl"]
-bg_color = Color(0.6117647, 0.9372549, 0.49803922, 1)
-border_width_left = 11
-border_width_top = 11
-border_width_right = 11
-border_width_bottom = 11
-border_color = Color(1, 0.85490197, 0.18039216, 1)
-corner_radius_top_left = 42
-corner_radius_top_right = 42
-corner_radius_bottom_right = 42
-corner_radius_bottom_left = 42
-expand_margin_right = 18.0
-shadow_color = Color(11.355705, 11.385859, 2.2832327, 0.6)
-shadow_size = 4
+[ext_resource type="StyleBox" uid="uid://bfyolk3lehbqw" path="res://Sprites/UI/buttonPressed.tres" id="2_eqxnh"]
+[ext_resource type="StyleBox" uid="uid://dvnrjlothndvt" path="res://Sprites/UI/Panel.tres" id="2_fwj43"]
+[ext_resource type="StyleBox" uid="uid://com00bb8mjs2j" path="res://Sprites/UI/Shadow.tres" id="2_kh4og"]
+[ext_resource type="StyleBox" uid="uid://cmwu5c47pnp3d" path="res://Sprites/UI/normalButton.tres" id="4_kh4og"]
 
 [sub_resource type="FontFile" id="FontFile_ob4rb"]
 subpixel_positioning = 0
@@ -55,22 +36,6 @@ default_font = SubResource("FontFile_ob4rb")
 default_font_size = 0
 Button/fonts/font = SubResource("FontFile_ob4rb")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fwj43"]
-bg_color = Color(0.8121123, 0.9713711, 0.70811754, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(1, 0.85490197, 0.18039216, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-expand_margin_left = 12.0
-expand_margin_top = 1.0
-expand_margin_right = 12.0
-expand_margin_bottom = 3.0
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_llox3"]
 bg_color = Color(0.8121123, 0.9713711, 0.70811754, 1)
 border_width_left = 3
@@ -88,12 +53,14 @@ expand_margin_right = 12.0
 expand_margin_bottom = 3.0
 
 [node name="LevelCompletePanel" type="Control" unique_id=354982094]
+process_mode = 2
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_ob4rb")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=654417073]
@@ -102,35 +69,41 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -4.345
-offset_top = -1.0
-offset_right = -4.3449707
-offset_bottom = 1.0
+offset_left = 177.0
+offset_top = 122.0
+offset_right = 177.0
+offset_bottom = 124.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="PopUpLayer" type="Control" parent="CenterContainer" unique_id=1488886948]
 custom_minimum_size = Vector2(523.705, 648.875)
 layout_mode = 2
+offset_transform_enabled = true
+mouse_filter = 2
 
 [node name="PanelShadow" type="Panel" parent="CenterContainer/PopUpLayer" unique_id=1106996913]
-layout_mode = 0
+layout_mode = 1
 offset_left = -105.65501
 offset_top = 191.00002
 offset_right = 84.34499
 offset_bottom = 261.0
 rotation = -0.0024755877
 scale = Vector2(1.8723805, 1.9602659)
-theme_override_styles/panel = SubResource("StyleBoxFlat_nlhux")
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("2_kh4og")
 
 [node name="MainPanel" type="PanelContainer" parent="CenterContainer/PopUpLayer" unique_id=1718193579]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = -102.785
 offset_top = 8.0
 offset_right = 202.215
 offset_bottom = 305.7
 offset_transform_enabled = true
-theme_override_styles/panel = SubResource("StyleBoxFlat_vq7pl")
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("2_fwj43")
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PopUpLayer/MainPanel" unique_id=509220532]
 propagate_maximum_size = false
@@ -169,7 +142,7 @@ offset_transform_position = Vector2(0, -19.425)
 offset_transform_scale = Vector2(1.205, 1.205)
 theme_override_colors/font_color = Color(0.3372549, 0.5137255, 0.30980393, 1)
 theme_override_constants/outline_size = 1
-text = "Great Job!"
+text = "GG!"
 horizontal_alignment = 1
 
 [node name="Stars" type="HBoxContainer" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content" unique_id=578740857]
@@ -187,6 +160,7 @@ custom_minimum_size = Vector2(60, 55)
 layout_mode = 2
 
 [node name="Star1" type="TextureRect" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars/StarHolder" unique_id=1870822840]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -208,6 +182,7 @@ custom_minimum_size = Vector2(64.725, 58.75)
 layout_mode = 2
 
 [node name="Star2" type="TextureRect" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars/StarHolder2" unique_id=475290038]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = -10.870003
 offset_top = -21.999996
@@ -224,6 +199,7 @@ custom_minimum_size = Vector2(60, 55)
 layout_mode = 2
 
 [node name="Star3" type="TextureRect" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Stars/StarHolder3" unique_id=132939583]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -243,12 +219,20 @@ stretch_mode = 5
 custom_minimum_size = Vector2(-11.215, 0)
 propagate_maximum_size = false
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.66
 offset_transform_enabled = true
 offset_transform_position = Vector2(0, 14.285)
+offset_transform_visual_only = false
+localize_numeral_system = false
+mouse_force_pass_scroll_events = false
 alignment = 1
 
 [node name="ReplayButton" type="Button" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Actions" unique_id=581040688]
 unique_name_in_owner = true
+process_mode = 3
+clip_children = 2
 layout_mode = 2
 offset_transform_enabled = true
 offset_transform_position = Vector2(-16.68, -8.26)
@@ -260,7 +244,7 @@ theme_override_colors/font_outline_color = Color(0.19215687, 0.33333334, 0.24313
 theme_override_constants/outline_size = 2
 theme_override_constants/h_separation = 4
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxFlat_fwj43")
+theme_override_styles/normal = ExtResource("4_kh4og")
 theme_override_styles/pressed = ExtResource("2_eqxnh")
 theme_override_styles/hover = ExtResource("2_eqxnh")
 button_mask = 0
@@ -269,6 +253,8 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="NextLevelButton" type="Button" parent="CenterContainer/PopUpLayer/MainPanel/MarginContainer/Content/Actions" unique_id=258987283]
+unique_name_in_owner = true
+process_mode = 3
 layout_mode = 2
 offset_transform_enabled = true
 offset_transform_position = Vector2(19.745, -8.26)

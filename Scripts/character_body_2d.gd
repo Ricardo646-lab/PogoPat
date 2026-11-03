@@ -1,5 +1,12 @@
 extends CharacterBody2D
 
+# --- Reusable Level Complete Popup ---
+const Level_Complete_Panel: PackedScene = preload("res://Scenes/LevelComplete.tscn")
+
+var result_canvas: CanvasLayer = null
+var result_popup: Control = null
+var level_finished: bool = false
+
 # --- Spawn / Checkpoint ---
 @onready var spawn_position: Vector2 = global_position
 
@@ -38,7 +45,7 @@ func _ready():
 
 	# --- HIDE MOBILE BUTTONS ON DESKTOP ---
 	var is_mobile = OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("android") or OS.has_feature("ios")
-	
+
 	if not is_mobile:
 		var canvas = get_node_or_null("CanvasLayer")
 		if canvas:
@@ -57,29 +64,32 @@ func _ready():
 
 # Listen for keyboard input, mouse click, or screen tap to start/resume
 func _input(event):
+	if level_finished:
+		return
+
 	# 1. Pause with the Escape key or mobile Pause button (ui_cancel)
 	if has_started and not is_dead and event.is_action_pressed("ui_cancel"):
 		pause_game()
 		return
-		
+
 	# 2. Start or resume met ELKE toetsaanslag, muisklik of touchscreen-tik
 	var is_key_press = event is InputEventKey and event.pressed and not event.echo
 	var is_click = event is InputEventMouseButton and event.pressed
 	var is_touch = event is InputEventScreenTouch and event.pressed
-	
+
 	if not has_started and not is_dead and (is_key_press or is_click or is_touch):
 		# Voorkom dat de pauze-toets (Escape) direct de game start als hij daarvoor werd ingedrukt
 		if event is InputEventKey and event.keycode == KEY_ESCAPE:
 			return
-			
+
 		has_started = true
-		
+
 		# Hide the overlay & start text
 		if start_overlay:
 			start_overlay.hide()
 		elif start_label:
 			start_label.hide()
-			
+
 		# Start the Poki gameplay tracking
 		if has_node("/root/PokiSDK"):
 			get_node("/root/PokiSDK").call("gameplayStart")
@@ -92,13 +102,13 @@ func pause_game():
 	if start_label:
 		start_label.text = "Paused! Press any key or click to resume"
 		start_label.show()
-		
+
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
 
 func _physics_process(delta):
 	# Freeze all physics and movement if the game hasn't started yet OF als we dood zijn
-	if not has_started or is_dead:
+	if not has_started or is_dead or level_finished:
 		return
 
 	# 1. Apply gravity (if the player is in the air)
@@ -108,19 +118,19 @@ func _physics_process(delta):
 	# 2. Behavior on the ground (INCLUSIEF JUMP BUFFERING)
 	if is_on_floor():
 		velocity.x = move_toward(velocity.x, 0, ground_friction * delta)
-		
+
 		# Start direct met opladen als Spatie is ingedrukt (ook als je hem in de lucht al vasthield)
 		if Input.is_action_pressed("charge_jump") and not is_charging:
 			is_charging = true
 			current_jump_charge = min_jump_force
-			
+
 		# Blijf opladen zolang Spatie ingedrukt blijft
 		if Input.is_action_pressed("charge_jump") and is_charging:
 			current_jump_charge -= charge_rate * delta
 			if current_jump_charge < max_jump_force:
 				current_jump_charge = max_jump_force
 			charge_changed.emit(inverse_lerp(min_jump_force, max_jump_force, current_jump_charge))
-				
+
 		# Spring wanneer Spatie wordt losgelaten
 		if Input.is_action_just_released("charge_jump") and is_charging:
 			velocity.y = current_jump_charge
@@ -135,7 +145,7 @@ func _physics_process(delta):
 		var direction = Input.get_axis("move_left", "move_right")
 		if direction:
 			velocity.x = move_toward(velocity.x, direction * move_speed, air_acceleration * delta)
-			
+
 			# Sprite flipping based on movement direction
 			if direction < 0:
 				anim_sprite.flip_h = true
@@ -167,19 +177,19 @@ func _physics_process(delta):
 
 func check_trap_collision() -> void:
 	# Do not check for traps if we are already dead or paused
-	if not has_started or is_dead:
+	if not has_started or is_dead or level_finished:
 		return
-		
+
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
-		
+
 		if collider is TileMapLayer:
 			var tile_map: TileMapLayer = collider
 			var collision_point = collision.get_position() - (collision.get_normal() * 4.0)
 			var tile_pos: Vector2i = tile_map.local_to_map(tile_map.to_local(collision_point))
 			var tile_data = tile_map.get_cell_tile_data(tile_pos)
-			
+
 			if tile_data:
 				var is_trap_value = tile_data.get_custom_data("is_trap")
 				if is_trap_value == true:
@@ -188,44 +198,47 @@ func check_trap_collision() -> void:
 
 # Handelt de explosie en sterf-animatie af
 func die():
+	if level_finished:
+		return
+
 	is_dead = true
-	
+
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
-		
+
 	velocity = Vector2.ZERO
-	
+
 	# Verberg de speler en start explosie
 	if anim_sprite:
 		anim_sprite.hide()
 	if has_node("DeathEffect"):
 		$DeathEffect.trigger()
-		
+
 	# Wacht 1.5 seconden
 	await get_tree().create_timer(1.5).timeout
-	
+
 	respawn()
 
 func respawn() -> void:
 	is_dead = false
-	
+
 	# 1. Player died: Stop Poki gameplay tracking
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
-		
+
 	# 2. Reset the player's position and status
 	global_position = spawn_position
 	velocity = Vector2.ZERO
 	is_charging = false
 	current_jump_charge = 0.0
 	charge_changed.emit(0.0)
-	
-	
+
+
 	if anim_sprite:
 		anim_sprite.show()
 	if has_node("DeathEffect"):
 		$DeathEffect.hide_effect()
-	
+
 	# 3. Reset the game state so the player has to press a key again to continue
 	has_started = false
 	if start_overlay:
@@ -237,29 +250,73 @@ func respawn() -> void:
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
 	if body == self or body is CharacterBody2D:
+		if level_finished:
+			return
+
+		level_finished = true
+		has_started = false
+		velocity = Vector2.ZERO
+		is_charging = false
+		current_jump_charge = 0.0
+		charge_changed.emit(0.0)
+
 		# Level completed! Stop gameplay tracking.
 		if has_node("/root/PokiSDK"):
 			get_node("/root/PokiSDK").call("gameplayStop")
-			
-		# 1. Haal het pad van de huidige scene op (bijv. "res://Scenes/Level1.tscn")
-		var current_scene_path: String = get_tree().current_scene.scene_file_path
-		
-		# 2. Haal het cijfer op uit de bestandsnaam
-		var regex = RegEx.new()
-		regex.compile("\\d+") # Zoekt naar het nummer in de naam
-		var result = regex.search(current_scene_path)
-		
-		if result:
-			var current_level_num: int = result.get_string().to_int()
-			var next_level_num: int = current_level_num + 1
-			
-			# 3. Bouw het nieuwe pad op met "Level"
-			var next_scene_path: String = "res://Scenes/Level" + str(next_level_num) + ".tscn"
-			
-			# 4. Check of het volgende level bestaat
-			if ResourceLoader.exists(next_scene_path):
-				get_tree().call_deferred("change_scene_to_file", next_scene_path)
-			else:
-				# Geen volgend level meer? Reset en ga terug naar Level 1!
-				print("Alle levels gehaald! Herstarten vanaf Level 1.")
-				get_tree().call_deferred("change_scene_to_file", "res://Scenes/Level1.tscn")
+
+		show_level_complete_popup()
+
+func show_level_complete_popup() -> void:
+	if is_instance_valid(result_popup):
+		return
+
+	result_canvas = CanvasLayer.new()
+	result_canvas.name = "ResultCanvas"
+	result_canvas.layer = 100
+	result_canvas.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().current_scene.add_child(result_canvas)
+
+	result_popup = Level_Complete_Panel.instantiate()
+	result_popup.process_mode = Node.PROCESS_MODE_ALWAYS
+	result_canvas.add_child(result_popup)
+
+	result_popup.connect("replay_requested", Callable(self, "_on_result_replay_requested"))
+	result_popup.connect("next_level_requested", Callable(self, "_on_result_next_requested"))
+
+	await get_tree().process_frame
+	result_popup.call("show_results", true, false, false)
+
+	# The completed level remains visible behind the transparent popup, but it is frozen.
+	get_tree().paused = true
+
+func _on_result_replay_requested() -> void:
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
+func _on_result_next_requested() -> void:
+	get_tree().paused = false
+	go_to_next_level()
+
+func go_to_next_level() -> void:
+	# 1. Haal het pad van de huidige scene op (bijv. "res://Scenes/Level1.tscn")
+	var current_scene_path: String = get_tree().current_scene.scene_file_path
+
+	# 2. Haal het cijfer op uit de bestandsnaam
+	var regex = RegEx.new()
+	regex.compile("\\d+") # Zoekt naar het nummer in de naam
+	var result = regex.search(current_scene_path)
+
+	if result:
+		var current_level_num: int = result.get_string().to_int()
+		var next_level_num: int = current_level_num + 1
+
+		# 3. Bouw het nieuwe pad op met "Level"
+		var next_scene_path: String = "res://Scenes/Level" + str(next_level_num) + ".tscn"
+
+		# 4. Check of het volgende level bestaat
+		if ResourceLoader.exists(next_scene_path):
+			get_tree().call_deferred("change_scene_to_file", next_scene_path)
+		else:
+			# Geen volgend level meer? Reset en ga terug naar Level 1!
+			print("Alle levels gehaald! Herstarten vanaf Level 1.")
+			get_tree().call_deferred("change_scene_to_file", "res://Scenes/Level1.tscn")
