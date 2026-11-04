@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://bkdno45mc5fnd"]
+[gd_scene format=4 uid="uid://chiujuuvni67r"]
 
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_ixwy0"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_yl36j"]
@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="12_hd8un"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="13_o3lbm"]
 [ext_resource type="Script" uid="uid://dg8jx1tmkbrfr" path="res://Scripts/level_label.gd" id="14_qh50r"]
-[ext_resource type="Script" path="res://Scripts/WreckingBall.gd" id="15_yl36j"]
+[ext_resource type="Script" uid="uid://bfpbsm5xjxyjm" path="res://Scripts/WreckingBall.gd" id="15_yl36j"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_ixwy0")
@@ -579,7 +579,6 @@ tile_set = SubResource("TileSet_dmjao")
 position = Vector2(-94, 151)
 scale = Vector2(0.75, 0.75)
 script = ExtResource("2_yl36j")
-charge_rate = 1500.0
 
 [node name="PlayerCollision" type="CollisionShape2D" parent="Player" unique_id=303246661]
 position = Vector2(-4, -38.666668)
