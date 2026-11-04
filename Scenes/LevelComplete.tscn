@@ -1,11 +1,11 @@
-[gd_scene format=3 uid="uid://bhp8s585itxn7"]
+[gd_scene format=3 uid="uid://ds7wv2f6sgtgb"]
 
 [ext_resource type="Script" path="res://Scripts/level_complete.gd" id="1_ob4rb"]
 [ext_resource type="Texture2D" path="res://Sprites/UI/star-01-classic.svg" id="1_s5v0a"]
-[ext_resource type="StyleBox" path="res://Sprites/UI/buttonPressed.tres" id="2_eqxnh"]
-[ext_resource type="StyleBox" path="res://Sprites/UI/Panel.tres" id="2_fwj43"]
-[ext_resource type="StyleBox" path="res://Sprites/UI/Shadow.tres" id="2_kh4og"]
-[ext_resource type="StyleBox" path="res://Sprites/UI/normalButton.tres" id="4_kh4og"]
+[ext_resource type="StyleBox" uid="uid://c1t6ga773jnh7" path="res://Scripts/shadowPanel.tres" id="2_kh4og"]
+[ext_resource type="StyleBox" uid="uid://em51fxepj67w" path="res://Scripts/Shadow.tres" id="3_kh4og"]
+[ext_resource type="StyleBox" uid="uid://c3hi2aalwr7nw" path="res://Scripts/normalButton.tres" id="5_0nqca"]
+[ext_resource type="StyleBox" uid="uid://c5u88jhh2slkj" path="res://Scripts/pressedButton.tres" id="6_31vao"]
 
 [sub_resource type="FontFile" id="FontFile_ob4rb"]
 subpixel_positioning = 0
@@ -103,7 +103,7 @@ offset_right = 202.215
 offset_bottom = 305.7
 offset_transform_enabled = true
 mouse_filter = 2
-theme_override_styles/panel = ExtResource("2_fwj43")
+theme_override_styles/panel = ExtResource("3_kh4og")
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PopUpLayer/MainPanel" unique_id=509220532]
 propagate_maximum_size = false
@@ -245,9 +245,9 @@ theme_override_colors/font_outline_color = Color(0.19215687, 0.33333334, 0.24313
 theme_override_constants/outline_size = 2
 theme_override_constants/h_separation = 4
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = ExtResource("4_kh4og")
-theme_override_styles/pressed = ExtResource("2_eqxnh")
-theme_override_styles/hover = ExtResource("2_eqxnh")
+theme_override_styles/normal = ExtResource("5_0nqca")
+theme_override_styles/pressed = ExtResource("6_31vao")
+theme_override_styles/hover = ExtResource("6_31vao")
 button_mask = 0
 text = "PLAY AGAIN"
 icon_alignment = 1
@@ -264,8 +264,8 @@ theme_override_colors/font_color = Color(0.19215687, 0.33333334, 0.24313726, 1)
 theme_override_constants/outline_size = 1
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_llox3")
-theme_override_styles/pressed = ExtResource("2_eqxnh")
-theme_override_styles/hover = ExtResource("2_eqxnh")
+theme_override_styles/pressed = ExtResource("6_31vao")
+theme_override_styles/hover = ExtResource("6_31vao")
 button_mask = 0
 text = "  NEXT LEVEL"
 autowrap_trim_flags = 0
