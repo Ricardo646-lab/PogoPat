@@ -79,7 +79,7 @@ var visual_stretch: float = 0.0
 var level_timer: float = 0.0
 @export var par_time: float = 30.0          # Tijdslimiet voor de 2e ster
 @export var fast_time: float = 15.0         # Tijdslimiet voor de 3e ster (extra snel!)
-@export var auto_next_delay: float = 3.0    # Seconden dat het Level Complete panel zichtbaar blijft
+@export var auto_next_delay: float = 2.0    # Seconden dat het Level Complete panel zichtbaar blijft
 
 func _ready():
 	if Engine.is_editor_hint():
