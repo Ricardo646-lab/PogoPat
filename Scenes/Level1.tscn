@@ -13,9 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://hy1kvj0ocq7g" path="res://Sprites/Akey.png" id="8_rpty4"]
 [ext_resource type="Texture2D" uid="uid://6j82vwjhbk54" path="res://Sprites/Dkey.png" id="9_6jj8j"]
 [ext_resource type="Texture2D" uid="uid://cim4aa6148wjn" path="res://Sprites/ArrowLeft.png" id="11_ubfni"]
-[ext_resource type="Texture2D" uid="uid://ggw4qn8a6vcr" path="res://Sprites/space_normal.png" id="12_6jj8j"]
 [ext_resource type="Texture2D" uid="uid://pwfjvyrar66w" path="res://Sprites/ArrowRight.png" id="12_ug0sv"]
-[ext_resource type="Texture2D" uid="uid://b1tm7r4lv8v0a" path="res://Sprites/space_pressed_no_purple.png" id="13_06um6"]
+[ext_resource type="Texture2D" uid="uid://b3w4ofkgm1onf" path="res://Sprites/spacebar_spritesheet.png" id="15_yji5v"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="16_ug0sv"]
 [ext_resource type="Script" uid="uid://dg8jx1tmkbrfr" path="res://Scripts/level_label.gd" id="17_0wsr5"]
 [ext_resource type="Script" uid="uid://lgi5ahmmmvkd" path="res://Scripts/timer_label.gd" id="21_fh0sh"]
@@ -511,18 +510,47 @@ size = Vector2(350, 350)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6jj8j"]
 size = Vector2(350, 350)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ulvkb"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(0, 0, 314, 154)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fh0sh"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(314, 0, 314, 154)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_03od6"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(628, 0, 314, 154)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_384de"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(942, 0, 314, 154)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bhaf5"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(1256, 0, 314, 154)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_ubfni"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("12_6jj8j")
+"texture": SubResource("AtlasTexture_ulvkb")
 }, {
-"duration": 3.0,
-"texture": ExtResource("13_06um6")
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fh0sh")
+}, {
+"duration": 9.0,
+"texture": SubResource("AtlasTexture_03od6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_384de")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bhaf5")
 }],
 "loop": 1,
 "name": &"default",
-"speed": 2.0
+"speed": 6.0
 }]
 
 [node name="Node2D3" type="Node2D" unique_id=1397552547]
@@ -640,10 +668,11 @@ scale = Vector2(0.61299807, 0.5930266)
 texture = ExtResource("12_ug0sv")
 
 [node name="ButtonJump" type="AnimatedSprite2D" parent="TutorialPrompts" unique_id=1623366308]
-position = Vector2(629, 292)
-scale = Vector2(0.5373791, 0.48339)
+position = Vector2(553, 286)
+scale = Vector2(0.8630784, 0.6607634)
 sprite_frames = SubResource("SpriteFrames_ubfni")
 autoplay = "default"
+frame_progress = 0.7577875
 
 [node name="SkyBackgroundLayer" type="CanvasLayer" parent="." unique_id=462155474]
 layer = -10
