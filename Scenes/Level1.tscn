@@ -648,31 +648,31 @@ z_index = -1
 script = ExtResource("8_06um6")
 
 [node name="Sprite A" type="Sprite2D" parent="TutorialPrompts" unique_id=967606512]
-position = Vector2(238, -406.99997)
-scale = Vector2(0.39101788, 0.4329849)
+position = Vector2(247, -383)
+scale = Vector2(0.43101817, 0.4329849)
 texture = ExtResource("8_rpty4")
 
 [node name="Sprite D" type="Sprite2D" parent="TutorialPrompts" unique_id=315512594]
-position = Vector2(559, -396)
+position = Vector2(559, -384.00003)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("9_6jj8j")
 
 [node name="Arrow Key left" type="Sprite2D" parent="TutorialPrompts" unique_id=629909559]
-position = Vector2(93, -409.00003)
+position = Vector2(93, -385)
 scale = Vector2(0.3, 0.302)
 texture = ExtResource("11_ubfni")
 
 [node name="Arrow Key Right" type="Sprite2D" parent="TutorialPrompts" unique_id=182211976]
-position = Vector2(704, -393)
+position = Vector2(713, -384)
 scale = Vector2(0.61299807, 0.5930266)
 texture = ExtResource("12_ug0sv")
 
 [node name="ButtonJump" type="AnimatedSprite2D" parent="TutorialPrompts" unique_id=1623366308]
 position = Vector2(553, 286)
-scale = Vector2(0.8630784, 0.6607634)
+scale = Vector2(1.1081129, 0.80633134)
 sprite_frames = SubResource("SpriteFrames_ubfni")
 autoplay = "default"
-frame_progress = 0.7577875
+frame_progress = 0.17209232
 
 [node name="SkyBackgroundLayer" type="CanvasLayer" parent="." unique_id=462155474]
 layer = -10
