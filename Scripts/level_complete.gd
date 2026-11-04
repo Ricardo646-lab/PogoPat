@@ -36,7 +36,8 @@ func _ready() -> void:
 
 	%ReplayButton.pressed.connect(
 		_on_replay_button_pressed
-	)
+	) 
+	print("pressed")
 
 	%NextLevelButton.pressed.connect(
 		_on_next_level_button_pressed
