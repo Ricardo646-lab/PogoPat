@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ds7wv2f6sgtgb"]
 
-[ext_resource type="Script" path="res://Scripts/level_complete.gd" id="1_ob4rb"]
+[ext_resource type="Script" uid="uid://dsmqxgreciotw" path="res://Scripts/level_complete.gd" id="1_ob4rb"]
 [ext_resource type="Texture2D" path="res://Sprites/UI/star-01-classic.svg" id="1_s5v0a"]
 [ext_resource type="StyleBox" uid="uid://c1t6ga773jnh7" path="res://Scripts/shadowPanel.tres" id="2_kh4og"]
 [ext_resource type="StyleBox" uid="uid://em51fxepj67w" path="res://Scripts/Shadow.tres" id="3_kh4og"]
