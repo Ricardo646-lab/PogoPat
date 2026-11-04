@@ -1,8 +1,5 @@
 extends Control
 
-signal replay_requested
-signal next_level_requested
-
 
 @onready var main_panel: Control = %MainPanel
 
@@ -24,18 +21,6 @@ var active_tweens: Array[Tween] = []
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	%ReplayButton.process_mode = Node.PROCESS_MODE_ALWAYS
-	%NextLevelButton.process_mode = Node.PROCESS_MODE_ALWAYS
-
-	%ReplayButton.mouse_filter = Control.MOUSE_FILTER_STOP
-	%NextLevelButton.mouse_filter = Control.MOUSE_FILTER_STOP
-
-	%ReplayButton.disabled = false
-	%NextLevelButton.disabled = false
-
-	%ReplayButton.pressed.connect(_on_replay_button_pressed)
-	%NextLevelButton.pressed.connect(_on_next_level_button_pressed)
 
 	# Als je deze scene los start (F6) zie je een demo met 3 sterren.
 	# Als de speler hem in een level opent, blijft hij verborgen tot show_results().
@@ -143,11 +128,3 @@ func _stop_active_tweens() -> void:
 			tween.kill()
 
 	active_tweens.clear()
-
-
-func _on_replay_button_pressed() -> void:
-	replay_requested.emit()
-
-
-func _on_next_level_button_pressed() -> void:
-	next_level_requested.emit()

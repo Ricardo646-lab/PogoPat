@@ -1,7 +1,6 @@
 extends CharacterBody2D
 
-# --- Reusable Level Complete Popup ---
-
+# --- Level Complete Popup ---
 const Level_Complete_Panel: PackedScene = preload("res://Scenes/LevelComplete.tscn")
 
 var result_canvas: CanvasLayer = null
@@ -78,8 +77,9 @@ var visual_stretch: float = 0.0
 
 # --- Sterren & Tijd Systeem ---
 var level_timer: float = 0.0
-@export var par_time: float = 30.0   # Tijdslimiet voor de 2e ster
-@export var fast_time: float = 15.0  # Tijdslimiet voor de 3e ster (extra snel!)
+@export var par_time: float = 30.0          # Tijdslimiet voor de 2e ster
+@export var fast_time: float = 15.0         # Tijdslimiet voor de 3e ster (extra snel!)
+@export var auto_next_delay: float = 3.0    # Seconden dat het Level Complete panel zichtbaar blijft
 
 func _ready():
 	if Engine.is_editor_hint():
@@ -96,7 +96,6 @@ func _ready():
 		if canvas:
 			if canvas.has_node("AnchorLinksonder"): canvas.get_node("AnchorLinksonder").hide()
 			if canvas.has_node("AnchorRechtsonder"): canvas.get_node("AnchorRechtsonder").hide()
-			if canvas.has_node("AnchorRechtsboven"): canvas.get_node("AnchorRechtsboven").hide()
 
 	if has_node("/root/PokiSDK"):
 		var poki = get_node("/root/PokiSDK")
@@ -430,6 +429,7 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 	if body != self and not body is CharacterBody2D:
 		return
 
+	# Maar één keer uitvoeren
 	if level_finished:
 		return
 
@@ -465,20 +465,15 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 	var star_display = get_tree().current_scene.find_child("StarDisplay", true, false)
 	if star_display and star_display.has_method("update_stars"):
 		star_display.update_stars(earned_stars)
-		print("StarDisplay succesvol geüpdatet met sterren: ", earned_stars)
-	else:
-		print("Waarschuwing: StarDisplay niet gevonden in deze scène!")
 
 	print("Level gehaald in ", snapped(level_timer, 0.01), "s! Behaalde sterren: ", earned_stars)
-	# -------------------------
 
+	# --- 3. TOON HET PANEL, WACHT, EN GA DOOR ---
 	show_level_complete_popup(earned_stars)
 
 
 func show_level_complete_popup(earned_stars: int) -> void:
-	if is_instance_valid(result_popup):
-		return
-
+	# Eigen CanvasLayer zodat het panel boven alles op het scherm staat
 	result_canvas = CanvasLayer.new()
 	result_canvas.name = "ResultCanvas"
 	result_canvas.layer = 100
@@ -489,22 +484,15 @@ func show_level_complete_popup(earned_stars: int) -> void:
 	result_popup.process_mode = Node.PROCESS_MODE_ALWAYS
 	result_canvas.add_child(result_popup)
 
-	result_popup.connect("replay_requested", Callable(self, "_on_result_replay_requested"))
-	result_popup.connect("next_level_requested", Callable(self, "_on_result_next_requested"))
-
 	await get_tree().process_frame
 	result_popup.call("show_results", earned_stars >= 1, earned_stars >= 2, earned_stars >= 3)
 
-	# The completed level remains visible behind the transparent popup, but it is frozen.
+	# Zet het level stil terwijl het panel zichtbaar is
 	get_tree().paused = true
 
+	# Wacht een paar seconden (deze timer loopt ook door tijdens de pauze)
+	await get_tree().create_timer(auto_next_delay).timeout
 
-func _on_result_replay_requested() -> void:
-	get_tree().paused = false
-	get_tree().call_deferred("reload_current_scene")
-
-
-func _on_result_next_requested() -> void:
 	get_tree().paused = false
 	go_to_next_level()
 
@@ -523,5 +511,5 @@ func go_to_next_level() -> void:
 		if ResourceLoader.exists(next_scene_path):
 			get_tree().call_deferred("change_scene_to_file", next_scene_path)
 		else:
-			print("Alle levels gehaald! Herstarten vanaf Level 1.")
-			get_tree().call_deferred("change_scene_to_file", "res://Scenes/Level1.tscn")
+			print("Alle levels gehaald! Terug naar de Level Selector.")
+			get_tree().call_deferred("change_scene_to_file", "res://Scenes/LevelSelector.tscn")
