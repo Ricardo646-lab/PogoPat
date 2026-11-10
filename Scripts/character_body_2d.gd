@@ -1,6 +1,13 @@
 @tool
 extends CharacterBody2D
 
+# --- Reusable Level Complete Popup ---
+const Level_Complete_Panel: PackedScene = preload("res://Scenes/LevelComplete.tscn")
+
+var result_canvas: CanvasLayer = null
+var result_popup: Control = null
+var level_finished: bool = false
+
 # --- Spawn / Checkpoint ---
 @onready var spawn_position: Vector2 = global_position
 
@@ -345,7 +352,7 @@ func _ik(root: Vector2, target: Vector2, a: float, b: float, bend: float) -> Vec
 	return root + along * x + side * h
 
 func check_trap_collision() -> void:
-	if not has_started or is_dead:
+	if not has_started or is_dead or level_finished:
 		return
 
 	for i in get_slide_collision_count():
@@ -367,6 +374,9 @@ func check_trap_collision() -> void:
 func die():
 	if is_dead:
 		return
+	if level_finished:
+		return
+
 	is_dead = true
 	is_charging = false
 	is_big_jump = false
@@ -417,6 +427,16 @@ func respawn() -> void:
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
 	if body == self or body is CharacterBody2D:
+		if level_finished:
+			return
+
+		level_finished = true
+		has_started = false
+		velocity = Vector2.ZERO
+		is_charging = false
+		current_jump_charge = 0.0
+		charge_changed.emit(0.0)
+
 		if has_node("/root/PokiSDK"):
 			get_node("/root/PokiSDK").call("gameplayStop")
 			
