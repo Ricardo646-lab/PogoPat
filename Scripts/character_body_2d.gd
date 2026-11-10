@@ -1,5 +1,11 @@
-@tool
 extends CharacterBody2D
+
+# --- Level Complete Popup ---
+const Level_Complete_Panel: PackedScene = preload("res://Scenes/LevelComplete.tscn")
+
+var result_canvas: CanvasLayer = null
+var result_popup: Control = null
+var level_finished: bool = false
 
 # --- Spawn / Checkpoint ---
 @onready var spawn_position: Vector2 = global_position
@@ -71,8 +77,9 @@ var visual_stretch: float = 0.0
 
 # --- Sterren & Tijd Systeem ---
 var level_timer: float = 0.0
-@export var par_time: float = 30.0   # Tijdslimiet voor de 2e ster
-@export var fast_time: float = 15.0  # Tijdslimiet voor de 3e ster (extra snel!)
+@export var par_time: float = 30.0          # Tijdslimiet voor de 2e ster
+@export var fast_time: float = 15.0         # Tijdslimiet voor de 3e ster (extra snel!)
+@export var auto_next_delay: float = 2.0    # Seconden dat het Level Complete panel zichtbaar blijft
 
 func _ready():
 	if Engine.is_editor_hint():
@@ -95,6 +102,9 @@ func _ready():
 		poki.call("gameLoadingFinished")
 
 func _input(event):
+	if level_finished:
+		return
+
 	if Engine.is_editor_hint():
 		return
 
@@ -137,7 +147,7 @@ func _physics_process(delta):
 	# Freeze all physics and movement if the game hasn't started yet OF als we dood zijn
 	if Engine.is_editor_hint():
 		return
-	if not has_started or is_dead:
+	if not has_started or is_dead or level_finished:
 		return
 
 	var direction = Input.get_axis("move_left", "move_right")
@@ -345,7 +355,7 @@ func _ik(root: Vector2, target: Vector2, a: float, b: float, bend: float) -> Vec
 	return root + along * x + side * h
 
 func check_trap_collision() -> void:
-	if not has_started or is_dead:
+	if not has_started or is_dead or level_finished:
 		return
 
 	for i in get_slide_collision_count():
@@ -365,7 +375,7 @@ func check_trap_collision() -> void:
 					break
 
 func die():
-	if is_dead:
+	if is_dead or level_finished:
 		return
 	is_dead = true
 	is_charging = false
@@ -416,55 +426,90 @@ func respawn() -> void:
 	queue_redraw()
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
-	if body == self or body is CharacterBody2D:
-		if has_node("/root/PokiSDK"):
-			get_node("/root/PokiSDK").call("gameplayStop")
-			
-		# --- 1. STERREN BEREKENEN OP BASIS VAN TIJD ---
-		var earned_stars = 1 # 1e ster: Je hebt het level gehaald!
-		
-		# 2e ster: Binnen de normale par_time gehaald?
-		if level_timer <= par_time:
-			earned_stars += 1
-			
-		# 3e ster: Binnen de snelle fast_time gehaald?
-		if level_timer <= fast_time:
-			earned_stars += 1
-			
-		# --- 2. SLA DE SCORE OP ---
-		var current_scene_path: String = get_tree().current_scene.scene_file_path
-		var level_name = current_scene_path.get_file().get_basename() # Unieke naam zoals "Level1" of "Level2"
-		
-		if has_node("/root/GameManager"):
-			get_node("/root/GameManager").save_level_stars(level_name, earned_stars)
-			
-		# Update direct de UI op het scherm
-		var star_display = get_tree().current_scene.find_child("StarDisplay", true, false)
-		if star_display and star_display.has_method("update_stars"):
-			star_display.update_stars(earned_stars)
-			print("StarDisplay succesvol geüpdatet met sterren: ", earned_stars)
-		else: 
-			print("Waarschuwing: StarDisplay niet gevonden in deze scène!")
-			
-		print("Level gehaald in ", snapped(level_timer, 0.01), "s! Behaalde sterren: ", earned_stars)
-		# -------------------------
-			
-		# 3. Ga door naar het volgende level of terug naar de Level Selector
-		var regex = RegEx.new()
-		regex.compile("\\d+") 
-		var result = regex.search(current_scene_path)
+	if body != self and not body is CharacterBody2D:
+		return
 
-		if result:
-			var current_level_num: int = result.get_string().to_int()
-			var next_level_num: int = current_level_num + 1
-			var next_scene_path: String = "res://Scenes/Level" + str(next_level_num) + ".tscn"
-			
-			# Wacht even 1 seconde zodat de speler zijn score ziet, ga dan door
-			await get_tree().create_timer(1.0).timeout
-			
-			if ResourceLoader.exists(next_scene_path):
-				get_tree().call_deferred("change_scene_to_file", next_scene_path)
-			else:
-				print("Alle levels gehaald! Terug naar de Level Selector.")
-				# Aangepast naar het pad van jouw Level Selector scène:
-				get_tree().call_deferred("change_scene_to_file", "res://Scenes/LevelSelector.tscn")
+	# Maar één keer uitvoeren
+	if level_finished:
+		return
+
+	level_finished = true
+	has_started = false
+	velocity = Vector2.ZERO
+	is_charging = false
+	current_jump_charge = 0.0
+	charge_changed.emit(0.0)
+
+	if has_node("/root/PokiSDK"):
+		get_node("/root/PokiSDK").call("gameplayStop")
+
+	# --- 1. STERREN BEREKENEN OP BASIS VAN TIJD ---
+	var earned_stars = 1 # 1e ster: Je hebt het level gehaald!
+
+	# 2e ster: Binnen de normale par_time gehaald?
+	if level_timer <= par_time:
+		earned_stars += 1
+
+	# 3e ster: Binnen de snelle fast_time gehaald?
+	if level_timer <= fast_time:
+		earned_stars += 1
+
+	# --- 2. SLA DE SCORE OP ---
+	var current_scene_path: String = get_tree().current_scene.scene_file_path
+	var level_name = current_scene_path.get_file().get_basename() # Unieke naam zoals "Level1" of "Level2"
+
+	if has_node("/root/GameManager"):
+		get_node("/root/GameManager").save_level_stars(level_name, earned_stars)
+
+	# Update direct de UI op het scherm
+	var star_display = get_tree().current_scene.find_child("StarDisplay", true, false)
+	if star_display and star_display.has_method("update_stars"):
+		star_display.update_stars(earned_stars)
+
+	print("Level gehaald in ", snapped(level_timer, 0.01), "s! Behaalde sterren: ", earned_stars)
+
+	# --- 3. TOON HET PANEL, WACHT, EN GA DOOR ---
+	show_level_complete_popup(earned_stars)
+
+
+func show_level_complete_popup(earned_stars: int) -> void:
+	# Eigen CanvasLayer zodat het panel boven alles op het scherm staat
+	result_canvas = CanvasLayer.new()
+	result_canvas.name = "ResultCanvas"
+	result_canvas.layer = 100
+	result_canvas.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().current_scene.add_child(result_canvas)
+
+	result_popup = Level_Complete_Panel.instantiate()
+	result_popup.process_mode = Node.PROCESS_MODE_ALWAYS
+	result_canvas.add_child(result_popup)
+
+	await get_tree().process_frame
+	result_popup.call("show_results", earned_stars >= 1, earned_stars >= 2, earned_stars >= 3)
+
+	# Zet het level stil terwijl het panel zichtbaar is
+	get_tree().paused = true
+
+	# Wacht een paar seconden (deze timer loopt ook door tijdens de pauze)
+	await get_tree().create_timer(auto_next_delay).timeout
+
+	get_tree().paused = false
+	go_to_next_level()
+
+
+func go_to_next_level() -> void:
+	var current_scene_path: String = get_tree().current_scene.scene_file_path
+	var regex = RegEx.new()
+	regex.compile("\\d+")
+	var result = regex.search(current_scene_path)
+
+	if result:
+		var current_level_num: int = result.get_string().to_int()
+		var next_level_num: int = current_level_num + 1
+		var next_scene_path: String = "res://Scenes/Level" + str(next_level_num) + ".tscn"
+
+		if ResourceLoader.exists(next_scene_path):
+			get_tree().call_deferred("change_scene_to_file", next_scene_path)
+		else:
+			print("Alle levels gehaald! Terug naar de Level Selector.")
+			get_tree().call_deferred("change_scene_to_file", "res://Scenes/LevelSelector.tscn")
