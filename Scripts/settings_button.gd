@@ -1,3 +1,4 @@
+@tool
 extends Button
 
 @export var gear_color: Color = Color("#7F8C8D") # Het grijze tandwiel

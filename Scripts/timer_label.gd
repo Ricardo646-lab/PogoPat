@@ -1,3 +1,4 @@
+@tool
 extends Label
 
 var player = null

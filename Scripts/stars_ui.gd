@@ -1,3 +1,4 @@
+@tool
 extends Control
 
 @export var current_stars: int = 0 
