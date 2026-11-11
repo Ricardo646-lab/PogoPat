@@ -35,8 +35,8 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 # --- Flips & Aim ---
 @export_group("Flips")
 @export var aim_max_angle_deg = 35.0
-@export var spin_acceleration = 8.0       
-@export var max_spin_speed = 3.5          
+@export var spin_acceleration = 8.0
+@export var max_spin_speed = 3.5
 @export var spin_damping = 2.0
 @export var big_jump_air_control = 0.3
 @export var land_tolerance_deg = 55.0
@@ -46,12 +46,12 @@ var current_jump_charge = 0.0
 var is_charging = false
 
 # --- Rotatie-state ---
-var angle: float = 0.0            
+var angle: float = 0.0
 var angular_vel: float = 0.0
 var is_big_jump: bool = false
 var was_on_floor: bool = false
 var pivot_blend: float = 0.0
-var tuck: float = 0.0             
+var tuck: float = 0.0
 
 # --- Dynamische Teken-Variabelen ---
 @export_group("Tekening")
@@ -59,17 +59,32 @@ var tuck: float = 0.0
 	set(v):
 		draw_scale = v
 		queue_redraw()
-@export var feet_y: float = 60.0:      
+@export var feet_y: float = 60.0:
 	set(v):
 		feet_y = v
 		queue_redraw()
-@export var show_collision_guide: bool = true:   
+@export var show_collision_guide: bool = true:
 	set(v):
 		show_collision_guide = v
 		queue_redraw()
 
 var is_facing_right: bool = true
 var visual_stretch: float = 0.0
+
+# --- Juice (screen shake) ---
+var fall_speed: float = 0.0
+var _shake_tween: Tween
+
+# --- Level Intro ---
+@export var finish_point: Node2D
+@export var intro_hold_time: float = 1.0
+@export var intro_travel_time: float = 3.0
+@export var intro_zoom_in: float = 1.4
+var intro_playing: bool = false
+var _intro_tween: Tween
+var _intro_cam_pos: Vector2
+var _intro_zoom: Vector2
+var _intro_smoothing: bool = false
 
 # --- UI ---
 @onready var start_label = get_node_or_null("%StartLabel")
@@ -101,7 +116,19 @@ func _ready():
 		var poki = get_node("/root/PokiSDK")
 		poki.call("gameLoadingFinished")
 
+	play_level_intro()
+
 func _input(event):
+	# While the intro plays, any key/click/touch skips it
+	if intro_playing:
+		var pressed = (event is InputEventKey and event.pressed and not event.echo) \
+			or (event is InputEventMouseButton and event.pressed) \
+			or (event is InputEventScreenTouch and event.pressed)
+		if pressed:
+			_intro_tween.kill()
+			_end_intro()
+		return
+
 	if level_finished:
 		return
 
@@ -218,10 +245,13 @@ func _physics_process(delta):
 	tuck = move_toward(tuck, 1.0 if is_big_jump else 0.0, 6.0 * delta)
 
 	# 7. Toepassen
+	fall_speed = velocity.y
 	move_and_slide()
 
 	var on_floor_now = is_on_floor()
 	if on_floor_now and not was_on_floor:
+		if is_big_jump:
+			_shake_camera(clamp(fall_speed * 0.02, 4.0, 20.0))
 		_on_land()
 	was_on_floor = on_floor_now
 
@@ -300,9 +330,9 @@ func _draw():
 	draw_line(footrest + Vector2(-6, 0), footrest + Vector2(6, 0), col_metal, 3.0)
 
 	# --- RIG: Lichaam staat nu netjes NAAST de pogo-stick ---
-	var lean = 0.35 + charge_ratio * 0.3                      
-	var crouch = clamp(comp * 0.9 + tuck * 4.0, -3.0, 11.0)   
-	
+	var lean = 0.35 + charge_ratio * 0.3
+	var crouch = clamp(comp * 0.9 + tuck * 4.0, -3.0, 11.0)
+
 	var foot = footrest + Vector2(0, -1)
 	# Heup en romp staan nu verder naar achteren (x = -9 i.p.v. -4) zodat de pogo goed zichtbaar blijft
 	var hip = foot + Vector2(-9, -21 + crouch)
@@ -310,10 +340,10 @@ func _draw():
 	var shoulder = hip + torso_dir * 17.0
 	var head = shoulder + torso_dir * 9.5
 	var hand = handle + Vector2(0, 0)
-	
+
 	# Knie en elleboog voor natuurlijke houding naast de stok
-	var knee = _ik(hip, foot, 13.0, 13.0, -1.0)         
-	var elbow = _ik(shoulder, hand, 11.0, 11.0, 1.0)   
+	var knee = _ik(hip, foot, 13.0, 13.0, -1.0)
+	var elbow = _ik(shoulder, hand, 11.0, 11.0, 1.0)
 
 	var t = 4.5
 	var limbs = [
@@ -513,3 +543,63 @@ func go_to_next_level() -> void:
 		else:
 			print("Alle levels gehaald! Terug naar de Level Selector.")
 			get_tree().call_deferred("change_scene_to_file", "res://Scenes/LevelSelector.tscn")
+
+
+# --- Juice: screen shake ---
+func _shake_camera(strength: float) -> void:
+	var cam = get_viewport().get_camera_2d()
+	if cam == null:
+		return
+	if _shake_tween:
+		_shake_tween.kill()
+	_shake_tween = create_tween()
+	for i in 6:
+		_shake_tween.tween_property(cam, "offset", Vector2(randf_range(-strength, strength), randf_range(-strength, strength)), 0.03)
+	_shake_tween.tween_property(cam, "offset", Vector2.ZERO, 0.03)
+
+
+# --- Level Intro ---
+func play_level_intro() -> void:
+	await get_tree().process_frame   # wait one frame so the camera is ready
+
+	if finish_point == null:
+		finish_point = get_tree().current_scene.find_child("FinishFlag", true, false)
+	var cam = get_viewport().get_camera_2d()
+	if finish_point == null or cam == null:
+		return
+
+	intro_playing = true
+	if start_overlay:
+		start_overlay.hide()
+	elif start_label:
+		start_label.hide()
+
+	# Remember where the camera normally is, so we can go back to it
+	_intro_cam_pos = cam.global_position
+	_intro_zoom = cam.zoom
+	_intro_smoothing = cam.position_smoothing_enabled
+	cam.position_smoothing_enabled = false
+
+	# Start close up on the finish
+	cam.global_position = finish_point.global_position
+	cam.zoom = _intro_zoom * intro_zoom_in
+
+	# Hold for a moment, then fly back to Pat while zooming out
+	_intro_tween = create_tween()
+	_intro_tween.tween_interval(intro_hold_time)
+	_intro_tween.tween_property(cam, "global_position", _intro_cam_pos, intro_travel_time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_intro_tween.parallel().tween_property(cam, "zoom", _intro_zoom, intro_travel_time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_intro_tween.tween_callback(_end_intro)
+
+
+func _end_intro() -> void:
+	intro_playing = false
+	var cam = get_viewport().get_camera_2d()
+	if cam:
+		cam.global_position = _intro_cam_pos
+		cam.zoom = _intro_zoom
+		cam.position_smoothing_enabled = _intro_smoothing
+	if start_overlay:
+		start_overlay.show()
+	elif start_label:
+		start_label.show()
