@@ -219,7 +219,7 @@ func _physics_process(delta):
 	if is_on_floor() and velocity.y >= 0 and not wants_charge:
 		if just_released_charge:
 			just_released_charge = false
-		else: 
+		elif direction != 0:
 			velocity.y = auto_hop_force
 			visual_stretch = 0.3
 
