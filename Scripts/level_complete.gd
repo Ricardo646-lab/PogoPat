@@ -17,6 +17,7 @@ extends Control
 
 var active_tweens: Array[Tween] = []
 
+@onready var star_sound = $StarSound
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -116,6 +117,10 @@ func _play_star_animation(earned_states: Array[bool]) -> void:
 
 		# Elke ster komt een beetje later dan de vorige.
 		tween.tween_interval(0.18 + index * 0.14)
+
+		# Speel het geluid af zodra de animatie van deze specifieke ster start
+		if star_sound:
+			tween.tween_callback(func(): star_sound.play())
 
 		tween.tween_property(holder, "scale", Vector2.ONE, 0.46).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		tween.parallel().tween_property(holder, "rotation", 0.0, 0.38).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)

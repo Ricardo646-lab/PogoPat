@@ -3,7 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_hurp7"]
 [ext_resource type="Script" uid="uid://48oqg8dhfpum" path="res://Scripts/camera_intro.gd" id="2_bmpu8"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_qh726"]
+[ext_resource type="AudioStream" uid="uid://ditch41a86cw5" path="res://Sounds/SimpleWhooshSound.mp3" id="3_040y1"]
 [ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_213sf"]
+[ext_resource type="AudioStream" uid="uid://dip3rujcmejmr" path="res://Sounds/SimpleWhooshSoundReverse.mp3" id="4_u7l1f"]
 [ext_resource type="Script" uid="uid://crwncxtwalo86" path="res://Scripts/death_effect.gd" id="4_xnl3v"]
 [ext_resource type="Texture2D" uid="uid://t63i3nqoy2m7" path="res://Sprites/barA_pill_under.png" id="4_ytef6"]
 [ext_resource type="Texture2D" uid="uid://b2wohh2ioas32" path="res://Sprites/barA_pill_progress.png" id="5_cwt8c"]
@@ -11,11 +13,20 @@
 [ext_resource type="Script" uid="uid://b25jt4oqueh7f" path="res://Scripts/ProgressBar.gd" id="6_0hflc"]
 [ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_4kscp"]
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="8_rbgxu"]
+[ext_resource type="AudioStream" uid="uid://daft06e1wjag0" path="res://Sounds/snapping-stick2.mp3" id="8_x7gh6"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="9_4kscp"]
+[ext_resource type="AudioStream" uid="uid://bfwvye78n4mrg" path="res://Sounds/snapping-stick4.mp3" id="9_qn1m2"]
+[ext_resource type="AudioStream" uid="uid://243dbygorq7m" path="res://Sounds/snapping-stick5.mp3" id="10_p4yew"]
 [ext_resource type="Script" uid="uid://dg8jx1tmkbrfr" path="res://Scripts/level_label.gd" id="10_xnl3v"]
+[ext_resource type="AudioStream" uid="uid://brq7m6wrup3g8" path="res://Sounds/bounce-pogo-stick.wav" id="11_fi0mo"]
+[ext_resource type="AudioStream" uid="uid://chf3ah3bab77o" path="res://Sounds/snapping-stick1.mp3" id="12_gb1h0"]
+[ext_resource type="AudioStream" uid="uid://c1t00iogwkltm" path="res://Sounds/victory.mp3" id="13_5em11"]
 [ext_resource type="Script" uid="uid://lgi5ahmmmvkd" path="res://Scripts/timer_label.gd" id="15_bmpu8"]
 [ext_resource type="Script" uid="uid://wcd4rgj7pjuv" path="res://Scripts/settings_button.gd" id="16_bmpu8"]
 [ext_resource type="Script" uid="uid://bh20rythjx2i4" path="res://Scripts/stars_ui.gd" id="16_c4srv"]
+[ext_resource type="AudioStream" uid="uid://dqht20xuh26od" path="res://Sounds/Charging-Sound.mp3" id="17_p4yew"]
+[ext_resource type="AudioStream" uid="uid://c5ihrw4q4ou3f" path="res://Sounds/Charging--Loop-Sound.mp3" id="18_ikm1e"]
+[ext_resource type="AudioStream" uid="uid://b1wq20mtjgwyg" path="res://Sounds/mini-jump.mp3" id="19_ikm1e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dyi31"]
 texture = ExtResource("1_hurp7")
@@ -521,6 +532,14 @@ script = ExtResource("2_bmpu8")
 player = NodePath("../Player")
 finish_target = NodePath("../FinishFlag")
 
+[node name="WooshOut" type="AudioStreamPlayer" parent="Camera2D" unique_id=1694386526]
+stream = ExtResource("3_040y1")
+pitch_scale = 2.0
+
+[node name="WooshBack" type="AudioStreamPlayer" parent="Camera2D" unique_id=641296022]
+stream = ExtResource("4_u7l1f")
+pitch_scale = 2.0
+
 [node name="FinishFlag" type="Area2D" parent="." unique_id=1415671248]
 position = Vector2(3245, 234)
 
@@ -537,6 +556,7 @@ texture = ExtResource("8_rbgxu")
 position = Vector2(-94, 151)
 scale = Vector2(0.75, 0.75)
 script = ExtResource("2_qh726")
+death_sounds = Array[AudioStream]([ExtResource("12_gb1h0"), ExtResource("8_x7gh6"), ExtResource("9_qn1m2"), ExtResource("10_p4yew")])
 spin_acceleration = 12.0
 max_spin_speed = 5.0
 camera_node = NodePath("../Camera2D")
@@ -558,6 +578,32 @@ metadata/_edit_use_anchors_ = true
 
 [node name="DeathEffect" type="Node2D" parent="Player" unique_id=2122959279]
 script = ExtResource("4_xnl3v")
+
+[node name="PogostickSound" type="AudioStreamPlayer" parent="Player" unique_id=2764140]
+stream = ExtResource("11_fi0mo")
+pitch_scale = 2.0
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="Player" unique_id=28055753]
+stream = ExtResource("12_gb1h0")
+pitch_scale = 1.5
+
+[node name="VictorySound" type="AudioStreamPlayer" parent="Player" unique_id=694584327]
+process_mode = 3
+stream = ExtResource("13_5em11")
+volume_db = 0.5
+pitch_scale = 2.0
+
+[node name="ChargeSound" type="AudioStreamPlayer" parent="Player" unique_id=480287312]
+stream = ExtResource("17_p4yew")
+pitch_scale = 3.0
+
+[node name="ChargeLoopSound" type="AudioStreamPlayer" parent="Player" unique_id=2138028551]
+stream = ExtResource("18_ikm1e")
+
+[node name="MiniJumpSound" type="AudioStreamPlayer" parent="Player" unique_id=868612903]
+stream = ExtResource("19_ikm1e")
+volume_db = -25.0
+pitch_scale = 2.05
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=1480814636]
 
@@ -650,6 +696,7 @@ offset_right = 450.0
 offset_bottom = 130.0
 theme_override_colors/font_color = Color(0.9843137, 0.94509804, 0.14117648, 1)
 theme_override_font_sizes/font_size = 30
+text = "Time: 0"
 script = ExtResource("15_bmpu8")
 metadata/_edit_use_anchors_ = true
 

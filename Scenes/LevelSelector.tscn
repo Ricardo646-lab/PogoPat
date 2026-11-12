@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dgfanxlqp2g06" path="res://Scripts/level_button.gd" id="1_ampnh"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="1_y46r8"]
+[ext_resource type="AudioStream" uid="uid://ixd02a2phc52" path="res://Sounds/Select-Sound.mp3" id="3_lirpq"]
+[ext_resource type="AudioStream" uid="uid://bsko4f7fhf0q" path="res://Sounds/Select-Disable-Sound.mp3" id="4_8iqa8"]
+[ext_resource type="AudioStream" uid="uid://c7ur26ha0gt8t" path="res://Sounds/Level-Selector-Background-Music.mp3" id="5_6gp5k"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4ewx"]
 bg_color = Color(0.9019608, 0.9490196, 0.9019608, 1)
@@ -129,6 +132,9 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
+hover_sound = ExtResource("3_lirpq")
+click_sound = ExtResource("3_lirpq")
+locked_sound = ExtResource("4_8iqa8")
 
 [node name="Button2" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=774228370]
 custom_minimum_size = Vector2(110, 100)
@@ -146,6 +152,9 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
 target_level_number = 2
+hover_sound = ExtResource("3_lirpq")
+click_sound = ExtResource("3_lirpq")
+locked_sound = ExtResource("4_8iqa8")
 
 [node name="Button3" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1310472393]
 custom_minimum_size = Vector2(110, 100)
@@ -163,6 +172,9 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
 target_level_number = 3
+hover_sound = ExtResource("3_lirpq")
+click_sound = ExtResource("3_lirpq")
+locked_sound = ExtResource("4_8iqa8")
 
 [node name="Button4" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1052113669]
 custom_minimum_size = Vector2(110, 100)
@@ -180,6 +192,9 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
 target_level_number = 4
+hover_sound = ExtResource("3_lirpq")
+click_sound = ExtResource("3_lirpq")
+locked_sound = ExtResource("4_8iqa8")
 
 [node name="Button5" type="Button" parent="CenterContainer/Panel/CenterContainer/GridContainer" unique_id=1165114964]
 custom_minimum_size = Vector2(110, 100)
@@ -197,3 +212,13 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ulvkb")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ampnh")
 script = ExtResource("1_ampnh")
 target_level_number = 5
+hover_sound = ExtResource("3_lirpq")
+click_sound = ExtResource("3_lirpq")
+locked_sound = ExtResource("4_8iqa8")
+
+[node name="LevelBackgroundMusic" type="AudioStreamPlayer" parent="." unique_id=1602546602]
+stream = ExtResource("5_6gp5k")
+volume_db = -15.0
+pitch_scale = 1.5
+autoplay = true
+parameters/looping = true

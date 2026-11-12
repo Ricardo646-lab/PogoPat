@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bqutdciaajfws" path="res://Sprites/UI/star-01-classic.svg" id="1_s5v0a"]
 [ext_resource type="StyleBox" uid="uid://c1t6ga773jnh7" path="res://Sprites/UI/shadowPanel.tres" id="2_kh4og"]
 [ext_resource type="StyleBox" uid="uid://em51fxepj67w" path="res://Sprites/UI/Shadow.tres" id="3_kh4og"]
+[ext_resource type="AudioStream" uid="uid://c224uljg65gdw" path="res://Sounds/Star_Sound_Effect.mp3" id="5_fwj43"]
 
 [node name="LevelCompletePanel" type="Control" unique_id=354982094]
 process_mode = 2
@@ -169,3 +170,9 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1880826119]
+
+[node name="StarSound" type="AudioStreamPlayer" parent="." unique_id=1338911369]
+process_mode = 3
+stream = ExtResource("5_fwj43")
+volume_db = 8.0
+pitch_scale = 1.25

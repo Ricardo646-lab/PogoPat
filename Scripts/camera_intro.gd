@@ -7,6 +7,9 @@ extends Camera2D
 
 var is_previewing: bool = false
 
+@onready var woosh_out = $WooshOut
+@onready var woosh_back = $WooshBack
+
 func _ready() -> void:
 	if player:
 		global_position = player.global_position
@@ -24,13 +27,16 @@ func play_finish_preview(on_complete_callback: Callable) -> void:
 
 	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 
+	
 	# 1. Pan camera to the finish target position
+	tween.tween_callback(func(): woosh_out.play())
 	tween.tween_property(self, "global_position", finish_target.global_position, pan_speed)
 
 	# 2. Pause at the finish
 	tween.tween_interval(hold_time)
 
 	# 3. Pan camera back to the player
+	tween.tween_callback(func(): woosh_back.play())
 	tween.tween_property(self, "global_position", player.global_position, pan_speed)
 
 	# 4. Finish preview and restore camera settings

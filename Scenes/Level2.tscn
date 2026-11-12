@@ -3,16 +3,23 @@
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_ms0wi"]
 [ext_resource type="Script" uid="uid://48oqg8dhfpum" path="res://Scripts/camera_intro.gd" id="2_2jwna"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_5awjf"]
+[ext_resource type="AudioStream" uid="uid://ditch41a86cw5" path="res://Sounds/SimpleWhooshSound.mp3" id="3_xx40l"]
 [ext_resource type="Texture2D" uid="uid://t63i3nqoy2m7" path="res://Sprites/barA_pill_under.png" id="4_62f1r"]
 [ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_ehjmi"]
+[ext_resource type="AudioStream" uid="uid://dip3rujcmejmr" path="res://Sounds/SimpleWhooshSoundReverse.mp3" id="4_utdxf"]
 [ext_resource type="Texture2D" uid="uid://b2wohh2ioas32" path="res://Sprites/barA_pill_progress.png" id="5_1je60"]
 [ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_p4u3k"]
 [ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_70df5"]
 [ext_resource type="Script" uid="uid://b25jt4oqueh7f" path="res://Scripts/ProgressBar.gd" id="6_ycmr1"]
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="8_p4u3k"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="9_70df5"]
+[ext_resource type="AudioStream" uid="uid://brq7m6wrup3g8" path="res://Sounds/bounce-pogo-stick.wav" id="10_8wk15"]
 [ext_resource type="Script" uid="uid://dg8jx1tmkbrfr" path="res://Scripts/level_label.gd" id="10_ejprb"]
+[ext_resource type="AudioStream" uid="uid://c1t00iogwkltm" path="res://Sounds/victory.mp3" id="11_bgqvi"]
+[ext_resource type="AudioStream" uid="uid://dqht20xuh26od" path="res://Sounds/Charging-Sound.mp3" id="12_6cjmx"]
+[ext_resource type="AudioStream" uid="uid://c5ihrw4q4ou3f" path="res://Sounds/Charging--Loop-Sound.mp3" id="13_s6bta"]
 [ext_resource type="Script" uid="uid://lgi5ahmmmvkd" path="res://Scripts/timer_label.gd" id="14_2jwna"]
+[ext_resource type="AudioStream" uid="uid://b1wq20mtjgwyg" path="res://Sounds/mini-jump.mp3" id="14_s6bta"]
 [ext_resource type="Script" uid="uid://wcd4rgj7pjuv" path="res://Scripts/settings_button.gd" id="15_2jwna"]
 [ext_resource type="Script" uid="uid://bh20rythjx2i4" path="res://Scripts/stars_ui.gd" id="15_sgc6j"]
 
@@ -572,6 +579,14 @@ script = ExtResource("2_2jwna")
 player = NodePath("../Player")
 finish_target = NodePath("../FinishFlag")
 
+[node name="WooshOut" type="AudioStreamPlayer" parent="Camera2D" unique_id=1995852]
+stream = ExtResource("3_xx40l")
+pitch_scale = 2.0
+
+[node name="WooshBack" type="AudioStreamPlayer" parent="Camera2D" unique_id=1965720044]
+stream = ExtResource("4_utdxf")
+pitch_scale = 2.0
+
 [node name="FinishFlag" type="Area2D" parent="." unique_id=1415671248]
 position = Vector2(1139, -399)
 
@@ -588,6 +603,7 @@ texture = ExtResource("8_p4u3k")
 position = Vector2(358, 154)
 scale = Vector2(0.75, 0.75)
 script = ExtResource("2_5awjf")
+death_sounds = null
 auto_hop_force = -150.0
 spin_acceleration = 12.0
 max_spin_speed = 5.0
@@ -606,6 +622,28 @@ fill_mode = 3
 texture_under = ExtResource("4_62f1r")
 texture_progress = ExtResource("5_1je60")
 script = ExtResource("6_ycmr1")
+
+[node name="PogostickSound" type="AudioStreamPlayer" parent="Player" unique_id=705493625]
+stream = ExtResource("10_8wk15")
+pitch_scale = 2.0
+
+[node name="VictorySound" type="AudioStreamPlayer" parent="Player" unique_id=969386851]
+process_mode = 3
+stream = ExtResource("11_bgqvi")
+volume_db = 0.5
+pitch_scale = 2.0
+
+[node name="ChargeSound" type="AudioStreamPlayer" parent="Player" unique_id=607138720]
+stream = ExtResource("12_6cjmx")
+pitch_scale = 3.0
+
+[node name="ChargeLoopSound" type="AudioStreamPlayer" parent="Player" unique_id=1556369138]
+stream = ExtResource("13_s6bta")
+
+[node name="MiniJumpSound" type="AudioStreamPlayer" parent="Player" unique_id=1571890935]
+stream = ExtResource("14_s6bta")
+volume_db = -25.0
+pitch_scale = 2.05
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=1181459577]
 
@@ -695,6 +733,7 @@ offset_right = 450.0
 offset_bottom = 130.0
 theme_override_colors/font_color = Color(0.9843137, 0.94509804, 0.14117648, 1)
 theme_override_font_sizes/font_size = 30
+text = "Time: 0"
 script = ExtResource("14_2jwna")
 
 [node name="StarDisplay" type="Control" parent="CanvasLayer/HUD" unique_id=901110748]

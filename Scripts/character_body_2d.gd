@@ -17,6 +17,16 @@ var is_dead: bool = false
 var is_intro_playing: bool = false
 var has_seen_intro: bool = false
 
+# --- Audio ---
+@onready var pogostick_sound = $PogostickSound
+@onready var victory_sound = $VictorySound  
+@onready var death_sound = $DeathSound
+@onready var charge_sound = $ChargeSound
+@onready var charge_loop_sound = $ChargeLoopSound
+@onready var mini_jump_sound = $MiniJumpSound
+
+@export var death_sounds: Array[AudioStream] = []
+
 # --- Charging Space Bar ---
 signal charge_changed(ratio: float)
 
@@ -54,7 +64,8 @@ var angular_vel: float = 0.0
 var is_big_jump: bool = false
 var was_on_floor: bool = false
 var pivot_blend: float = 0.0
-var tuck: float = 0.0             
+var tuck: float = 0.0
+var just_released_charge: bool = false             
 
 # --- Dynamic Drawing Variables ---
 @export_group("Drawing")
@@ -194,6 +205,9 @@ func _physics_process(delta):
 	if not has_started or is_dead or level_finished:
 		return
 
+	if Input.is_action_just_released("charge_jump") and is_charging:
+		just_released_charge = true
+
 	var direction = Input.get_axis("move_left", "move_right")
 	var wants_charge = Input.is_action_pressed("charge_jump") and (is_charging or is_on_floor())
 
@@ -203,8 +217,14 @@ func _physics_process(delta):
 
 	# 2. Automatic small hop
 	if is_on_floor() and velocity.y >= 0 and not wants_charge:
-		velocity.y = auto_hop_force
-		visual_stretch = 0.3
+		if just_released_charge:
+			just_released_charge = false
+		else: 
+			velocity.y = auto_hop_force
+			visual_stretch = 0.3
+
+			if mini_jump_sound and not mini_jump_sound.playing:
+				mini_jump_sound.play()
 
 	# 3. Horizontal movement
 	if wants_charge:
@@ -243,12 +263,32 @@ func _physics_process(delta):
 		if not is_charging:
 			is_charging = true
 			current_jump_charge = min_jump_force
+
+			if charge_sound and not charge_sound.playing and not (charge_loop_sound and charge_loop_sound.playing):
+				charge_sound.play()
+
 		else:
 			current_jump_charge -= charge_rate * delta
 			current_jump_charge = max(current_jump_charge, max_jump_force)
-		charge_changed.emit(inverse_lerp(min_jump_force, max_jump_force, current_jump_charge))
+
+		var ratio = inverse_lerp(min_jump_force, max_jump_force, current_jump_charge)
+		charge_changed.emit(ratio)
+
+		if ratio >= 0.99:
+			# Stop de opbouw als die nog speelde
+			if charge_sound and charge_sound.playing:
+				charge_sound.stop()
+			# Start de loop-sound voor het laatste stukje
+			if charge_loop_sound and not charge_loop_sound.playing:
+				charge_loop_sound.play()
 
 	elif is_charging:
+
+		if charge_sound and charge_sound.playing:
+			charge_sound.stop()
+		if charge_loop_sound and charge_loop_sound.playing:
+			charge_loop_sound.stop()
+		
 		velocity = Vector2(0, current_jump_charge).rotated(angle)
 		is_charging = false
 		current_jump_charge = 0.0
@@ -256,6 +296,9 @@ func _physics_process(delta):
 		visual_stretch = -0.4
 		is_big_jump = true
 		angular_vel = 0.0
+
+		if pogostick_sound:
+			pogostick_sound.play()
 
 	# 6. Visual stretch and animation parameters
 	visual_stretch = move_toward(visual_stretch, 0.0, 8.0 * delta)
@@ -423,12 +466,23 @@ func die():
 	is_dead = true
 	is_charging = false
 	is_big_jump = false
+
+	if charge_sound and charge_sound.playing:
+		charge_sound.stop()
+	if charge_loop_sound and charge_loop_sound.playing:
+			charge_loop_sound.stop()
+
 	queue_redraw()
 
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
 
 	velocity = Vector2.ZERO
+
+	if death_sounds.size() > 0 and death_sound:
+		var random_index = randi() % death_sounds.size()
+		death_sound.stream = death_sounds[random_index]
+		death_sound.play()
 
 	if has_node("DeathEffect"):
 		$DeathEffect.trigger()
@@ -439,6 +493,11 @@ func die():
 
 func respawn() -> void:
 	is_dead = false
+
+	if charge_sound and charge_sound.playing:
+		charge_sound.stop()
+	if charge_loop_sound and charge_loop_sound.playing:
+			charge_loop_sound.stop()
 
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
@@ -478,6 +537,10 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 		return
 
 	level_finished = true
+	
+	if victory_sound:
+		victory_sound.play()
+
 	has_started = false
 	velocity = Vector2.ZERO
 	is_charging = false
