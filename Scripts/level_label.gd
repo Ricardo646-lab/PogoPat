@@ -1,3 +1,4 @@
+@tool
 extends Label
 
 @export var totaal_levels: int = 5

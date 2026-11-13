@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkjou6bv63kw3"
-path="res://.godot/imported/barB_blocks_progress.png-71a7bf65924fb9f13c7c16485f0b1a14.ctex"
+uid="uid://dbvih83yk6u0p"
+path="res://.godot/imported/Controls.png-29db16db1715dd9c5416af0dffaada37.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/barB_blocks_progress.png"
-dest_files=["res://.godot/imported/barB_blocks_progress.png-71a7bf65924fb9f13c7c16485f0b1a14.ctex"]
+source_file="res://Sprites/Controls.png"
+dest_files=["res://.godot/imported/Controls.png-29db16db1715dd9c5416af0dffaada37.ctex"]
 
 [params]
 

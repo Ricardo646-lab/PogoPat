@@ -4,8 +4,10 @@ var player = null
 
 func _process(_delta: float) -> void:
 	if not player:
-		# Zoekt automatisch in de hele actieve scene naar de node die "Player" heet
-		player = get_tree().current_scene.find_child("Player", true, false)
+		var current_scene = get_tree().current_scene
+		if current_scene:
+			# Zoekt pas als de scène volledig geladen is
+			player = current_scene.find_child("Player", true, false)
 		
 	if player and "level_timer" in player:
 		var seconden = int(player.level_timer)

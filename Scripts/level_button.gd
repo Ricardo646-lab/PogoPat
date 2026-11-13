@@ -2,10 +2,39 @@ extends Button
 
 @export var target_level_number: int = 1
 
+@export_category("Sounds")
+@export var hover_sound: AudioStream
+@export var click_sound: AudioStream
+@export var locked_sound: AudioStream
+
+var audio_player: AudioStreamPlayer
+
 func _ready() -> void:
+
+	audio_player = AudioStreamPlayer.new()
+	add_child(audio_player)
+
 	if not pressed.is_connected(_on_button_pressed):
 		pressed.connect(_on_button_pressed)
+
+	if not mouse_entered.is_connected(_on_mouse_entered):
+		mouse_entered.connect(_on_mouse_entered)
+
+	if not gui_input.is_connected(_gui_input):
+		gui_input.connect(_gui_input)
+
 	update_level_state()
+
+func _on_mouse_entered() -> void:
+	if not disabled and hover_sound:
+		audio_player.stream = hover_sound
+		audio_player.play()
+
+func _gui_input(event: InputEvent) -> void:
+	if disabled and (event is InputEventMouseButton or event is InputEventScreenTouch) and event.pressed:
+		if locked_sound:
+			audio_player.stream = locked_sound
+			audio_player.play()
 
 func update_level_state() -> void:
 	var is_unlocked = true
@@ -24,6 +53,13 @@ func update_level_state() -> void:
 
 func _on_button_pressed() -> void:
 	if not disabled:
+
+		if click_sound:
+			audio_player.stream = click_sound
+			audio_player.play()
+			# Wacht heel even (0.5 seconde) zodat het geluid te horen is voordat de scène wisselt
+			await get_tree().create_timer(0.5).timeout
+
 		var scene_path = "res://Scenes/Level" + str(target_level_number) + ".tscn"
 		if ResourceLoader.exists(scene_path):
 			get_tree().change_scene_to_file(scene_path)
