@@ -58,6 +58,13 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var current_jump_charge = 0.0
 var is_charging = false
 
+# --- Gelanceerd door wreckingball ---
+@export_group("Launch")
+@export var launch_gravity_scale: float = 0.3   # Minder zwaartekracht = je vliegt echt weg
+@export var launch_fly_time: float = 1.5        # Na zoveel seconden zonder muur: weggevlogen
+var is_launched: bool = false
+var launch_timer: float = 0.0
+
 # --- Rotation State ---
 var angle: float = 0.0            
 var angular_vel: float = 0.0
@@ -205,6 +212,10 @@ func _physics_process(delta):
 	if not has_started or is_dead or level_finished:
 		return
 
+	if is_launched:
+		_launched_physics(delta)
+		return
+
 	if Input.is_action_just_released("charge_jump") and is_charging:
 		just_released_charge = true
 
@@ -317,6 +328,44 @@ func _physics_process(delta):
 
 	# 8. Check trap collisions
 	check_trap_collision()
+
+	queue_redraw()
+
+# Wordt aangeroepen door de wreckingball
+func launch(launch_velocity: Vector2) -> void:
+	if is_dead or level_finished or is_launched:
+		return
+	is_launched = true
+	launch_timer = 0.0
+	is_charging = false
+	current_jump_charge = 0.0
+	charge_changed.emit(0.0)
+	if charge_sound and charge_sound.playing:
+		charge_sound.stop()
+	if charge_loop_sound and charge_loop_sound.playing:
+		charge_loop_sound.stop()
+	velocity = launch_velocity
+	is_facing_right = launch_velocity.x > 0
+	if pogostick_sound:
+		pogostick_sound.play()
+
+func _launched_physics(delta: float) -> void:
+	launch_timer += delta
+	velocity.y += gravity * launch_gravity_scale * delta
+	angle += sign(velocity.x) * 15.0 * delta   # Rondtollen
+	pivot_blend = 1.0
+	tuck = 1.0
+	move_and_slide()
+
+	# Tegen een muur: splat!
+	if is_on_wall():
+		die(get_wall_normal())
+		return
+
+	# Geen muur geraakt: weggevlogen
+	if launch_timer > launch_fly_time:
+		die()
+		return
 
 	queue_redraw()
 
@@ -460,12 +509,14 @@ func check_trap_collision() -> void:
 					die()
 					break
 
-func die():
+# splat_normal = richting van de muur waar je tegenaan knalt (leeg = gewone explosie)
+func die(splat_normal: Vector2 = Vector2.ZERO):
 	if is_dead or level_finished:
 		return
 	is_dead = true
 	is_charging = false
 	is_big_jump = false
+	is_launched = false
 
 	if charge_sound and charge_sound.playing:
 		charge_sound.stop()
@@ -485,7 +536,10 @@ func die():
 		death_sound.play()
 
 	if has_node("DeathEffect"):
-		$DeathEffect.trigger()
+		if splat_normal != Vector2.ZERO:
+			$DeathEffect.trigger_splat(splat_normal)
+		else:
+			$DeathEffect.trigger()
 
 	await get_tree().create_timer(1.5).timeout
 
@@ -506,6 +560,7 @@ func respawn() -> void:
 	velocity = Vector2.ZERO
 	is_charging = false
 	is_big_jump = false
+	is_launched = false
 	current_jump_charge = 0.0
 	angle = 0.0
 	angular_vel = 0.0

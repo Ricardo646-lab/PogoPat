@@ -503,8 +503,6 @@ size = Vector2(350, 350)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru3pw"]
 size = Vector2(518, 18)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_o4ewx"]
-
 [node name="Node2D" type="Node2D" unique_id=1397552547]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1043154353]
@@ -637,11 +635,4 @@ scale = Vector2(5, 5)
 script = ExtResource("15_yl36j")
 ball_radius = 15.0
 
-[node name="Area2D" type="Area2D" parent="ProceduralWreckingBall" unique_id=917722958]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ProceduralWreckingBall/Area2D" unique_id=169296065]
-position = Vector2(0, 150)
-shape = SubResource("CircleShape2D_o4ewx")
-
 [connection signal="body_entered" from="FinishFlag" to="Player" method="_on_finish_button_body_entered"]
-[connection signal="body_entered" from="ProceduralWreckingBall/Area2D" to="ProceduralWreckingBall" method="_on_area_2d_body_entered"]

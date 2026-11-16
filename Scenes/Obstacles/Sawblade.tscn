@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b8sawblade001"]
+
+[ext_resource type="Script" path="res://Scripts/Sawblade.gd" id="1_saw"]
+
+[node name="Sawblade" type="Node2D"]
+script = ExtResource("1_saw")
