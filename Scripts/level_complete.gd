@@ -1,3 +1,4 @@
+@tool
 extends Control
 
 @onready var main_panel: Control = %MainPanel
@@ -50,7 +51,9 @@ func show_results(
 
 	_apply_star_states(earned_states)
 	_play_panel_animation()
-	_play_star_animation(earned_states)
+	
+	# Start de dramatische, opeenvolgende sterren-animatie met 3D depth effect
+	_play_star_animation_sequential(earned_states)
 
 
 func _apply_star_states(earned_states: Array[bool]) -> void:
@@ -92,7 +95,8 @@ func _play_panel_animation() -> void:
 	tween.tween_property(main_panel, "modulate:a", 1.0, 0.25)
 
 
-func _play_star_animation(earned_states: Array[bool]) -> void:
+func _play_star_animation_sequential(earned_states: Array[bool]) -> void:
+	# 1. Zet alle niet-behaalde sterren klaar, verberg de behaalde sterren
 	for index in star_holders.size():
 		var holder := star_holders[index]
 		var earned := earned_states[index]
@@ -100,36 +104,49 @@ func _play_star_animation(earned_states: Array[bool]) -> void:
 		holder.pivot_offset = holder.size * 0.5
 		holder.rotation = 0.0
 
-		# Niet behaalde ster: klein en doorzichtig, geen animatie.
 		if not earned:
 			holder.scale = Vector2(0.82, 0.82)
 			holder.modulate.a = 0.42
+		else:
+			holder.scale = Vector2.ZERO
+			holder.modulate.a = 0.0
+
+	# Wacht even totdat de paneelanimatie goed zichtbaar is
+	await get_tree().create_timer(0.35).timeout
+
+	# 2. Laat elke behaalde ster één voor één vanuit de "voorgrond" invliegen
+	for index in star_holders.size():
+		var earned := earned_states[index]
+		if not earned:
 			continue
 
-		# Behaalde ster: begint onzichtbaar en gedraaid.
-		holder.scale = Vector2.ZERO
+		var holder := star_holders[index]
+		
+		# --- 3D EFFECT ---
+		# Start gigantisch groot (alsof de ster dicht bij de camera / voor het scherm hangt)
+		holder.scale = Vector2(5.5, 5.5)
 		holder.modulate.a = 0.0
+		holder.rotation = deg_to_rad(randf_range(-50.0, 50.0))
 
-		if index == 0:
-			holder.rotation = deg_to_rad(-22.0)
-		elif index == 1:
-			holder.rotation = deg_to_rad(14.0)
-		else:
-			holder.rotation = deg_to_rad(22.0)
+		# Speel geluid af op het moment dat de ster naar voren schiet
+		if star_sound:
+			star_sound.play()
 
 		var tween := create_tween()
 		active_tweens.append(tween)
+		tween.set_parallel(true)
+		tween.set_ease(Tween.EASE_OUT)
 
-		# Elke ster komt een beetje later dan de vorige.
-		tween.tween_interval(0.18 + index * 0.14)
+		# Vlieg van heel dichtbij naar de normale grootte in de houder met een dikke bouncende 'back' transitie
+		tween.tween_property(holder, "scale", Vector2.ONE, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(holder, "rotation", 0.0, 0.5).set_trans(Tween.TRANS_SPRING)
+		tween.tween_property(holder, "modulate:a", 1.0, 0.15)
 
-		# Speel het geluid af zodra de animatie van deze specifieke ster start
-		if star_sound:
-			tween.tween_callback(func(): star_sound.play())
+		# Wacht tot deze ster volledig op zijn plek is geland
+		await tween.finished
 
-		tween.tween_property(holder, "scale", Vector2.ONE, 0.46).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(holder, "rotation", 0.0, 0.38).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(holder, "modulate:a", 1.0, 0.16)
+		# Pauze voor dramatisch effect voor de volgende ster
+		await get_tree().create_timer(0.35).timeout
 
 
 func _stop_active_tweens() -> void:

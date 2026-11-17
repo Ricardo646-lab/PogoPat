@@ -27,6 +27,9 @@ var has_seen_intro: bool = false
 
 @export var death_sounds: Array[AudioStream] = []
 
+# --- Particles (Using your exact node name: LandingParticles) ---
+@onready var landing_particles = get_node_or_null("LandingParticles")
+
 # --- Charging Space Bar ---
 signal charge_changed(ratio: float)
 
@@ -48,7 +51,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 # --- Flips & Aim ---
 @export_group("Flips")
 @export var aim_max_angle_deg = 35.0
-@export var spin_acceleration = 8.0       
+@export var spin_acceleration = 8.0        
 @export var max_spin_speed = 3.5          
 @export var spin_damping = 2.0
 @export var big_jump_air_control = 0.3
@@ -65,7 +68,7 @@ var is_big_jump: bool = false
 var was_on_floor: bool = false
 var pivot_blend: float = 0.0
 var tuck: float = 0.0
-var just_released_charge: bool = false             
+var just_released_charge: bool = false                
 
 # --- Dynamic Drawing Variables ---
 @export_group("Drawing")
@@ -95,7 +98,7 @@ var visual_stretch: float = 0.0
 var level_timer: float = 0.0
 @export var par_time: float = 30.0          # Time limit for 2nd star
 @export var fast_time: float = 15.0         # Time limit for 3rd star (extra fast!)
-@export var auto_next_delay: float = 2.0    # Delay in seconds before auto-advancing after level completion
+@export var auto_next_delay: float = 2.0    # Fallback delay
 
 func _ready():
 	if Engine.is_editor_hint():
@@ -275,15 +278,12 @@ func _physics_process(delta):
 		charge_changed.emit(ratio)
 
 		if ratio >= 0.99:
-			# Stop de opbouw als die nog speelde
 			if charge_sound and charge_sound.playing:
 				charge_sound.stop()
-			# Start de loop-sound voor het laatste stukje
 			if charge_loop_sound and not charge_loop_sound.playing:
 				charge_loop_sound.play()
 
 	elif is_charging:
-
 		if charge_sound and charge_sound.playing:
 			charge_sound.stop()
 		if charge_loop_sound and charge_loop_sound.playing:
@@ -321,6 +321,12 @@ func _physics_process(delta):
 	queue_redraw()
 
 func _on_land() -> void:
+	# --- Trigger your LandingParticles node ---
+	if landing_particles:
+		landing_particles.global_position = global_position + Vector2(0, feet_y)
+		landing_particles.amount = 14 if is_big_jump else 6
+		landing_particles.restart()
+
 	if not is_big_jump:
 		return
 
@@ -386,8 +392,8 @@ func _draw():
 	draw_circle(handle + Vector2(6, 0), 1.8, col_black)
 	draw_line(footrest + Vector2(-6, 0), footrest + Vector2(6, 0), col_metal, 3.0)
 
-	# --- Character Rig: Body positioned beside the pogo stick ---
-	var lean = 0.35 + charge_ratio * 0.3                      
+	# --- Character Rig ---
+	var lean = 0.35 + charge_ratio * 0.3                       
 	var crouch = clamp(comp * 0.9 + tuck * 4.0, -3.0, 11.0)   
 	
 	var foot = footrest + Vector2(0, -1)
@@ -397,8 +403,7 @@ func _draw():
 	var head = shoulder + torso_dir * 9.5
 	var hand = handle + Vector2(0, 0)
 	
-	# Knee and elbow IK for natural pose beside the stick
-	var knee = _ik(hip, foot, 13.0, 13.0, -1.0)         
+	var knee = _ik(hip, foot, 13.0, 13.0, -1.0)           
 	var elbow = _ik(shoulder, hand, 11.0, 11.0, 1.0)   
 
 	var t = 4.5
@@ -582,16 +587,28 @@ func show_level_complete_popup(earned_stars: int) -> void:
 	result_canvas.process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().current_scene.add_child(result_canvas)
 
+	var dim_overlay = ColorRect.new()
+	dim_overlay.name = "DimOverlay"
+	dim_overlay.color = Color(0, 0, 0, 0)
+	dim_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	result_canvas.add_child(dim_overlay)
+
+	var bg_tween = create_tween()
+	bg_tween.tween_property(dim_overlay, "color:a", 0.45, 0.4).set_ease(Tween.EASE_OUT)
+
 	result_popup = Level_Complete_Panel.instantiate()
 	result_popup.process_mode = Node.PROCESS_MODE_ALWAYS
 	result_canvas.add_child(result_popup)
 
 	await get_tree().process_frame
+	await get_tree().process_frame
 	result_popup.call("show_results", earned_stars >= 1, earned_stars >= 2, earned_stars >= 3)
 
 	get_tree().paused = true
 
-	await get_tree().create_timer(auto_next_delay).timeout
+	# --- Dynamic Delay based on earned stars so the full 3D animation plays out ---
+	var dynamic_delay = 1.8 + (earned_stars * 0.9)
+	await get_tree().create_timer(dynamic_delay).timeout
 
 	get_tree().paused = false
 	go_to_next_level()
