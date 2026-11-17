@@ -629,6 +629,23 @@ stream = ExtResource("8_q1ws5")
 volume_db = 0.5
 pitch_scale = 2.0
 
+[node name="LandingParticles" type="CPUParticles2D" parent="Player" unique_id=268714800]
+position = Vector2(1.3333334, 69.33333)
+emitting = false
+one_shot = true
+preprocess = 0.61
+speed_scale = 2.0
+explosiveness = 0.86
+randomness = 0.2
+direction = Vector2(0, -2)
+spread = 75.0
+gravity = Vector2(0, 40)
+initial_velocity_min = 35.0
+initial_velocity_max = 60.0
+scale_amount_min = 5.0
+scale_amount_max = 9.0
+color = Color(1, 1, 1, 0.78431374)
+
 [node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=9238275]
 
 [node name="AnchorLinksonder" type="Control" parent="Player/CanvasLayer" unique_id=1734678761]
