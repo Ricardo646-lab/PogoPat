@@ -109,6 +109,7 @@
 		"TextureButton",
 		"TileMap",
 		"TileSetScenesCollectionSource",
+		"TouchScreenButton",
 		"VFlowContainer",
 		"VSlider",
 		"VideoStream",

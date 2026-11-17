@@ -3,16 +3,18 @@ extends Node2D
 
 # Slingerende sloopkogel. Raakt hij de speler, dan wordt die weggelanceerd.
 
-@export var chain_length: float = 150.0   # Lengte van de ketting
-@export var swing_speed: float = 2.0      # Hoe snel de kogel slingert
+@export var chain_length: float = 455.0   # Lengte van de ketting
+@export var swing_speed: float = 1.6      # Hoe snel de kogel slingert
 @export var max_angle: float = 50.0       # Maximale hoek in graden (links/rechts)
-@export var ball_radius: float = 35.0     # Straal van de kogel
+@export var ball_radius: float = 80.0     # Straal van de kogel
 @export var launch_power: float = 1600.0  # Hoe hard de speler wegvliegt
 
+@export var phase_deg: float = 0.0       # startfase in graden (180 = precies andersom)
 var time_passed: float = 0.0
 var ball_area: Area2D
 
 func _ready() -> void:
+	time_passed = deg_to_rad(phase_deg)
 	queue_redraw()
 	if Engine.is_editor_hint():
 		return
@@ -32,14 +34,15 @@ func _process(delta: float) -> void:
 		return
 	# Slingeren met een sinus-golf
 	time_passed += delta * swing_speed
-	rotation_degrees = sin(time_passed) * max_angle
+	rotation_degrees = sin(time_passed) * max_angle   # draaien: geen nieuwe tekening nodig
 
 func _draw() -> void:
 	var ball_pos = Vector2(0, chain_length)
-	draw_line(Vector2.ZERO, ball_pos, Color(0.4, 0.4, 0.4), 6.0)               # Ketting
-	draw_circle(Vector2.ZERO, 6.0, Color(0.2, 0.2, 0.2))                        # Ophangpunt
+	# Het ophangpunt hangt aan het loopkatje van een kraan (getekend in construction_background.gd)
+	draw_line(Vector2.ZERO, ball_pos, Color(0.4, 0.4, 0.4), 10.0)               # Ketting
+	draw_circle(Vector2.ZERO, 12.0, Color(0.2, 0.2, 0.2))                        # Ophangpunt
 	draw_circle(ball_pos, ball_radius, Color(0.15, 0.15, 0.15))                 # Kogel
-	draw_circle(ball_pos, ball_radius, Color(0.3, 0.3, 0.3), false, 5.0)        # Rand
+	draw_circle(ball_pos, ball_radius, Color(0.3, 0.3, 0.3), false, 8.0)        # Rand
 	draw_circle(ball_pos + Vector2(-ball_radius, -ball_radius) * 0.35, ball_radius * 0.2, Color(1, 1, 1, 0.25))  # Glans
 
 func _on_ball_hit(body: Node2D) -> void:

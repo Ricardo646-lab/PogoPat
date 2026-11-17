@@ -49,7 +49,8 @@ disable_xr = "yes"
 
 # Tree, TextEdit, RichTextLabel, ColorPicker, dialogs, SpinBox, ...:
 # none are used. PogoPat has Label, Button, Panel, TextureRect,
-# TextureProgressBar, CenterContainer, GridContainer and TouchScreenButton.
+# TextureProgressBar, CenterContainer and GridContainer. (Touch controls are
+# drawn in code, so TouchScreenButton is disabled in pogo_pat.gdbuild.)
 disable_advanced_gui = "yes"
 
 # 115 more classes the game doesn't use (old TileMap, lights, skeletons,
@@ -67,11 +68,12 @@ module_gdscript_enabled = "yes"         # all game code + the Poki SDK script bu
 module_godot_physics_2d_enabled = "yes" # CharacterBody2D, Area2D, tile collision
 module_freetype_enabled = "yes"         # drawing text (labels, level numbers)
 module_text_server_fb_enabled = "yes"   # simple text: replaces the big text_server_adv (ICU, HarfBuzz)
-module_regex_enabled = "yes"            # RegEx in character_body_2d.gd (finding the next level number)
+module_regex_enabled = "yes"            # RegEx in level_generator.gd (reading the level data)
+module_minimp3_enabled = "yes"          # the sounds are .mp3 (the one .wav is core, needs no module)
 # Left out: svg (only the engine's own theme icons, never shown), webp
 # (textures saved as PNG instead, see above) and jpg (Sky.jpg is converted
 # to a texture at import time, so the .jpg loader isn't needed at runtime).
-# No audio files in the project, so no ogg/vorbis/mp3 either.
+# No .ogg files, so no ogg/vorbis.
 
 # Brotli must stay: Godot's built-in font is stored as WOFF2, and without
 # brotli no text at all is shown. Minizip is only for ZIP files.

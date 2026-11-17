@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b8wreckball01"]
+[gd_scene format=3]
 
 [ext_resource type="Script" uid="uid://bfpbsm5xjxyjm" path="res://Scripts/WreckingBall.gd" id="1_wb"]
 
