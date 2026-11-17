@@ -70,7 +70,7 @@ disable_advanced_gui = "yes"
 #                         Test with the checklist in Docs/KLEINERE_BUILD.md; if
 #                         something breaks, go back to pogo_pat.gdbuild.
 #
-# Must stay on (look unused but are needed): AudioStreamMP3, AudioStreamWAV,
+# Must stay on (look unused but are needed): AudioStreamOggVorbis, AudioStreamWAV,
 # CompressedTexture2D, ImageTexture, GradientTexture2D + Gradient (sky),
 # ConvexPolygonShape2D (tile collision), StyleBoxEmpty + StyleBoxFlat (theme),
 # Tween + Animation (Tween uses its interpolation code), AnimatableBody2D
@@ -84,12 +84,13 @@ module_godot_physics_2d_enabled = "yes" # CharacterBody2D, Area2D, AnimatableBod
 module_freetype_enabled = "yes"         # drawing text (labels, level numbers)
 module_text_server_fb_enabled = "yes"   # simple text: replaces the big text_server_adv (ICU, HarfBuzz)
 module_regex_enabled = "yes"            # RegEx in level_generator.gd (reading the level data)
-module_minimp3_enabled = "yes"          # the sounds are .mp3 (the one .wav is core, needs no module).
-                                        # WITHOUT this there is no sound at all on Poki.
+module_ogg_enabled = "yes"              # music + charge loop are .ogg (container) ...
+module_vorbis_enabled = "yes"           # ... with Vorbis audio. WITHOUT these two: no music on Poki.
+                                        # All other sounds are .wav: core, no module needed.
 # Left out: svg (the star .svg is converted to a texture at import time;
 # the svg module is only needed to load .svg at runtime), webp (textures
-# saved as PNG instead, see above), jpg (no .jpg at runtime) and ogg/vorbis
-# (no .ogg files).
+# saved as PNG instead, see above), jpg (no .jpg at runtime) and minimp3
+# (no .mp3 files any more).
 
 # Brotli must stay: Godot's built-in font is stored as WOFF2, and without
 # brotli no text at all is shown. Minizip is only for ZIP files.

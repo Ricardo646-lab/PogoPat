@@ -7,7 +7,7 @@ Een web-build bestaat uit twee grote delen:
 Poki serveert beide met brotli/gzip: de echte download is ±25–35% van de bestandsgrootte.
 
 **Volgorde:** fase 1 (bestanden) → fase 2 (export) → fase 3 (engine) → fase 4 (testen).
-Per stap staat erbij **wie** het doet: 🎨 editor/afbeelding, 🎵 Audacity, 💻 code (kan Claude doen).
+Per stap staat erbij **wie** het doet: 🎨 editor/afbeelding, 💻 code (kan Claude doen).
 
 ---
 
@@ -16,11 +16,11 @@ Per stap staat erbij **wie** het doet: 🎨 editor/afbeelding, 🎵 Audacity, �
 - **Nodes/resources:** Node, Node2D, CanvasLayer, Camera2D, Sprite2D, AnimatedSprite2D + SpriteFrames + AtlasTexture
   (alleen tutorial; vervalt na stap 1.5), TileMapLayer + TileSet + TileSetAtlasSource, CharacterBody2D,
   AnimatableBody2D, Area2D, CollisionShape2D, Rectangle/Circle/CapsuleShape2D, ConvexPolygonShape2D (tile-botsing),
-  AudioStreamPlayer + AudioStreamMP3 + AudioStreamWAV, Control, Label, Button, Panel, PanelContainer, TextureRect,
+  AudioStreamPlayer + AudioStreamOggVorbis + AudioStreamWAV, Control, Label, Button, Panel, PanelContainer, TextureRect,
   TextureProgressBar, Center/Grid/HBox/VBox/MarginContainer, StyleBoxFlat, StyleBoxEmpty (standaard-thema),
   FontVariation, Tween, Animation (rekenfuncties voor Tween), ConfigFile, RegEx, RandomNumberGenerator,
   JavaScriptBridge (Poki), CompressedTexture2D, ImageTexture, GradientTexture2D + Gradient (lucht, na stap 1.1).
-- **Modules:** gdscript, godot_physics_2d, freetype, text_server_fb, regex, **minimp3**. Brotli aan (lettertype is WOFF2).
+- **Modules:** gdscript, godot_physics_2d, freetype, text_server_fb, regex, **ogg + vorbis** (muziek en laadlus zijn .ogg; alle andere geluiden .wav, dat is ingebouwd). Brotli aan (lettertype is WOFF2).
 - `Docs/` (.md, .py) komt niet in de build.
 
 ---
@@ -30,8 +30,8 @@ Per stap staat erbij **wie** het doet: 🎨 editor/afbeelding, 🎵 Audacity, �
 | # | Wat | Nu | Na | Wie |
 |---|---|---|---|---|
 | 1.1 | Lucht: `Sky.jpg` → kleurverloop | 543 KB | ±1 KB | 🎨 |
-| 1.2 | Muziek: 256 kbps stereo → 48 kbps mono | 592 KB | ±115 KB | 🎵 |
-| 1.3 | Geluidseffecten: 256–320 kbps stereo → 64 kbps mono | ±345 KB | ±90 KB | 🎵 |
+| 1.2 | ✔ Gedaan: mp3 vervangen door .ogg (muziek, laadlus) en .wav (QOA-gecomprimeerd bij import) | ±950 KB | ±670 KB | – |
+| 1.3 | Optioneel: wav-imports op mono (Import → Force → Mono) | ±380 KB wav | ±200 KB | 🎨 |
 | 1.4 | Lege `AnimationPlayer` weg | – | – | 🎨 |
 | 1.5 | Tutorial-hints (`Controls.png` + `spacebar_spritesheet.png`) in code tekenen | 303 KB | 0 | 💻 |
 | 1.6 | Finishvlag (`FinishFlag.png`) in code tekenen | 46 KB | 0 | 💻 |
@@ -48,16 +48,14 @@ Per stap staat erbij **wie** het doet: 🎨 editor/afbeelding, 🎵 Audacity, �
 4. Verwijder `Sprites/Sky.jpg` in het FileSystem-paneel.
 - ✅ Lucht ziet er hetzelfde uit (ook het tintje per wereld blijft: dat zit in `modulate`).
 
-### 1.2 + 1.3 Geluid opnieuw coderen 🎵
-1. Open elk `.mp3`-bestand in `Sounds/` in Audacity.
-2. Tracks → Mix → **Mix Stereo Down to Mono**.
-3. File → Export → MP3, **Constant bitrate**, 44,1 kHz:
-   - `Level-Selector-Background-Music.mp3`: **48 kbps** (achtergrondmuziek; verschil nauwelijks hoorbaar op telefoon)
-   - alle andere: **64 kbps**
-4. Exacte **zelfde bestandsnaam** opslaan (overschrijven) → alle verwijzingen in Godot blijven werken.
-- `bounce-pogo-stick.wav` niet aanpassen (wordt bij import al 17 KB).
-- ✅ `.mp3`-bestanden samen ±200 KB; in Godot geen kapotte verwijzingen; alles klinkt nog goed.
-- Nog kleiner (keuze): muziek inkorten of de selector-muziek weglaten (−115 KB).
+### 1.2 Geluid: ✔ gedaan
+Alle `.mp3` zijn vervangen door de bestanden in `OGG Sounds/` (muziek, laadlus) en `Wav Sounds/` (de rest);
+`Sounds/` bevat alleen nog `bounce-pogo-stick.wav`. De laadlus (`Charging--Loop-Sound.ogg`) staat op herhalen, zoals de mp3.
+De wav's worden bij import gecomprimeerd (QOA, `compress/mode=2`).
+
+### 1.3 Optioneel: wav's mono 🎨
+Per wav in `Wav Sounds/`: Import-paneel → **Force → Mono** aan → Reimport. Halveert de grootste wav's
+(Charging-Sound 133 KB, victory 66 KB). Alleen doen als ze niet bewust stereo klinken.
 
 ### 1.4 Lege AnimationPlayer weg 🎨
 `LevelComplete.tscn` → node `AnimationPlayer` verwijderen (alle animaties daar zijn Tweens) → opslaan.
@@ -106,8 +104,9 @@ finish-streep (14,8) (15,8). Nieuwe PNG met alleen deze tiles (bijv. 8×2 tiles 
 
 ## Fase 3 – Engine-sjabloon opnieuw bouwen (index.wasm)
 
-**Verplicht**, ook als je verder niets aan de engine wilt veranderen: in het huidige sjabloon staat de mp3-module uit,
-dus op Poki is er **geen geluid**. `custom.py` heeft hem al aan staan (`module_minimp3_enabled = "yes"`).
+**Verplicht**, ook als je verder niets aan de engine wilt veranderen: in het huidige sjabloon staan de ogg/vorbis-modules
+uit, dus op Poki speelt de **muziek en de laadlus niet**. `custom.py` heeft ze al aan staan
+(`module_ogg_enabled` en `module_vorbis_enabled`; de mp3-module is uit, er zijn geen .mp3-bestanden meer).
 
 ### 3.1 Extra klassen uitzetten
 Dit staat al klaar in twee profielen in `engine-template/` (kies in `custom.py` bij `build_profile`):
@@ -125,7 +124,7 @@ De groepen:
 | 4. Animatie (na stap 1.4 en 1.5) | `AnimationPlayer`, `AnimationMixer`, `AnimationLibrary`, `AnimatedSprite2D`, `SpriteFrames`, `AtlasTexture` | middel |
 | 5. GUI | `ColorRect`, `ScrollContainer`, `HScrollBar`, `VScrollBar`, `HSplitContainer`, `VSplitContainer`, `FlowContainer`, `HFlowContainer`, `VFlowContainer`, `FoldableContainer`, `HSeparator`, `VSeparator`, `VirtualJoystick` | middel (standaard-thema verwijst naar sommige) |
 
-**Nooit uitzetten:** `AudioStreamMP3`, `AudioStreamWAV`, `CompressedTexture2D`, `ImageTexture`, `GradientTexture2D`,
+**Nooit uitzetten:** `AudioStreamOggVorbis`, `AudioStreamWAV`, `CompressedTexture2D`, `ImageTexture`, `GradientTexture2D`,
 `Gradient`, `ConvexPolygonShape2D`, `StyleBoxEmpty`, `StyleBoxFlat`, `Tween`, `Animation`, `JavaScriptBridge`.
 
 ### 3.2 Bouwen
