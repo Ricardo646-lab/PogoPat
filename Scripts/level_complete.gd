@@ -1,6 +1,5 @@
 extends Control
 
-
 @onready var main_panel: Control = %MainPanel
 
 @onready var star_nodes: Array[Node] = [
@@ -75,16 +74,22 @@ func _play_panel_animation() -> void:
 	_stop_active_tweens()
 
 	main_panel.pivot_offset = main_panel.size * 0.5
-	main_panel.scale = Vector2(0.82, 0.82)
+	main_panel.scale = Vector2(1, 0.5)          # Start smaller for a pop-in effect
 	main_panel.modulate.a = 0.0
+	main_panel.rotation = deg_to_rad(-7.0)         # Slight tilt for a dynamic pop-up feel
 
 	var tween := create_tween()
 	active_tweens.append(tween)
 
 	tween.set_parallel(true)
+	tween.set_ease(Tween.EASE_OUT)
 
-	tween.tween_property(main_panel, "scale", Vector2.ONE, 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(main_panel, "modulate:a", 1.0, 0.2)
+	# Springy scale effect using TRANS_BACK
+	tween.tween_property(main_panel, "scale", Vector2.ONE, 0.6).set_trans(Tween.TRANS_BACK)
+	# Smooth rotation straighten-out
+	tween.tween_property(main_panel, "rotation", 0.0, 0.5).set_trans(Tween.TRANS_SPRING)
+	# Fast fade-in
+	tween.tween_property(main_panel, "modulate:a", 1.0, 0.25)
 
 
 func _play_star_animation(earned_states: Array[bool]) -> void:
