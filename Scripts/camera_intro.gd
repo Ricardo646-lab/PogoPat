@@ -29,14 +29,14 @@ func play_finish_preview(on_complete_callback: Callable) -> void:
 
 	
 	# 1. Pan camera to the finish target position
-	tween.tween_callback(func(): woosh_out.play())
+	tween.tween_callback(func(): AudioManager.woosh_out.play())
 	tween.tween_property(self, "global_position", finish_target.global_position, pan_speed)
 
 	# 2. Pause at the finish
 	tween.tween_interval(hold_time)
 
 	# 3. Pan camera back to the player
-	tween.tween_callback(func(): woosh_back.play())
+	tween.tween_callback(func(): AudioManager.woosh_back.play())
 	tween.tween_property(self, "global_position", player.global_position, pan_speed)
 
 	# 4. Finish preview and restore camera settings
