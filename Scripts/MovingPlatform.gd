@@ -25,6 +25,8 @@ var start: Vector2
 var travelled: float = 0.0
 var rail: Node2D
 
+@onready var moving_platform_sound: AudioStreamPlayer2D = $MovingPlatformSound
+
 class Rail extends Node2D:
 	var lengte: Vector2
 	func _draw() -> void:
@@ -47,12 +49,21 @@ func _ready() -> void:
 	add_child(rail)
 	_zet_rail()
 
+	if moving_platform_sound and not moving_platform_sound.playing:
+		moving_platform_sound.play()
+
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	travelled += speed * delta
 	position = start + _axis() * pingpong(travelled, distance)
 	_zet_rail()
+
+	# Subtiele pitch-modulatie om het eentonige loop-effect te breken
+	if moving_platform_sound:
+		var base_pitch = remap(speed, 60.0, 200.0, 0.9, 1.2)
+		var loop_masker = sin(Time.get_ticks_msec() * 0.005) * 0.02
+		moving_platform_sound.pitch_scale = base_pitch + loop_masker
 
 func _draw() -> void:
 	# Rail: in het spel een los onderdeel (zie _ready), hier alleen als voorbeeld in de editor
