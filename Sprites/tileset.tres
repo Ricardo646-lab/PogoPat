@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://ux7g7y1kajd2"]
 
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_tex"]
 

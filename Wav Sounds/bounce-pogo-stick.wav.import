@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://brq7m6wrup3g8"
-path="res://.godot/imported/bounce-pogo-stick.wav-857aad9e4bfb8a25bc353ef358eb24eb.sample"
+path="res://.godot/imported/bounce-pogo-stick.wav-e572a4ff5cf16fbc150678907476fe0d.sample"
 
 [deps]
 
-source_file="res://Sounds/bounce-pogo-stick.wav"
-dest_files=["res://.godot/imported/bounce-pogo-stick.wav-857aad9e4bfb8a25bc353ef358eb24eb.sample"]
+source_file="res://Wav Sounds/bounce-pogo-stick.wav"
+dest_files=["res://.godot/imported/bounce-pogo-stick.wav-e572a4ff5cf16fbc150678907476fe0d.sample"]
 
 [params]
 
