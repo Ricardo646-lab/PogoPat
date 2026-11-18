@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://u6sebxjed4hu"
+path="res://.godot/imported/WreckingBallSound.ogg-bbd27a0853a12eaf381f1fe70e1dd430.oggvorbisstr"
+
+[deps]
+
+source_file="res://OGG Sounds/WreckingBallSound.ogg"
+dest_files=["res://.godot/imported/WreckingBallSound.ogg-bbd27a0853a12eaf381f1fe70e1dd430.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

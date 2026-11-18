@@ -8,6 +8,6 @@ script = ExtResource("1_saw")
 
 [node name="SawSound" type="AudioStreamPlayer2D" parent="." unique_id=901138367]
 stream = ExtResource("2_8rx2d")
-volume_db = -10.0
+volume_db = -15.0
 pitch_scale = 3.0
 autoplay = true

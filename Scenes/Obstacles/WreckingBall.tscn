@@ -1,6 +1,13 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cqf1ft5mgmwpd"]
 
 [ext_resource type="Script" uid="uid://bfpbsm5xjxyjm" path="res://Scripts/WreckingBall.gd" id="1_wb"]
+[ext_resource type="AudioStream" uid="uid://u6sebxjed4hu" path="res://OGG Sounds/WreckingBallSound.ogg" id="2_u10sv"]
 
-[node name="WreckingBall" type="Node2D"]
+[node name="WreckingBall" type="Node2D" unique_id=782189247]
 script = ExtResource("1_wb")
+
+[node name="WreckingBallSound" type="AudioStreamPlayer2D" parent="." unique_id=1072802315]
+stream = ExtResource("2_u10sv")
+volume_db = 15.0
+pitch_scale = 0.22
+autoplay = true

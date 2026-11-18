@@ -13,6 +13,8 @@ extends Node2D
 var time_passed: float = 0.0
 var ball_area: Area2D
 
+@onready var wrecking_ball_sound: AudioStreamPlayer2D = $WreckingBallSound
+
 func _ready() -> void:
 	time_passed = deg_to_rad(phase_deg)
 	queue_redraw()
@@ -29,12 +31,28 @@ func _ready() -> void:
 	add_child(ball_area)
 	ball_area.body_entered.connect(_on_ball_hit)
 
+	# Start het geluid als dat nog niet gebeurt is
+	if wrecking_ball_sound and not wrecking_ball_sound.playing:
+		wrecking_ball_sound.play()
+
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	# Slingeren met een sinus-golf
 	time_passed += delta * swing_speed
 	rotation_degrees = sin(time_passed) * max_angle   # draaien: geen nieuwe tekening nodig
+# 	Laat het geluid echt meeslingeren (volume én toonhoogte)
+	if wrecking_ball_sound:
+		# cosinus geeft de snelheid aan: 0 bij de uitersten (stilstand), 1 in het midden (snelste)
+		var speed_factor = abs(cos(time_passed))
+		
+		# 1. Toonhoogte (pitch): van diep naar hoog naarmate hij sneller gaat
+		var target_pitch = remap(speed_factor, 0.0, 1.0, 0.7, 1.3)
+		wrecking_ball_sound.pitch_scale = lerp(wrecking_ball_sound.pitch_scale, target_pitch, delta * 8.0)
+		
+		# 2. Volume: bijna stil in de hoeken (-30 dB), vol geluid in het midden (0 dB)
+		var target_db = lerp(-30.0, 5.0, speed_factor)
+		wrecking_ball_sound.volume_db = lerp(wrecking_ball_sound.volume_db, target_db, delta * 8.0)
 
 func _draw() -> void:
 	var ball_pos = Vector2(0, chain_length)
