@@ -13,6 +13,7 @@ extends Node
 @onready var charge_sound: AudioStreamPlayer = $ChargeSound
 @onready var victory_sound: AudioStreamPlayer = $VictorySound
 @onready var star_sound: AudioStreamPlayer = $StarSound
+@onready var death_sound: AudioStreamPlayer = $DeathSound
 
 # Muziek & Loops (OGG)
 @onready var charge_loop_sound: AudioStreamPlayer = $ChargeLoopSound

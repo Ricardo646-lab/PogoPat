@@ -17,19 +17,11 @@ var is_dead: bool = false
 var is_intro_playing: bool = false
 var has_seen_intro: bool = false
 
-# --- Audio ---
-@onready var pogostick_sound = $PogostickSound
-@onready var victory_sound = $VictorySound  
-@onready var death_sound = $DeathSound
-@onready var charge_sound = $ChargeSound
-@onready var charge_loop_sound = $ChargeLoopSound
-@onready var mini_jump_sound = $MiniJumpSound
-
-@export var death_sounds: Array[AudioStream] = []
-
 # --- Charging Space Bar ---
 signal charge_changed(ratio: float)
 
+# --- Audio --- 
+@export var death_sounds: Array[AudioStream] = []
 # --- Gravity ---
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -179,8 +171,8 @@ func _physics_process(delta):
 			velocity.y = auto_hop_force
 			visual_stretch = 0.3
 
-			if mini_jump_sound and not mini_jump_sound.playing:
-				mini_jump_sound.play()
+			if not AudioManager.mini_jump_sound.playing:
+				AudioManager.mini_jump_sound.play()
 
 	# 3. Horizontal movement
 	if wants_charge:
@@ -220,8 +212,8 @@ func _physics_process(delta):
 			is_charging = true
 			current_jump_charge = min_jump_force
 
-			if charge_sound and not charge_sound.playing and not (charge_loop_sound and charge_loop_sound.playing):
-				charge_sound.play()
+			if not AudioManager.charge_sound.playing and not AudioManager.charge_loop_sound.playing:
+				AudioManager.charge_sound.play()
 
 		else:
 			current_jump_charge -= charge_rate * delta
@@ -231,19 +223,14 @@ func _physics_process(delta):
 		charge_changed.emit(ratio)
 
 		if ratio >= 0.99:
-			# Stop de opbouw als die nog speelde
-			if charge_sound and charge_sound.playing:
-				charge_sound.stop()
-			# Start de loop-sound voor het laatste stukje
-			if charge_loop_sound and not charge_loop_sound.playing:
-				charge_loop_sound.play()
+			if AudioManager.charge_sound.playing:
+				AudioManager.charge_sound.stop()
+			if not AudioManager.charge_loop_sound.playing:
+				AudioManager.charge_loop_sound.play()
 
 	elif is_charging:
-
-		if charge_sound and charge_sound.playing:
-			charge_sound.stop()
-		if charge_loop_sound and charge_loop_sound.playing:
-			charge_loop_sound.stop()
+		AudioManager.charge_sound.stop()
+		AudioManager.charge_loop_sound.stop()
 		
 		velocity = Vector2(0, current_jump_charge).rotated(angle)
 		is_charging = false
@@ -253,8 +240,7 @@ func _physics_process(delta):
 		is_big_jump = true
 		angular_vel = 0.0
 
-		if pogostick_sound:
-			pogostick_sound.play()
+		AudioManager.pogostick_sound.play()
 
 	# 6. Visual stretch and animation parameters
 	visual_stretch = move_toward(visual_stretch, 0.0, 8.0 * delta)
@@ -285,14 +271,11 @@ func launch(launch_velocity: Vector2) -> void:
 	is_charging = false
 	current_jump_charge = 0.0
 	charge_changed.emit(0.0)
-	if charge_sound and charge_sound.playing:
-		charge_sound.stop()
-	if charge_loop_sound and charge_loop_sound.playing:
-		charge_loop_sound.stop()
+	AudioManager.charge_sound.stop()
+	AudioManager.charge_loop_sound.stop()
 	velocity = launch_velocity
 	is_facing_right = launch_velocity.x > 0
-	if pogostick_sound:
-		pogostick_sound.play()
+	AudioManager.pogostick_sound.play()
 
 func _launched_physics(delta: float) -> void:
 	launch_timer += delta
@@ -463,10 +446,8 @@ func die(splat_normal: Vector2 = Vector2.ZERO):
 	is_big_jump = false
 	is_launched = false
 
-	if charge_sound and charge_sound.playing:
-		charge_sound.stop()
-	if charge_loop_sound and charge_loop_sound.playing:
-			charge_loop_sound.stop()
+	AudioManager.charge_sound.stop()
+	AudioManager.charge_loop_sound.stop()
 
 	queue_redraw()
 
@@ -475,10 +456,10 @@ func die(splat_normal: Vector2 = Vector2.ZERO):
 
 	velocity = Vector2.ZERO
 
-	if death_sounds.size() > 0 and death_sound:
+	if death_sounds.size() > 0:
 		var random_index = randi() % death_sounds.size()
-		death_sound.stream = death_sounds[random_index]
-		death_sound.play()
+		AudioManager.death_sound.stream = death_sounds[random_index]
+		AudioManager.death_sound.play()
 
 	if has_node("DeathEffect"):
 		if splat_normal != Vector2.ZERO:
@@ -493,10 +474,8 @@ func die(splat_normal: Vector2 = Vector2.ZERO):
 func respawn() -> void:
 	is_dead = false
 
-	if charge_sound and charge_sound.playing:
-		charge_sound.stop()
-	if charge_loop_sound and charge_loop_sound.playing:
-			charge_loop_sound.stop()
+	AudioManager.charge_sound.stop()
+	AudioManager.charge_loop_sound.stop()
 
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
@@ -530,8 +509,7 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 
 	level_finished = true
 	
-	if victory_sound:
-		victory_sound.play()
+	AudioManager.victory_sound.play()
 
 	has_started = false
 	velocity = Vector2.ZERO
