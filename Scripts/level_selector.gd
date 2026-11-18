@@ -14,6 +14,10 @@ var page = 0
 var page_count = ceili(GameManager.LEVEL_COUNT / float(PER_PAGE))
 
 func _ready() -> void:
+# Start de muziek als deze nog niet speelt wanneer je in de level selector komt
+	if not AudioManager.level_background_music.playing:
+		AudioManager.level_background_music.play()
+
 	var template = grid.get_child(0)
 	buttons.append(template)
 	for i in PER_PAGE - 1:
@@ -30,6 +34,11 @@ func _ready() -> void:
 
 	# Begin op de pagina van het level waar je bent
 	_show_page(floori((GameManager.current_level - 1) / float(PER_PAGE)))
+
+# Zodra je naar een level gaat en de level selector-scène afsluit, stopt de muziek direct.
+func _exit_tree() -> void:
+	if AudioManager.level_background_music.playing:
+		AudioManager.level_background_music.stop()
 
 func _show_page(p: int) -> void:
 	page = clampi(p, 0, page_count - 1)

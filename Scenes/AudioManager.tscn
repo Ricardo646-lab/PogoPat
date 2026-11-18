@@ -63,7 +63,6 @@ pitch_scale = 1.25
 stream = ExtResource("11_x78ut")
 volume_db = -15.0
 pitch_scale = 1.5
-autoplay = true
 parameters/looping = true
 
 [node name="LockedButtonSound" type="AudioStreamPlayer" parent="." unique_id=685737250]

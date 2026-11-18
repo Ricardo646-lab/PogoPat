@@ -9,14 +9,14 @@ extends Node
 
 # Gameplay Geluiden (WAV)
 @onready var mini_jump_sound: AudioStreamPlayer = $MiniJumpSound
-@onready var bounce_sound: AudioStreamPlayer = $BounceSound
+@onready var pogostick_sound: AudioStreamPlayer = $PogostickSound
 @onready var charge_sound: AudioStreamPlayer = $ChargeSound
 @onready var victory_sound: AudioStreamPlayer = $VictorySound
 @onready var star_sound: AudioStreamPlayer = $StarSound
 
 # Muziek & Loops (OGG)
 @onready var charge_loop_sound: AudioStreamPlayer = $ChargeLoopSound
-@onready var background_music: AudioStreamPlayer = $BackgroundMusic
+@onready var level_background_music: AudioStreamPlayer = $LevelBackgroundMusic
 
 func _ready() -> void:
 	# Zorgt ervoor dat de audio blijft spelen als het spel pauzeert
@@ -43,7 +43,7 @@ func play_mini_jump() -> void:
 	mini_jump_sound.play()
 
 func play_bounce() -> void:
-	bounce_sound.play()
+	pogostick_sound.play()
 
 func play_victory() -> void:
 	victory_sound.play()
@@ -68,8 +68,8 @@ func stop_charge_loop() -> void:
 
 # --- Achtergrondmuziek (OGG) ---
 func play_music() -> void:
-	if not background_music.playing:
-		background_music.play()
+	if not level_background_music.playing:
+		level_background_music.play()
 
 func stop_music() -> void:
-	background_music.stop()
+	level_background_music.stop()

@@ -57,6 +57,8 @@ func highest_unlocked() -> int:
 
 func play_level(level: int) -> void:
 	current_level = clampi(level, 1, LEVEL_COUNT)
+	if AudioManager.level_background_music.playing:
+		AudioManager.level_background_music.stop()
 	get_tree().change_scene_to_packed(game_scene)
 
 func next_level() -> void:

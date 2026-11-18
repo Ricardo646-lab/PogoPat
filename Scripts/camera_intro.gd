@@ -7,9 +7,6 @@ extends Camera2D
 
 var is_previewing: bool = false
 
-@onready var woosh_out = $WooshOut
-@onready var woosh_back = $WooshBack
-
 func _ready() -> void:
 	if player:
 		global_position = player.global_position
