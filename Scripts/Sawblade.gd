@@ -26,6 +26,8 @@ var travelled: float = 0.0
 var blade: Node2D
 var rail: Node2D
 
+@onready var saw_sound: AudioStreamPlayer2D = $SawSound
+
 class Rail extends Node2D:
 	var lengte: Vector2
 	func _draw() -> void:
@@ -80,6 +82,10 @@ func _ready() -> void:
 	add_child(area)
 	area.body_entered.connect(_on_body_entered)
 
+	# Controleer of het geluid speelt
+	if saw_sound and not saw_sound.playing:
+		saw_sound.play()
+
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
@@ -87,6 +93,13 @@ func _process(delta: float) -> void:
 	position = start + _axis() * pingpong(travelled, distance)
 	rail.position = start - position     # rail blijft op zijn plek (alleen verschuiven, niet hertekenen)
 	blade.rotation += 12.0 * delta
+
+# Pas de pitch aan én voeg een mini-golfje toe om de loop te maskeren
+	if saw_sound:
+		var base_pitch = remap(speed, 50.0, 300.0, 0.8, 1.4)
+		# Dit zorgt voor een subtiele schommeling in de toonhoogte (breekt de loop)
+		var loop_masker = sin(Time.get_ticks_msec() * 0.008) * 0.03
+		saw_sound.pitch_scale = base_pitch + loop_masker
 
 # Alleen in de editor: voorbeeld van rail + blad
 func _draw() -> void:
