@@ -12,6 +12,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 44.0
+offset_bottom = 44.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -47,66 +49,6 @@ rotation = -0.0024755877
 scale = Vector2(1.7389511, 2.0007002)
 mouse_filter = 2
 theme_override_styles/panel = ExtResource("2_kh4og")
-
-[node name="Node2D" type="Node2D" parent="CenterContainer/PopUpLayer/PanelShadow" unique_id=1444789085]
-position = Vector2(92.96375, -0.79961777)
-rotation = 0.0021517107
-scale = Vector2(1.1, 1.2)
-skew = 0.00069642067
-
-[node name="CPUParticles2D" type="CPUParticles2D" parent="CenterContainer/PopUpLayer/PanelShadow/Node2D" unique_id=705763037]
-position = Vector2(0, -40.99997)
-scale = Vector2(6.000001, 2.1200006)
-amount = 16
-explosiveness = 0.6
-randomness = 0.2
-local_coords = true
-direction = Vector2(0, -1)
-spread = 50.0
-gravity = Vector2(0, 100)
-initial_velocity_min = 65.0
-initial_velocity_max = 182.98
-angular_velocity_min = 280.0
-angular_velocity_max = 280.0
-scale_amount_min = 1.5
-scale_amount_max = 2.0
-color = Color(0.91764706, 0.105882354, 0.1764706, 1)
-
-[node name="CPUParticles2D2" type="CPUParticles2D" parent="CenterContainer/PopUpLayer/PanelShadow/Node2D" unique_id=161519826]
-position = Vector2(5, -21.99997)
-scale = Vector2(6.000001, 2.1200006)
-amount = 16
-explosiveness = 0.6
-randomness = 0.2
-local_coords = true
-direction = Vector2(0, -1)
-spread = 50.0
-gravity = Vector2(0, -100)
-initial_velocity_min = 65.0
-initial_velocity_max = 182.98
-angular_velocity_min = 280.0
-angular_velocity_max = 280.0
-scale_amount_min = 1.5
-scale_amount_max = 2.0
-color = Color(0.92016, 0.96, 0.1632, 1)
-
-[node name="CPUParticles2D3" type="CPUParticles2D" parent="CenterContainer/PopUpLayer/PanelShadow/Node2D" unique_id=107394173]
-position = Vector2(0, -15.9999695)
-scale = Vector2(6.000001, 2.1200006)
-amount = 16
-explosiveness = 0.6
-randomness = 0.2
-local_coords = true
-direction = Vector2(0, -1)
-spread = 50.0
-gravity = Vector2(0, 100)
-initial_velocity_min = 65.0
-initial_velocity_max = 182.98
-angular_velocity_min = 280.0
-angular_velocity_max = 280.0
-scale_amount_min = 1.5
-scale_amount_max = 2.0
-color = Color(0.19185773, 0.5844479, 0.36709306, 1)
 
 [node name="MainPanel" type="PanelContainer" parent="CenterContainer/PopUpLayer" unique_id=1718193579]
 unique_name_in_owner = true
