@@ -26,15 +26,12 @@ func _ready() -> void:
 	update_level_state()
 
 func _on_mouse_entered() -> void:
-	if not disabled and hover_sound:
-		audio_player.stream = hover_sound
-		audio_player.play()
+	if not disabled:
+		AudioManager.hover_button_sound.play()
 
 func _gui_input(event: InputEvent) -> void:
 	if disabled and (event is InputEventMouseButton or event is InputEventScreenTouch) and event.pressed:
-		if locked_sound:
-			audio_player.stream = locked_sound
-			audio_player.play()
+		AudioManager.locked_button_sound.play()
 
 func update_level_state() -> void:
 	disabled = not GameManager.is_unlocked(target_level_number)
@@ -42,13 +39,8 @@ func update_level_state() -> void:
 
 func _on_button_pressed() -> void:
 	if not disabled:
-
-		if click_sound:
-			audio_player.stream = click_sound
-			audio_player.play()
-			# Wacht heel even (0.5 seconde) zodat het geluid te horen is voordat de scène wisselt
-			await get_tree().create_timer(0.5).timeout
-
+		AudioManager.clicked_button_sound.play()
+		await get_tree().create_timer(0.5).timeout
 		GameManager.play_level(target_level_number)
 
 func _draw() -> void:
