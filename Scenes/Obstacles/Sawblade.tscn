@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cccfbhisojdpr"]
+
+[ext_resource type="Script" uid="uid://qa2vvmxb2v5e" path="res://Scripts/Sawblade.gd" id="1_saw"]
+[ext_resource type="AudioStream" uid="uid://bcbg3ai6i323f" path="res://OGG Sounds/saw.ogg" id="2_8rx2d"]
+
+[node name="Sawblade" type="Node2D" unique_id=1467858230]
+script = ExtResource("1_saw")
+
+[node name="SawSound" type="AudioStreamPlayer2D" parent="." unique_id=901138367]
+stream = ExtResource("2_8rx2d")
+volume_db = -15.0
+pitch_scale = 3.0
+autoplay = true

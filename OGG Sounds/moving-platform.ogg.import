@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://br3xmnebmrimw"
+path="res://.godot/imported/moving-platform.ogg-d2d5a5939cbaf40f3eadb87908397773.oggvorbisstr"
+
+[deps]
+
+source_file="res://OGG Sounds/moving-platform.ogg"
+dest_files=["res://.godot/imported/moving-platform.ogg-d2d5a5939cbaf40f3eadb87908397773.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

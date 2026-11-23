@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://dbvih83yk6u0p" path="res://Sprites/Controls.png" id="11_0wsr5"]
+[ext_resource type="Texture2D" uid="uid://b3w4ofkgm1onf" path="res://Sprites/spacebar_spritesheet.png" id="15_yji5v"]
+[ext_resource type="Script" uid="uid://gtwdnwvwhg1j" path="res://Scripts/tutorial_prompts.gd" id="8_06um6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ulvkb"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(0, 0, 314, 154)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fh0sh"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(314, 0, 314, 154)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_03od6"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(628, 0, 314, 154)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_384de"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(942, 0, 314, 154)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bhaf5"]
+atlas = ExtResource("15_yji5v")
+region = Rect2(1256, 0, 314, 154)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ubfni"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ulvkb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fh0sh")
+}, {
+"duration": 9.0,
+"texture": SubResource("AtlasTexture_03od6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_384de")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bhaf5")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 6.0
+}]
+
+[node name="Tutorial" type="Node2D"]
+z_index = -1
+
+[node name="Move" type="Sprite2D" parent="." unique_id=452052859]
+position = Vector2(194, -249)
+scale = Vector2(0.49197036, 0.475342)
+texture = ExtResource("11_0wsr5")
+hframes = 2
+region_rect = Rect2(72, 10, 535, 381)
+script = ExtResource("8_06um6")
+
+[node name="ButtonJump" type="AnimatedSprite2D" parent="." unique_id=1623366308]
+position = Vector2(157, 90)
+scale = Vector2(1.1081129, 0.80633134)
+sprite_frames = SubResource("SpriteFrames_ubfni")
+autoplay = "default"
+frame_progress = 0.17209232
+

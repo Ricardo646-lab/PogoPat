@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cm605l31d1k2b"
+path="res://.godot/imported/mini-jump.wav-d52944cf84bf9393583f596c8fc62147.sample"
+
+[deps]
+
+source_file="res://Wav Sounds/mini-jump.wav"
+dest_files=["res://.godot/imported/mini-jump.wav-d52944cf84bf9393583f596c8fc62147.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=1

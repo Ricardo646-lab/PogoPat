@@ -17,19 +17,11 @@ var is_dead: bool = false
 var is_intro_playing: bool = false
 var has_seen_intro: bool = false
 
-# --- Audio ---
-@onready var pogostick_sound = $PogostickSound
-@onready var victory_sound = $VictorySound  
-@onready var death_sound = $DeathSound
-@onready var charge_sound = $ChargeSound
-@onready var charge_loop_sound = $ChargeLoopSound
-@onready var mini_jump_sound = $MiniJumpSound
-
-@export var death_sounds: Array[AudioStream] = []
-
 # --- Charging Space Bar ---
 signal charge_changed(ratio: float)
 
+# --- Audio --- 
+@export var death_sounds: Array[AudioStream] = []
 # --- Gravity ---
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -58,6 +50,13 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var current_jump_charge = 0.0
 var is_charging = false
 
+# --- Gelanceerd door wreckingball ---
+@export_group("Launch")
+@export var launch_gravity_scale: float = 0.3   # Minder zwaartekracht = je vliegt echt weg
+@export var launch_fly_time: float = 1.5        # Na zoveel seconden zonder muur: weggevlogen
+var is_launched: bool = false
+var launch_timer: float = 0.0
+
 # --- Rotation State ---
 var angle: float = 0.0            
 var angular_vel: float = 0.0
@@ -85,11 +84,8 @@ var just_released_charge: bool = false
 var is_facing_right: bool = true
 var visual_stretch: float = 0.0
 
-# --- UI & Camera ---
-@onready var start_label = get_node_or_null("%StartLabel")
-@onready var start_overlay = get_node_or_null("CanvasLayer/StartOverlay")
+# --- Camera ---
 @export var camera_node: Camera2D
-@export var view_finish_button: Button
 
 # --- Stars & Time System ---
 var level_timer: float = 0.0
@@ -101,21 +97,6 @@ func _ready():
 	if Engine.is_editor_hint():
 		queue_redraw()
 		return
-
-	if start_label:
-		start_label.text = "Press any key or click to start"
-
-	if view_finish_button:
-		view_finish_button.hide()
-		view_finish_button.pressed.connect(_on_view_finish_button_pressed)
-
-	var is_mobile = OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("android") or OS.has_feature("ios")
-
-	if not is_mobile:
-		var canvas = get_node_or_null("CanvasLayer")
-		if canvas:
-			if canvas.has_node("AnchorLinksonder"): canvas.get_node("AnchorLinksonder").hide()
-			if canvas.has_node("AnchorRechtsonder"): canvas.get_node("AnchorRechtsonder").hide()
 
 	if has_node("/root/PokiSDK"):
 		var poki = get_node("/root/PokiSDK")
@@ -129,11 +110,6 @@ func _input(event):
 		pause_game()
 		return
 
-	# Ignore click inputs if clicking directly on the View Finish Button
-	if event is InputEventMouseButton and view_finish_button and view_finish_button.is_visible_in_tree():
-		if view_finish_button.get_global_rect().has_point(event.position):
-			return
-
 	var is_key_press = event is InputEventKey and event.pressed and not event.echo
 	var is_click = event is InputEventMouseButton and event.pressed
 	var is_touch = event is InputEventScreenTouch and event.pressed
@@ -142,12 +118,6 @@ func _input(event):
 		if event is InputEventKey and event.keycode == KEY_ESCAPE:
 			return
 
-		if start_label:
-			start_label.hide()
-
-		if view_finish_button:
-			view_finish_button.hide()
-
 		# Only auto-play intro preview on the very first start attempt of the level
 		if not has_seen_intro and camera_node and camera_node.has_method("play_finish_preview"):
 			is_intro_playing = true
@@ -155,43 +125,17 @@ func _input(event):
 				has_seen_intro = true
 				has_started = true
 				is_intro_playing = false
-				if start_overlay:
-					start_overlay.hide()
 				if has_node("/root/PokiSDK"):
 					get_node("/root/PokiSDK").call("gameplayStart")
 			)
 		else:
 			# Direct start on respawn or subsequent attempts
 			has_started = true
-			if start_overlay:
-				start_overlay.hide()
 			if has_node("/root/PokiSDK"):
 				get_node("/root/PokiSDK").call("gameplayStart")
 
-func _on_view_finish_button_pressed() -> void:
-	if is_intro_playing or has_started or is_dead:
-		return
-
-	if camera_node and camera_node.has_method("play_finish_preview"):
-		is_intro_playing = true
-		if view_finish_button:
-			view_finish_button.hide()
-		camera_node.play_finish_preview(func():
-			is_intro_playing = false
-			if view_finish_button and not has_started:
-				view_finish_button.show()
-		)
-
 func pause_game():
 	has_started = false
-	if start_overlay:
-		start_overlay.show()
-	if start_label:
-		start_label.text = "Paused! Press any key or click to resume"
-		start_label.show()
-	if view_finish_button and has_seen_intro:
-		view_finish_button.show()
-
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
 
@@ -203,6 +147,10 @@ func _physics_process(delta):
 	if Engine.is_editor_hint():
 		return
 	if not has_started or is_dead or level_finished:
+		return
+
+	if is_launched:
+		_launched_physics(delta)
 		return
 
 	if Input.is_action_just_released("charge_jump") and is_charging:
@@ -223,8 +171,8 @@ func _physics_process(delta):
 			velocity.y = auto_hop_force
 			visual_stretch = 0.3
 
-			if mini_jump_sound and not mini_jump_sound.playing:
-				mini_jump_sound.play()
+			if not AudioManager.mini_jump_sound.playing:
+				AudioManager.mini_jump_sound.play()
 
 	# 3. Horizontal movement
 	if wants_charge:
@@ -264,8 +212,8 @@ func _physics_process(delta):
 			is_charging = true
 			current_jump_charge = min_jump_force
 
-			if charge_sound and not charge_sound.playing and not (charge_loop_sound and charge_loop_sound.playing):
-				charge_sound.play()
+			if not AudioManager.charge_sound.playing and not AudioManager.charge_loop_sound.playing:
+				AudioManager.charge_sound.play()
 
 		else:
 			current_jump_charge -= charge_rate * delta
@@ -275,19 +223,14 @@ func _physics_process(delta):
 		charge_changed.emit(ratio)
 
 		if ratio >= 0.99:
-			# Stop de opbouw als die nog speelde
-			if charge_sound and charge_sound.playing:
-				charge_sound.stop()
-			# Start de loop-sound voor het laatste stukje
-			if charge_loop_sound and not charge_loop_sound.playing:
-				charge_loop_sound.play()
+			if AudioManager.charge_sound.playing:
+				AudioManager.charge_sound.stop()
+			if not AudioManager.charge_loop_sound.playing:
+				AudioManager.charge_loop_sound.play()
 
 	elif is_charging:
-
-		if charge_sound and charge_sound.playing:
-			charge_sound.stop()
-		if charge_loop_sound and charge_loop_sound.playing:
-			charge_loop_sound.stop()
+		AudioManager.charge_sound.stop()
+		AudioManager.charge_loop_sound.stop()
 		
 		velocity = Vector2(0, current_jump_charge).rotated(angle)
 		is_charging = false
@@ -297,8 +240,7 @@ func _physics_process(delta):
 		is_big_jump = true
 		angular_vel = 0.0
 
-		if pogostick_sound:
-			pogostick_sound.play()
+		AudioManager.pogostick_sound.play()
 
 	# 6. Visual stretch and animation parameters
 	visual_stretch = move_toward(visual_stretch, 0.0, 8.0 * delta)
@@ -317,6 +259,41 @@ func _physics_process(delta):
 
 	# 8. Check trap collisions
 	check_trap_collision()
+
+	queue_redraw()
+
+# Wordt aangeroepen door de wreckingball
+func launch(launch_velocity: Vector2) -> void:
+	if is_dead or level_finished or is_launched:
+		return
+	is_launched = true
+	launch_timer = 0.0
+	is_charging = false
+	current_jump_charge = 0.0
+	charge_changed.emit(0.0)
+	AudioManager.charge_sound.stop()
+	AudioManager.charge_loop_sound.stop()
+	velocity = launch_velocity
+	is_facing_right = launch_velocity.x > 0
+	AudioManager.pogostick_sound.play()
+
+func _launched_physics(delta: float) -> void:
+	launch_timer += delta
+	velocity.y += gravity * launch_gravity_scale * delta
+	angle += sign(velocity.x) * 15.0 * delta   # Rondtollen
+	pivot_blend = 1.0
+	tuck = 1.0
+	move_and_slide()
+
+	# Tegen een muur: splat!
+	if is_on_wall():
+		die(get_wall_normal())
+		return
+
+	# Geen muur geraakt: weggevlogen
+	if launch_timer > launch_fly_time:
+		die()
+		return
 
 	queue_redraw()
 
@@ -460,17 +437,17 @@ func check_trap_collision() -> void:
 					die()
 					break
 
-func die():
+# splat_normal = richting van de muur waar je tegenaan knalt (leeg = gewone explosie)
+func die(splat_normal: Vector2 = Vector2.ZERO):
 	if is_dead or level_finished:
 		return
 	is_dead = true
 	is_charging = false
 	is_big_jump = false
+	is_launched = false
 
-	if charge_sound and charge_sound.playing:
-		charge_sound.stop()
-	if charge_loop_sound and charge_loop_sound.playing:
-			charge_loop_sound.stop()
+	AudioManager.charge_sound.stop()
+	AudioManager.charge_loop_sound.stop()
 
 	queue_redraw()
 
@@ -479,13 +456,16 @@ func die():
 
 	velocity = Vector2.ZERO
 
-	if death_sounds.size() > 0 and death_sound:
+	if death_sounds.size() > 0:
 		var random_index = randi() % death_sounds.size()
-		death_sound.stream = death_sounds[random_index]
-		death_sound.play()
+		AudioManager.death_sound.stream = death_sounds[random_index]
+		AudioManager.death_sound.play()
 
 	if has_node("DeathEffect"):
-		$DeathEffect.trigger()
+		if splat_normal != Vector2.ZERO:
+			$DeathEffect.trigger_splat(splat_normal)
+		else:
+			$DeathEffect.trigger()
 
 	await get_tree().create_timer(1.5).timeout
 
@@ -494,10 +474,8 @@ func die():
 func respawn() -> void:
 	is_dead = false
 
-	if charge_sound and charge_sound.playing:
-		charge_sound.stop()
-	if charge_loop_sound and charge_loop_sound.playing:
-			charge_loop_sound.stop()
+	AudioManager.charge_sound.stop()
+	AudioManager.charge_loop_sound.stop()
 
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
@@ -506,6 +484,7 @@ func respawn() -> void:
 	velocity = Vector2.ZERO
 	is_charging = false
 	is_big_jump = false
+	is_launched = false
 	current_jump_charge = 0.0
 	angle = 0.0
 	angular_vel = 0.0
@@ -519,14 +498,6 @@ func respawn() -> void:
 		$DeathEffect.hide_effect()
 
 	has_started = false
-	if start_overlay:
-		start_overlay.show()
-	if start_label:
-		start_label.text = "Press any key or click to start"
-		start_label.show()
-	if view_finish_button and has_seen_intro:
-		view_finish_button.show()
-
 	queue_redraw()
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
@@ -538,8 +509,7 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 
 	level_finished = true
 	
-	if victory_sound:
-		victory_sound.play()
+	AudioManager.victory_sound.play()
 
 	has_started = false
 	velocity = Vector2.ZERO
@@ -560,11 +530,7 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 		earned_stars += 1
 
 	# --- 2. Save Score & Update UI ---
-	var current_scene_path: String = get_tree().current_scene.scene_file_path
-	var level_name = current_scene_path.get_file().get_basename()
-
-	if has_node("/root/GameManager"):
-		get_node("/root/GameManager").save_level_stars(level_name, earned_stars)
+	GameManager.save_level_stars(GameManager.current_level, earned_stars)
 
 	var star_display = get_tree().current_scene.find_child("StarDisplay", true, false)
 	if star_display and star_display.has_method("update_stars"):
@@ -597,18 +563,4 @@ func show_level_complete_popup(earned_stars: int) -> void:
 	go_to_next_level()
 
 func go_to_next_level() -> void:
-	var current_scene_path: String = get_tree().current_scene.scene_file_path
-	var regex = RegEx.new()
-	regex.compile("\\d+")
-	var result = regex.search(current_scene_path)
-
-	if result:
-		var current_level_num: int = result.get_string().to_int()
-		var next_level_num: int = current_level_num + 1
-		var next_scene_path: String = "res://Scenes/Level" + str(next_level_num) + ".tscn"
-
-		if ResourceLoader.exists(next_scene_path):
-			get_tree().call_deferred("change_scene_to_file", next_scene_path)
-		else:
-			print("All levels completed! Returning to Level Selector.")
-			get_tree().call_deferred("change_scene_to_file", "res://Scenes/LevelSelector.tscn")
+	GameManager.call_deferred("next_level")

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cohd3l4l4ejew"
+path="res://.godot/imported/Level-Selector-Background-Music.ogg-f2c9d7a1433895d7e142c679db4a6f7a.oggvorbisstr"
+
+[deps]
+
+source_file="res://OGG Sounds/Level-Selector-Background-Music.ogg"
+dest_files=["res://.godot/imported/Level-Selector-Background-Music.ogg-f2c9d7a1433895d7e142c679db4a6f7a.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
