@@ -19,6 +19,15 @@ extends Node
 @onready var charge_loop_sound: AudioStreamPlayer = $ChargeLoopSound
 @onready var level_background_music: AudioStreamPlayer = $LevelBackgroundMusic
 
+@onready var master_bus_index := AudioServer.get_bus_index("Master")
+
+# Standaard op 1.0 (100% volume). Pas aan als je een ConfigFile gebruikt.
+var master_volume_linear: float = 1.0:
+	set(value):
+		master_volume_linear = clampf(value, 0.0, 1.0)
+		AudioServer.set_bus_volume_db(master_bus_index, linear_to_db(master_volume_linear))
+		AudioServer.set_bus_mute(master_bus_index, master_volume_linear <= 0.001)
+
 func _ready() -> void:
 	# Zorgt ervoor dat de audio blijft spelen als het spel pauzeert
 	process_mode = Node.PROCESS_MODE_ALWAYS
