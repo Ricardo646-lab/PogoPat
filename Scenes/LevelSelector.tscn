@@ -147,10 +147,10 @@ locked_sound = ExtResource("4_8iqa8")
 
 [node name="Prev" type="Button" parent="CenterContainer/Panel" unique_id=683334510]
 layout_mode = 0
-offset_left = 25.0
-offset_top = 200.0
-offset_right = 95.0
-offset_bottom = 300.0
+offset_left = 20.0
+offset_top = 215.0
+offset_right = 90.0
+offset_bottom = 290.0
 theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 40
@@ -162,10 +162,10 @@ text = "<"
 
 [node name="Next" type="Button" parent="CenterContainer/Panel" unique_id=1678891929]
 layout_mode = 0
-offset_left = 805.0
-offset_top = 200.0
-offset_right = 875.0
-offset_bottom = 300.0
+offset_left = 810.0
+offset_top = 215.0
+offset_right = 880.0
+offset_bottom = 290.0
 theme_override_colors/font_color = Color(0.49803922, 0.54901963, 0.5529412, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 40
