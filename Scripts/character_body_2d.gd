@@ -102,6 +102,8 @@ func _ready():
 		var poki = get_node("/root/PokiSDK")
 		poki.call("gameLoadingFinished")
 
+	PokiEvents.level_started(GameManager.current_level)
+
 func _input(event):
 	if level_finished or Engine.is_editor_hint():
 		return
@@ -445,6 +447,7 @@ func die(splat_normal: Vector2 = Vector2.ZERO):
 	is_charging = false
 	is_big_jump = false
 	is_launched = false
+	PokiEvents.player_died()
 
 	AudioManager.charge_sound.stop()
 	AudioManager.charge_loop_sound.stop()
@@ -530,6 +533,8 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 		earned_stars += 1
 
 	# --- 2. Save Score & Update UI ---
+	# Eerst meten: TTFI kijkt of level 1 al eerder gehaald is
+	PokiEvents.level_completed(GameManager.current_level, earned_stars)
 	GameManager.save_level_stars(GameManager.current_level, earned_stars)
 
 	var star_display = get_tree().current_scene.find_child("StarDisplay", true, false)
