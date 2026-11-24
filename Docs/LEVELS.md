@@ -246,7 +246,9 @@ Elk level heeft één vorm: `KLIM` · `AFDALING` · `VALLEI` (omlaag, dan omhoog
 | 9 De Storm | 81–90 | snelheid, strakke sterren | 43–127 |
 | 10 De Top | 91–100 | de finale, steeds hoger | 42–165 |
 
-Elk 10e level is een **finale** en eindigt hoger dan de start. Sterren: ⭐⭐⭐ = eerste tijd, ⭐⭐ = tweede tijd.
+Elk 10e level is een **finale** en eindigt hoger dan de start.
+
+**Sterren:** elk level heeft 3 sterren om op te pakken. `level_generator.gd` zet ze automatisch op ~¼, ½ en ¾ van de route, op een plek waar je kunt staan (of boven een bewegend platform), liefst buiten het bereik van zagen en kogels. Na een death komen ze terug. De tijden bij elk level (`⭐ 9 / 18`) worden niet meer voor sterren gebruikt.
 
 ---
 

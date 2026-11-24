@@ -24,6 +24,11 @@ const PLATFORM = preload("res://Scenes/Obstacles/MovingPlatform.tscn")
 const TUTORIAL = preload("res://Scenes/Tutorial.tscn")
 const Achtergrond = preload("res://Scripts/construction_background.gd")
 const TouchControls = preload("res://Scripts/touch_controls.gd")
+const StarPickup = preload("res://Scripts/star_pickup.gd")
+
+const STER_PLEKKEN = [0.25, 0.5, 0.75]   # sterren op ~1/4, 1/2 en 3/4 van de weg start -> finish
+const STER_HOOGTE = 100                  # midden van de ster boven de vloer (px): je raakt hem al lopend
+const STER_AFSTAND = 4                   # min. kolommen tussen sterren en van start/finish
 
 const SAW_SPEED = {"normaal": 150.0, "snel": 320.0, "razend": 400.0}
 const VSAW_SPEED = {"normaal": 150.0, "snel": 250.0}
@@ -51,6 +56,11 @@ var f = 0                 # huidige vloer (rij)
 var x = 0                 # huidige kolom
 var spawn_col = 0
 var kogels = []            # ophangpunten van de sloopkogels (daar komt een kraan in de achtergrond)
+var gevaar = {}            # kolommen in het bereik van een zaag of sloopkogel (liever geen ster)
+var platform_plekken = []  # [kolom, rij] boven de baan van horizontale platforms (ook plek voor een ster)
+var finish_col = 0
+var sterren = []           # de 3 sterren in dit level
+var star_display = null    # HUD: de 3 sterren-vakjes (stars_ui.gd)
 
 # ---------------------------------------------------------------------------------------------
 func _ready() -> void:
@@ -83,9 +93,9 @@ func _ready() -> void:
 	player.spawn_position = spawn
 	camera.global_position = spawn
 
-	var stars = LevelData.STARS[level]
-	player.fast_time = stars[0]
-	player.par_time = stars[1]
+	star_display = find_child("StarDisplay", true, false)
+	_plaats_sterren()
+	player.respawned.connect(_reset_sterren)
 
 	var label = find_child("LevelLabel", true, false)
 	if label:
@@ -337,6 +347,7 @@ func _finish(soort: String) -> Dictionary:
 			breed = 6
 			_ground(6)
 	var vloer = f
+	finish_col = col0
 	if soort == "piek":
 		f += 2
 	_wall(x)
@@ -578,6 +589,12 @@ func _saw(pos: Vector2, vertical: bool, tiles: int, speed: String, offset: float
 	saw.radius = SAW_RADIUS.get(maat, 100.0)
 	saw.start_offset = offset
 	add_child(saw)
+	var breed = 0.0 if vertical else saw.distance
+	_markeer_gevaar(pos.x - saw.radius, pos.x + breed + saw.radius)
+
+func _markeer_gevaar(van_px: float, tot_px: float) -> void:
+	for c in range(floori(van_px / TILE), ceili(tot_px / TILE) + 1):
+		gevaar[c] = true
 
 # Verticale zaag: bovenste stand midden 5 rijen boven de vloer, zakt 'slag' rijen
 func _vsaw(cx: float, floor_row: int, slag: int, speed: String, offset: float) -> void:
@@ -592,6 +609,8 @@ func _ball(anchor: Vector2, k: int, fase: float, speed: String) -> void:
 	ball.phase_deg = fase
 	add_child(ball)
 	kogels.append(anchor)
+	var bereik = ball.chain_length + ball.ball_radius
+	_markeer_gevaar(anchor.x - bereik, anchor.x + bereik)
 
 func _platform(pos: Vector2, vertical: bool, tiles: int, speed: String, offset: float) -> void:
 	var p = PLATFORM.instantiate()
@@ -602,6 +621,10 @@ func _platform(pos: Vector2, vertical: bool, tiles: int, speed: String, offset: 
 	p.speed = PLATFORM_SPEED.get(speed, 170.0)
 	p.start_offset = offset
 	add_child(p)
+	if not vertical:
+		var c0 = floori(pos.x / TILE)
+		for c in range(c0, c0 + tiles + PLATFORM_TILES):
+			platform_plekken.append(Vector2i(c, floori(pos.y / TILE)))
 
 func _decor(bottom_left: Vector2i, atlas: Vector2i) -> void:
 	for dx in 2:
@@ -656,6 +679,72 @@ func _mirror(rows: Array) -> Array:
 		m = r1.sub(m, "$2$1", true)
 		out.append(m)
 	return out
+
+# ---------------------------------------------------------------------------------------------
+# Sterren: 3 per level, automatisch op een tegel waar je op kunt staan (grond, torenvloer,
+# richel, pilaar) langs de route. Nooit op spikes; liefst niet bij een zaag of sloopkogel.
+func _plaats_sterren() -> void:
+	# Korte levels: sterren mogen dichter bij elkaar
+	var afstand = clampi(floori((finish_col - spawn_col) / 4.0), 2, STER_AFSTAND)
+	var veilig = []    # [kolom, rij] van de tegel waar je op staat
+	var riskant = []
+	for cell in tilemap.get_used_cells() + platform_plekken:
+		var c = cell.x
+		var r = cell.y
+		if c < spawn_col + afstand or c > finish_col - afstand:
+			continue
+		if tilemap.get_cell_source_id(cell) != -1 and tilemap.get_cell_atlas_coords(cell) == SPIKE_UP:
+			continue
+		var vrij = true
+		for dr in range(1, 4):   # 3 rijen lucht erboven (geen spike, plafond of richel)
+			var boven = Vector2i(c, r - dr)
+			if tilemap.get_cell_source_id(boven) != -1 or vulling.get_cell_source_id(boven) != -1:
+				vrij = false
+				break
+		if vrij:
+			(riskant if gevaar.has(c) else veilig).append(cell)
+
+	# Per plek de dichtstbijzijnde veilige tegel; is er geen, dan een tegel bij een zaag/kogel.
+	var gekozen = []
+	for p in STER_PLEKKEN:
+		var doel = spawn_col + (finish_col - spawn_col) * p
+		for lijst in [veilig, riskant]:
+			var beste = null
+			for cell in lijst:
+				var te_dichtbij = gekozen.any(func(g): return abs(g.x - cell.x) < afstand)
+				if te_dichtbij:
+					continue
+				# Dichtst bij het doel; bij gelijke kolom de hoogste vloer (de route in torens)
+				if beste == null or abs(cell.x - doel) < abs(beste.x - doel) \
+						or (cell.x == beste.x and cell.y < beste.y):
+					beste = cell
+			if beste != null:
+				gekozen.append(beste)
+				break
+	if gekozen.size() < 3:
+		push_warning("Level %d: maar %d sterren geplaatst" % [level, gekozen.size()])
+	gekozen.sort_custom(func(a, b): return a.x < b.x)
+
+	for cell in gekozen:
+		var ster = StarPickup.new()
+		ster.position = Vector2(cell.x * TILE + HALF_TILE, cell.y * TILE - STER_HOOGTE)
+		ster.collected.connect(_ster_gepakt)
+		add_child(ster)
+		sterren.append(ster)
+
+func _ster_gepakt(ster) -> void:
+	if star_display == null:
+		return
+	# Van de plek in het level (scherm) naar het eerste lege vakje in de HUD
+	var scherm = ster.get_global_transform_with_canvas()
+	var start_scale = scherm.get_scale().x * StarPickup.GROOTTE / star_display.VAKJE / star_display.get_global_transform_with_canvas().get_scale().x
+	star_display.fly_in(scherm.origin, start_scale)
+
+func _reset_sterren() -> void:
+	for ster in sterren:
+		ster.reset()
+	if star_display:
+		star_display.reset()
 
 # ---------------------------------------------------------------------------------------------
 func _paint() -> void:

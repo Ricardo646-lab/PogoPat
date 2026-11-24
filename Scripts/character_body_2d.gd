@@ -87,10 +87,9 @@ var visual_stretch: float = 0.0
 # --- Camera ---
 @export var camera_node: Camera2D
 
-# --- Stars & Time System ---
+# --- Time (alleen voor de klok in de HUD; sterren pak je op in het level) ---
 var level_timer: float = 0.0
-@export var par_time: float = 30.0          # Time limit for 2nd star
-@export var fast_time: float = 15.0         # Time limit for 3rd star (extra fast!)
+signal respawned   # level_generator zet dan de sterren terug
 @export var auto_next_delay: float = 2.0    # Delay in seconds before auto-advancing after level completion
 
 func _ready():
@@ -502,6 +501,7 @@ func respawn() -> void:
 
 	has_started = false
 	queue_redraw()
+	respawned.emit()
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
 	if body != self and not body is CharacterBody2D:
@@ -523,25 +523,17 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 	if has_node("/root/PokiSDK"):
 		get_node("/root/PokiSDK").call("gameplayStop")
 
-	# --- 1. Calculate Stars Based on Time ---
-	var earned_stars = 1
+	# --- 1. Sterren = aantal opgepakte sterren deze poging (0-3) ---
+	var earned_stars = 0
+	var star_display = get_tree().current_scene.find_child("StarDisplay", true, false)
+	if star_display and star_display.has_method("get_collected"):
+		earned_stars = star_display.get_collected()
 
-	if level_timer <= par_time:
-		earned_stars += 1
-
-	if level_timer <= fast_time:
-		earned_stars += 1
-
-	# --- 2. Save Score & Update UI ---
-	# Eerst meten: TTFI kijkt of level 1 al eerder gehaald is
-	PokiEvents.level_completed(GameManager.current_level, earned_stars)
+	# --- 2. Save Score ---
+	PokiEvents.level_completed(earned_stars)
 	GameManager.save_level_stars(GameManager.current_level, earned_stars)
 
-	var star_display = get_tree().current_scene.find_child("StarDisplay", true, false)
-	if star_display and star_display.has_method("update_stars"):
-		star_display.update_stars(earned_stars)
-
-	print("Level completed in ", snapped(level_timer, 0.01), "s! Earned stars: ", earned_stars)
+	print("Level completed in ", snapped(level_timer, 0.01), "s! Stars: ", earned_stars)
 
 	# --- 3. Show Result Panel & Advance ---
 	show_level_complete_popup(earned_stars)
