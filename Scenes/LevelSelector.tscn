@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://b3mynv7dtet61" path="res://Scripts/level_selector.gd" id="2_sel"]
 [ext_resource type="AudioStream" uid="uid://bbnq8dg8drobx" path="res://Wav Sounds/Select-Sound.wav" id="3_lirpq"]
 [ext_resource type="AudioStream" uid="uid://cvl1r2ldkosgh" path="res://Wav Sounds/Select-Disable-Sound.wav" id="4_8iqa8"]
+[ext_resource type="PackedScene" uid="uid://c45j7ach0tm55" path="res://Scenes/VolumeWidget.tscn" id="6_bu2bu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4ewx"]
 bg_color = Color(0.9019608, 0.9490196, 0.9019608, 1)
@@ -185,3 +186,10 @@ theme_override_colors/font_color = Color(0.4506483, 0.4506483, 0.45064825, 1)
 theme_override_font_sizes/font_size = 28
 text = "1 / 10"
 horizontal_alignment = 1
+
+[node name="VolumeWidget" parent="." unique_id=269574089 instance=ExtResource("6_bu2bu")]
+layout_mode = 0
+offset_left = 1034.0
+offset_top = 17.0
+offset_right = 1138.0
+offset_bottom = 153.0

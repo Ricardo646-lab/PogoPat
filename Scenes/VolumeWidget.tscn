@@ -3,17 +3,18 @@
 [ext_resource type="Script" uid="uid://svkvf04ut3j0" path="res://Scripts/VolumeSlider.gd" id="1_qyomt"]
 
 [node name="VolumeWidget" type="Control" unique_id=269574089]
-custom_minimum_size = Vector2(180, 110)
+custom_minimum_size = Vector2(104, 136)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_qyomt")
 
-[node name="HSlider" type="HSlider" parent="." unique_id=748675361]
-custom_minimum_size = Vector2(180, 32)
+[node name="VSlider" type="VSlider" parent="." unique_id=740796349]
+custom_minimum_size = Vector2(28, 120)
 layout_mode = 0
-offset_top = 66.0
-offset_right = 180.0
-offset_bottom = 98.0
+offset_left = 4.0
+offset_top = 8.0
+offset_right = 32.0
+offset_bottom = 128.0
 max_value = 1.0
 step = 0.05
 value = 1.0
