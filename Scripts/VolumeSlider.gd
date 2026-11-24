@@ -1,6 +1,6 @@
 extends Control
 
-@onready var slider: HSlider = get_node_or_null("HSlider") as HSlider
+@onready var slider: VSlider = get_node_or_null("VSlider") as VSlider
 
 var _is_open: bool = false
 var _is_hovering: bool = false
@@ -18,8 +18,8 @@ func _on_slider_changed(new_value: float) -> void:
 	queue_redraw()
 
 func _is_over_icon(pos: Vector2) -> bool:
-	var top_limit: float = slider.position.y if slider != null else 54.0
-	return pos.x >= 0.0 and pos.x <= size.x and pos.y >= 0.0 and pos.y <= top_limit
+	var icon_start_x: float = 36.0
+	return pos.x >= icon_start_x and pos.x <= size.x and pos.y >= 0.0 and pos.y <= 64.0
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -44,7 +44,8 @@ func _draw() -> void:
 	)
 
 	var s: float = 1.9
-	var center_x: float = (size.x * 0.5) - (2.0 * s)
+	var icon_start_x: float = 36.0
+	var center_x: float = icon_start_x + ((size.x - icon_start_x) * 0.5) - (2.0 * s)
 	var center_y: float = 34.0
 	var line_w: float = 2.0 * s
 
