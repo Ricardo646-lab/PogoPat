@@ -16,6 +16,7 @@ extends Control
 
 var active_tweens: Array[Tween] = []
 
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -28,6 +29,7 @@ func _ready() -> void:
 	else:
 		hide()
 
+
 func show_results(
 	level_completed: bool,
 	within_time_limit: bool,
@@ -39,6 +41,7 @@ func show_results(
 		collected_everything,
 	]
 
+	_stop_active_tweens()
 	show()
 	await get_tree().process_frame
 
@@ -46,6 +49,7 @@ func show_results(
 	_play_panel_animation()
 	_play_confetti()
 	_play_star_animation_sequential(earned_states)
+
 
 func _play_confetti() -> void:
 	Spark._ensure_pool()
@@ -86,6 +90,7 @@ func _play_confetti() -> void:
 		"rainbow": true
 	})
 
+
 func _apply_star_states(earned_states: Array[bool]) -> void:
 	for index in star_nodes.size():
 		var star := star_nodes[index]
@@ -96,8 +101,8 @@ func _apply_star_states(earned_states: Array[bool]) -> void:
 		elif star is CanvasItem:
 			star.modulate = Color.WHITE if earned else Color(0.35, 0.35, 0.35, 0.42)
 
+
 func _play_panel_animation() -> void:
-	_stop_active_tweens()
 	main_panel.pivot_offset = main_panel.size * 0.5
 	main_panel.scale = Vector2(1, 0.5)
 	main_panel.modulate.a = 0.0
@@ -111,43 +116,45 @@ func _play_panel_animation() -> void:
 	tween.tween_property(main_panel, "rotation", 0.0, 0.5).set_trans(Tween.TRANS_SPRING)
 	tween.tween_property(main_panel, "modulate:a", 1.0, 0.25)
 
+
 func _play_star_animation_sequential(earned_states: Array[bool]) -> void:
 	for index in star_holders.size():
 		var holder := star_holders[index]
+		var earned := earned_states[index]
+
 		holder.pivot_offset = holder.size * 0.5
 		holder.rotation = 0.0
-		holder.scale = Vector2.ZERO
-		holder.modulate.a = 0.0
+		holder.scale = Vector2.ZERO if earned else Vector2.ONE
+		holder.modulate.a = 0.0 if earned else 1.0
 
-	await get_tree().create_timer(0.35).timeout
+	await get_tree().create_timer(0.25).timeout
 
 	for index in star_holders.size():
-		var earned := earned_states[index]
-		if not earned:
+		if not earned_states[index]:
 			continue
 
 		var holder := star_holders[index]
-		holder.scale = Vector2(5.5, 5.5)
+		holder.scale = Vector2(3.2, 3.2)
 		holder.modulate.a = 0.0
-		holder.rotation = deg_to_rad(randf_range(-50.0, 50.0))
+		holder.rotation = deg_to_rad(randf_range(-35.0, 35.0))
 
 		Spark.burst(holder.get_global_rect().get_center(), "pickup")
 
+		if AudioManager and AudioManager.star_sound:
+			AudioManager.star_sound.play()
+
 		var tween := create_tween()
 		active_tweens.append(tween)
-		tween.tween_interval(0.18 + index * 0.14)
-		tween.tween_callback(func():
-			if AudioManager and AudioManager.star_sound:
-				AudioManager.star_sound.play()
-		)
-		tween.tween_property(holder, "scale", Vector2.ONE, 0.46).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(holder, "rotation", 0.0, 0.38).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(holder, "modulate:a", 1.0, 0.16)
+		tween.tween_property(holder, "scale", Vector2.ONE, 0.36).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(holder, "rotation", 0.0, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(holder, "modulate:a", 1.0, 0.14)
 
-		await tween.finished
+		await get_tree().create_timer(0.4).timeout
+
 
 func _stop_active_tweens() -> void:
 	for tween in active_tweens:
 		if tween and tween.is_valid():
 			tween.kill()
+
 	active_tweens.clear()

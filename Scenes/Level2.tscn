@@ -1,25 +1,14 @@
-[gd_scene format=4 uid="uid://v6i6cv886a83"]
+[gd_scene format=4 uid="uid://p2oh2bvln07i"]
 
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_ms0wi"]
 [ext_resource type="Script" uid="uid://48oqg8dhfpum" path="res://Scripts/camera_intro.gd" id="2_2jwna"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_5awjf"]
-[ext_resource type="AudioStream" path="res://Sounds/SimpleWhooshSound.mp3" id="3_xx40l"]
 [ext_resource type="Texture2D" uid="uid://t63i3nqoy2m7" path="res://Sprites/barA_pill_under.png" id="4_62f1r"]
-[ext_resource type="Texture2D" path="res://Sprites/buttonleft1.png" id="4_ehjmi"]
-[ext_resource type="AudioStream" path="res://Sounds/SimpleWhooshSoundReverse.mp3" id="4_utdxf"]
 [ext_resource type="Texture2D" uid="uid://b2wohh2ioas32" path="res://Sprites/barA_pill_progress.png" id="5_1je60"]
-[ext_resource type="Texture2D" path="res://Sprites/buttonright1.png" id="5_p4u3k"]
-[ext_resource type="Texture2D" path="res://Sprites/buttonjump1.png" id="6_70df5"]
 [ext_resource type="Script" uid="uid://b25jt4oqueh7f" path="res://Scripts/ProgressBar.gd" id="6_ycmr1"]
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="8_p4u3k"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="9_70df5"]
-[ext_resource type="AudioStream" path="res://Sounds/bounce-pogo-stick.wav" id="10_8wk15"]
-[ext_resource type="Script" path="res://Scripts/level_label.gd" id="10_ejprb"]
-[ext_resource type="AudioStream" path="res://Sounds/victory.mp3" id="11_bgqvi"]
-[ext_resource type="AudioStream" path="res://Sounds/Charging-Sound.mp3" id="12_6cjmx"]
-[ext_resource type="AudioStream" path="res://Sounds/Charging--Loop-Sound.mp3" id="13_s6bta"]
 [ext_resource type="Script" uid="uid://lgi5ahmmmvkd" path="res://Scripts/timer_label.gd" id="14_2jwna"]
-[ext_resource type="AudioStream" path="res://Sounds/mini-jump.mp3" id="14_s6bta"]
 [ext_resource type="Script" uid="uid://wcd4rgj7pjuv" path="res://Scripts/settings_button.gd" id="15_2jwna"]
 [ext_resource type="Script" uid="uid://bh20rythjx2i4" path="res://Scripts/stars_ui.gd" id="15_sgc6j"]
 
@@ -580,11 +569,9 @@ player = NodePath("../Player")
 finish_target = NodePath("../FinishFlag")
 
 [node name="WooshOut" type="AudioStreamPlayer" parent="Camera2D" unique_id=1995852]
-stream = ExtResource("3_xx40l")
 pitch_scale = 2.0
 
 [node name="WooshBack" type="AudioStreamPlayer" parent="Camera2D" unique_id=1965720044]
-stream = ExtResource("4_utdxf")
 pitch_scale = 2.0
 
 [node name="FinishFlag" type="Area2D" parent="." unique_id=1415671248]
@@ -623,24 +610,19 @@ texture_progress = ExtResource("5_1je60")
 script = ExtResource("6_ycmr1")
 
 [node name="PogostickSound" type="AudioStreamPlayer" parent="Player" unique_id=705493625]
-stream = ExtResource("10_8wk15")
 pitch_scale = 2.0
 
 [node name="VictorySound" type="AudioStreamPlayer" parent="Player" unique_id=969386851]
 process_mode = 3
-stream = ExtResource("11_bgqvi")
 volume_db = 0.5
 pitch_scale = 2.0
 
 [node name="ChargeSound" type="AudioStreamPlayer" parent="Player" unique_id=607138720]
-stream = ExtResource("12_6cjmx")
 pitch_scale = 3.0
 
 [node name="ChargeLoopSound" type="AudioStreamPlayer" parent="Player" unique_id=1556369138]
-stream = ExtResource("13_s6bta")
 
 [node name="MiniJumpSound" type="AudioStreamPlayer" parent="Player" unique_id=1571890935]
-stream = ExtResource("14_s6bta")
 volume_db = -25.0
 pitch_scale = 2.05
 
@@ -659,14 +641,12 @@ metadata/_edit_use_anchors_ = true
 [node name="ButtonLeft" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorLinksonder" unique_id=391973601]
 position = Vector2(-28.999998, -156)
 scale = Vector2(0.371, 0.4)
-texture_normal = ExtResource("4_ehjmi")
 shape = SubResource("RectangleShape2D_ncjpd")
 action = "move_left"
 
 [node name="ButtonRight" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorLinksonder" unique_id=2106248405]
 position = Vector2(120.99999, -157)
 scale = Vector2(0.37115592, 0.40000007)
-texture_normal = ExtResource("5_p4u3k")
 shape = SubResource("RectangleShape2D_ffsx8")
 action = "move_right"
 
@@ -686,7 +666,6 @@ metadata/_edit_use_anchors_ = true
 [node name="ButtonJump" type="TouchScreenButton" parent="Player/CanvasLayer/AnchorRechtsonder" unique_id=1003176784]
 position = Vector2(-273.00003, -162)
 scale = Vector2(0.33404028, 0.37950668)
-texture_normal = ExtResource("6_70df5")
 shape = SubResource("RectangleShape2D_dl4b5")
 action = "charge_jump"
 
@@ -720,9 +699,6 @@ offset_bottom = 130.0
 theme_override_colors/font_color = Color(0.984189, 0.94494605, 0.14307114, 1)
 theme_override_font_sizes/font_size = 30
 text = "2 / 6"
-script = ExtResource("10_ejprb")
-totaal_levels = 6
-huidig_level = 2
 
 [node name="TimerLabel" type="Label" parent="CanvasLayer/HUD" unique_id=402583419]
 layout_mode = 0
