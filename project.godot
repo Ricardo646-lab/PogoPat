@@ -20,7 +20,7 @@ PokiSDK="*uid://c72j1j6g10y8w"
 GameManager="*uid://citn2ia4bo8kc"
 Spark="*uid://c04tpeyg1jjnc"
 AudioManager="*uid://6o48mosevj7e"
-<<<<<<<HEADSpark="*uid://c04tpeyg1jjnc"
+PokiEvents="*res://Scripts/poki_events.gd"
 
 [display]
 

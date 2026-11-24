@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c45j7ach0tm55"]
+
+[ext_resource type="Script" uid="uid://svkvf04ut3j0" path="res://Scripts/VolumeSlider.gd" id="1_qyomt"]
+
+[node name="VolumeWidget" type="Control" unique_id=269574089]
+custom_minimum_size = Vector2(180, 110)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_qyomt")
+
+[node name="HSlider" type="HSlider" parent="." unique_id=748675361]
+custom_minimum_size = Vector2(180, 32)
+layout_mode = 0
+offset_top = 66.0
+offset_right = 180.0
+offset_bottom = 98.0
+max_value = 1.0
+step = 0.05
+value = 1.0

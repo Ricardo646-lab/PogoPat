@@ -30,15 +30,16 @@ func _ready() -> void:
 		hide()
 
 
+# star1..3 = of de speler 1, 2 of 3 sterren in het level heeft opgepakt
 func show_results(
-	level_completed: bool,
-	within_time_limit: bool,
-	collected_everything: bool
+	star1: bool,
+	star2: bool,
+	star3: bool
 ) -> void:
 	var earned_states: Array[bool] = [
-		level_completed,
-		within_time_limit,
-		collected_everything,
+		star1,
+		star2,
+		star3,
 	]
 
 	_stop_active_tweens()

@@ -17,7 +17,7 @@ var current_level: int = 1
 # plaatjes opnieuw (~80 ms hapering per levelwissel).
 var game_scene: PackedScene
 var selector_scene: PackedScene
-var level_stars = {}   # level nummer -> beste aantal sterren, bijv. {1: 3, 2: 2}
+var level_stars = {}   # gehaald level -> beste aantal opgepakte sterren (0-3), bijv. {1: 3, 2: 0}
 
 func _ready() -> void:
 	# Liggend: basis 1152x648. Staand: basis 648x1152. Zo zijn HUD, knoppen en tekst in beide
@@ -46,8 +46,12 @@ func save_level_stars(level: int, stars: int) -> void:
 func get_stars(level: int) -> int:
 	return level_stars.get(level, 0)
 
+# Gehaald, ook met 0 sterren (sterren zijn optioneel: het volgende level gaat altijd open)
+func is_completed(level: int) -> bool:
+	return level_stars.has(level)
+
 func is_unlocked(level: int) -> bool:
-	return unlock_all or level == 1 or get_stars(level - 1) > 0
+	return unlock_all or level == 1 or is_completed(level - 1)
 
 func highest_unlocked() -> int:
 	var level = 1

@@ -2,6 +2,7 @@
 extends CharacterBody2D
 
 const Level_Complete_Panel: PackedScene = preload("res://Scenes/LevelComplete.tscn")
+const Palettes = preload("res://Scripts/palettes.gd")
 
 var result_canvas: CanvasLayer = null
 var result_popup: Control = null
@@ -91,12 +92,10 @@ var squash: float = 0.0
 # --- Camera ---
 @export var camera_node: Camera2D
 
-# --- Stars & Time System ---
+# --- Time (alleen voor de klok in de HUD; sterren pak je op in het level) ---
 var level_timer: float = 0.0
-@export var par_time: float = 30.0
-@export var fast_time: float = 15.0
-@export var auto_next_delay: float = 1.6
-
+signal respawned   # level_generator zet dan de sterren terug
+@export var auto_next_delay: float = 2.0    # Delay in seconds before auto-advancing after level completion
 
 func _ready():
 	if Engine.is_editor_hint():
@@ -113,6 +112,7 @@ func _ready():
 		var poki = get_node("/root/PokiSDK")
 		poki.call("gameLoadingFinished")
 
+	PokiEvents.level_started(GameManager.current_level)
 
 func _get_audio_manager() -> Node:
 	if has_node("/root/AudioManager"):
@@ -591,6 +591,7 @@ func die(splat_normal: Vector2 = Vector2.ZERO):
 	is_charging = false
 	is_big_jump = false
 	is_launched = false
+	PokiEvents.player_died()
 
 	_stop_sound("charge_sound")
 	_stop_sound("charge_loop_sound")
@@ -643,6 +644,7 @@ func respawn() -> void:
 
 	has_started = false
 	queue_redraw()
+	respawned.emit()
 
 
 func _on_finish_button_body_entered(body: Node2D) -> void:
@@ -658,25 +660,22 @@ func _on_finish_button_body_entered(body: Node2D) -> void:
 	current_jump_charge = 0.0
 	charge_changed.emit(0.0)
 
-	var earned_stars = 1
-	if level_timer <= par_time:
-		earned_stars += 1
-	if level_timer <= fast_time:
-		earned_stars += 1
+	if has_node("/root/PokiSDK"):
+		get_node("/root/PokiSDK").call("gameplayStop")
 
-	var detected := _get_scene_level_number()
-	if has_node("/root/GameManager"):
-		var gm = get_node("/root/GameManager")
-		if detected != -1 and "current_level" in gm:
-			gm.current_level = detected
-		if gm.has_method("save_level_stars"):
-			var level_key = gm.current_level if "current_level" in gm else detected
-			gm.call("save_level_stars", level_key, earned_stars)
-
+	# --- 1. Sterren = aantal opgepakte sterren deze poging (0-3) ---
+	var earned_stars = 0
 	var star_display = get_tree().current_scene.find_child("StarDisplay", true, false)
-	if star_display and star_display.has_method("update_stars"):
-		star_display.update_stars(earned_stars)
+	if star_display and star_display.has_method("get_collected"):
+		earned_stars = star_display.get_collected()
 
+	# --- 2. Save Score ---
+	PokiEvents.level_completed(earned_stars)
+	GameManager.save_level_stars(GameManager.current_level, earned_stars)
+
+	print("Level completed in ", snapped(level_timer, 0.01), "s! Stars: ", earned_stars)
+
+	# --- 3. Show Result Panel & Advance ---
 	show_level_complete_popup(earned_stars)
 
 
@@ -699,6 +698,7 @@ func show_level_complete_popup(earned_stars: int) -> void:
 	result_popup = Level_Complete_Panel.instantiate()
 	result_popup.process_mode = Node.PROCESS_MODE_ALWAYS
 	result_canvas.add_child(result_popup)
+	Palettes.kleur_popup(result_popup, Palettes.voor_level(GameManager.current_level))
 
 	await get_tree().process_frame
 	await get_tree().process_frame

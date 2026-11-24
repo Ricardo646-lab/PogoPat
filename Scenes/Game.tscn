@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://lgi5ahmmmvkd" path="res://Scripts/timer_label.gd" id="15_ms3ee"]
 [ext_resource type="Script" uid="uid://bh20rythjx2i4" path="res://Scripts/stars_ui.gd" id="16_ktnig"]
 [ext_resource type="Script" uid="uid://wcd4rgj7pjuv" path="res://Scripts/settings_button.gd" id="16_ms3ee"]
+[ext_resource type="PackedScene" uid="uid://c45j7ach0tm55" path="res://Scenes/VolumeWidget.tscn" id="18_x3xnh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rbgxu"]
 size = Vector2(421, 23)
@@ -144,5 +145,12 @@ offset_bottom = 97.0
 grow_horizontal = 0
 flat = true
 script = ExtResource("16_ms3ee")
+
+[node name="VolumeWidget" parent="CanvasLayer/HUD" unique_id=269574089 instance=ExtResource("18_x3xnh")]
+layout_mode = 0
+offset_left = 905.0
+offset_top = 25.0
+offset_right = 1065.0
+offset_bottom = 185.0
 
 [connection signal="body_entered" from="FinishFlag" to="Player" method="_on_finish_button_body_entered"]
