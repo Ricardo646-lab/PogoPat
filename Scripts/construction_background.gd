@@ -70,11 +70,30 @@ var pal: Dictionary
 
 # level: levelnummer. van/tot: horizontaal bereik van het level (pixels).
 # kogels: ophangpunten van de sloopkogels (wereldcoordinaten) -> daar komt een kraan.
-func bouw(level: int, van: float, tot: float, camera: Camera2D, kogels: Array, lucht: CanvasItem) -> void:
+# kleuren: palet uit palettes.gd ({} = originele look met luchtfoto en kleuren per wereld)
+func bouw(level: int, van: float, tot: float, camera: Camera2D, kogels: Array, lucht: CanvasItem, kleuren: Dictionary = {}) -> void:
 	rng.seed = level * 104729 + 17
-	pal = PALETTEN[clampi(floori((level - 1) / 10.0), 0, 9)]
+	pal = PALETTEN[clampi(floori((level - 1) / 10.0), 0, 9)].duplicate()
+	pal["container"] = [Color(0.70, 0.84, 0.92), Color(0.80, 0.90, 0.74)]
+	pal["cabine"] = Color(0.78, 0.88, 0.96)
+	if not kleuren.is_empty():
+		pal.ver = kleuren.gebouw.lerp(kleuren.lucht, 0.35)   # verder weg = meer lucht-kleur
+		pal.beton = kleuren.gebouw
+		pal.steiger = kleuren.rand
+		pal.kraan = kleuren.accent
+		pal.container = [kleuren.gebouw.lerp(kleuren.grond, 0.4), kleuren.grond.lerp(kleuren.lucht, 0.4)]
+		pal.cabine = kleuren.lucht.lightened(0.3)
 	if lucht:
-		lucht.modulate = pal.lucht
+		if kleuren.is_empty():
+			lucht.modulate = pal.lucht
+		else:
+			# Vlakke lucht in plaats van de foto
+			lucht.self_modulate = Color(1, 1, 1, 0)
+			var vlak = ColorRect.new()
+			vlak.color = kleuren.lucht
+			vlak.set_anchors_preset(Control.PRESET_FULL_RECT)
+			vlak.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			lucht.add_child(vlak)
 	z_index = -20
 
 	var ver = _laag(0.12, camera)
@@ -154,7 +173,7 @@ func _bouwplaats(l: Laag, van: float, tot: float) -> void:
 				x += 120
 			3:      # containers / keten
 				for i in rng.randi_range(1, 3):
-					var c = [pal.steiger, Color(0.70, 0.84, 0.92), Color(0.80, 0.90, 0.74)][rng.randi_range(0, 2)]
+					var c = [pal.steiger, pal.container[0], pal.container[1]][rng.randi_range(0, 2)]
 					l.vormen.append(["rect", Rect2(x, basis - 70 * (i + 1), 200, 66), c])
 					for s in range(int(x + 14), int(x + 190), 22):
 						l.vormen.append(["lijn", Vector2(s, basis - 70 * (i + 1) + 6), Vector2(s, basis - 70 * i - 10), c.lightened(0.15), 4.0])
@@ -209,7 +228,7 @@ func _kraan(l: Laag, x: float, top: float, basis: float, kleur: Color, schaal: f
 	var kort = lang * 0.35
 	_giek(l, Vector2(x - kort, top), Vector2(x + b + lang, top), kleur, schaal)
 	l.vormen.append(["rect", Rect2(x - kort, top + 4, 70 * schaal, 50 * schaal), kleur.lerp(Color(0.82, 0.82, 0.86), 0.6)])   # contragewicht
-	l.vormen.append(["rect", Rect2(x + b, top + 4, 34 * schaal, 30 * schaal), Color(0.78, 0.88, 0.96)])                       # cabine
+	l.vormen.append(["rect", Rect2(x + b, top + 4, 34 * schaal, 30 * schaal), pal.cabine])                                    # cabine
 	l.vormen.append(["poly", PackedVector2Array([Vector2(x, top), Vector2(x + b / 2, top - 70 * schaal), Vector2(x + b, top)]), kleur])  # top
 	var haak = x + b + lang * rng.randf_range(0.4, 0.9)
 	var haak_y = top + rng.randf_range(120, 400) * schaal
@@ -252,7 +271,7 @@ func _kogelkraan(l: Laag, anker: Vector2, kant: float) -> void:
 	_giek(l, Vector2(min(contra, giek_eind), top), Vector2(max(contra, giek_eind), top), kleur, 1.0)
 	l.vormen.append(["rect", Rect2(min(contra, contra - kant * 90.0), top + 4, 90, 60), kleur.lerp(Color(0.82, 0.82, 0.86), 0.6)])
 	l.vormen.append(["poly", PackedVector2Array([Vector2(links, top - 26), Vector2(links + b / 2, top - 110), Vector2(links + b, top - 26)]), kleur])
-	l.vormen.append(["rect", Rect2(links + (b if kant < 0 else -40), top - 10, 40, 34), Color(0.78, 0.88, 0.96)])   # cabine
+	l.vormen.append(["rect", Rect2(links + (b if kant < 0 else -40), top - 10, 40, 34), pal.cabine])   # cabine
 	# loopkatje met kabel naar het ophangpunt
 	l.vormen.append(["rect", Rect2(anker.x - 22, top - 4, 44, 18), kleur.darkened(0.12)])
 	l.vormen.append(["lijn", Vector2(anker.x, top + 12), anker, kleur.darkened(0.2), 4.0])

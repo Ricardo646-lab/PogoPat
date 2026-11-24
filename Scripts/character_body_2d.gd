@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 # --- Level Complete Popup ---
 const Level_Complete_Panel: PackedScene = preload("res://Scenes/LevelComplete.tscn")
+const Palettes = preload("res://Scripts/palettes.gd")
 
 var result_canvas: CanvasLayer = null
 var result_popup: Control = null
@@ -548,6 +549,7 @@ func show_level_complete_popup(earned_stars: int) -> void:
 	result_popup = Level_Complete_Panel.instantiate()
 	result_popup.process_mode = Node.PROCESS_MODE_ALWAYS
 	result_canvas.add_child(result_popup)
+	Palettes.kleur_popup(result_popup, Palettes.voor_level(GameManager.current_level))
 
 	await get_tree().process_frame
 	result_popup.call("show_results", earned_stars >= 1, earned_stars >= 2, earned_stars >= 3)

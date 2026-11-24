@@ -25,6 +25,7 @@ const TUTORIAL = preload("res://Scenes/Tutorial.tscn")
 const Achtergrond = preload("res://Scripts/construction_background.gd")
 const TouchControls = preload("res://Scripts/touch_controls.gd")
 const StarPickup = preload("res://Scripts/star_pickup.gd")
+const Palettes = preload("res://Scripts/palettes.gd")
 
 const STER_PLEKKEN = [0.25, 0.5, 0.75]   # sterren op ~1/4, 1/2 en 3/4 van de weg start -> finish
 const STER_HOOGTE = 100                  # midden van de ster boven de vloer (px): je raakt hem al lopend
@@ -86,7 +87,11 @@ func _ready() -> void:
 	# Getekende bouwplaats-achtergrond (elk level anders) + kranen bij de sloopkogels
 	var achtergrond = Achtergrond.new()
 	add_child(achtergrond)
-	achtergrond.bouw(level, -WALL_W * TILE, (x + WALL_W) * TILE, camera, kogels, get_node_or_null("SkyBackgroundLayer/TextureRect"))
+	# Kleurpalet: elk level een ander (9 stuks, daarna weer van voren af aan)
+	var palet = Palettes.voor_level(level)
+	achtergrond.bouw(level, -WALL_W * TILE, (x + WALL_W) * TILE, camera, kogels, get_node_or_null("SkyBackgroundLayer/TextureRect"), palet)
+	Palettes.kleur_grond([tilemap, vulling], palet)
+	Palettes.kleur_hud(self, palet)
 
 	var spawn = Vector2(spawn_col * TILE + HALF_TILE, -60)
 	player.global_position = spawn
