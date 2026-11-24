@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://brq7m6wrup3g8"
+path="res://.godot/imported/bounce-pogo-stick.wav-e572a4ff5cf16fbc150678907476fe0d.sample"
+
+[deps]
+
+source_file="res://Wav Sounds/bounce-pogo-stick.wav"
+dest_files=["res://.godot/imported/bounce-pogo-stick.wav-e572a4ff5cf16fbc150678907476fe0d.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=1

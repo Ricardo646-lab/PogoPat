@@ -4,17 +4,8 @@ extends Control
 @export var current_stars: int = 0 
 
 func _ready() -> void:
-	# Haal de levelnaam uniek op uit het bestandspad (bijv. "Level1", "Level2")
-	var scene_path = get_tree().current_scene.scene_file_path
-	var level_name = scene_path.get_file().get_basename() # Haalt bijv. "Level1" uit "res://Scenes/Level1.tscn"
-	
-	if has_node("/root/GameManager"):
-		var gm = get_node("/root/GameManager")
-		if "level_stars" in gm and gm.level_stars.has(level_name):
-			current_stars = gm.level_stars[level_name]
-		else:
-			current_stars = 0
-			
+	if not Engine.is_editor_hint():
+		current_stars = GameManager.get_stars(GameManager.current_level)
 	queue_redraw()
 
 

@@ -8,18 +8,11 @@ var base_scale: Vector2
 func _ready() -> void:
 	base_scale = scale
 
-	# Mobile-check 
-	var is_mobile = OS.has_feature("android") or OS.has_feature("ios") or OS.has_feature("web_android") or OS.has_feature("web_ios")
-
-	if is_mobile:
-		hide()
-		set_process(false)
-	else:
-		show()
-		# Splits the image automatically into 2 equal halves (Frame 0 = WASD, Frame 1 = Arrows)
-		hframes = 2
-		vframes = 1
-		frame = 0
+	# (Op telefoon wordt de tutorial niet geplaatst: daar lichten de touch-controls op.)
+	# Splits the image automatically into 2 equal halves (Frame 0 = WASD, Frame 1 = Arrows)
+	hframes = 2
+	vframes = 1
+	frame = 0
 
 func _process(delta: float) -> void:
 	# switch between frames every toggle_interval seconds

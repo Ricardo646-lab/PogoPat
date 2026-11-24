@@ -15,7 +15,6 @@ extends Control
 ]
 
 var active_tweens: Array[Tween] = []
-@onready var star_sound = $StarSound
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -48,22 +47,19 @@ func show_results(
 	_play_confetti()
 	_play_star_animation_sequential(earned_states)
 
-
 func _play_confetti() -> void:
-	# Make sure Spark has created its particle container
 	Spark._ensure_pool()
 
-	# Move Spark into the same CanvasLayer as the popup
-	Spark._pool.reparent(get_parent())
+	var parent_node := get_parent()
+	if parent_node and Spark._pool and Spark._pool.get_parent() != parent_node:
+		Spark._pool.reparent(parent_node)
 
-	# Get the screen dimensions
-	var screen_size = get_viewport_rect().size
+	var screen_size := get_viewport_rect().size
 
-	# Create three large confetti bursts
 	Spark.burst(Vector2(screen_size.x * 0.2, screen_size.y * 0.15), {
 		"amount": 60,
 		"speed": 350.0,
-		"lifetime": 2,
+		"lifetime": 2.0,
 		"size": 6.0,
 		"gravity": 400.0,
 		"spread": TAU,
@@ -73,7 +69,7 @@ func _play_confetti() -> void:
 	Spark.burst(Vector2(screen_size.x * 0.5, screen_size.y * 0.1), {
 		"amount": 60,
 		"speed": 350.0,
-		"lifetime": 2,
+		"lifetime": 2.0,
 		"size": 6.5,
 		"gravity": 400.0,
 		"spread": TAU,
@@ -83,13 +79,12 @@ func _play_confetti() -> void:
 	Spark.burst(Vector2(screen_size.x * 0.8, screen_size.y * 0.15), {
 		"amount": 60,
 		"speed": 350.0,
-		"lifetime": 2,
+		"lifetime": 2.0,
 		"size": 6.0,
 		"gravity": 400.0,
 		"spread": TAU,
 		"rainbow": true
 	})
-
 
 func _apply_star_states(earned_states: Array[bool]) -> void:
 	for index in star_nodes.size():
@@ -136,25 +131,20 @@ func _play_star_animation_sequential(earned_states: Array[bool]) -> void:
 		holder.modulate.a = 0.0
 		holder.rotation = deg_to_rad(randf_range(-50.0, 50.0))
 
-		if star_sound:
-			star_sound.play()
-
-		# Sparkle burst on each earned star reveal
 		Spark.burst(holder.get_global_rect().get_center(), "pickup")
 
 		var tween := create_tween()
 		active_tweens.append(tween)
-		tween.set_parallel(true)
-		tween.set_ease(Tween.EASE_OUT)
-		tween.tween_property(holder, "scale", Vector2.ONE, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.tween_property(holder, "rotation", 0.0, 0.5).set_trans(Tween.TRANS_SPRING)
-		tween.tween_property(holder, "modulate:a", 1.0, 0.15)
+		tween.tween_interval(0.18 + index * 0.14)
+		tween.tween_callback(func():
+			if AudioManager and AudioManager.star_sound:
+				AudioManager.star_sound.play()
+		)
+		tween.tween_property(holder, "scale", Vector2.ONE, 0.46).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(holder, "rotation", 0.0, 0.38).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(holder, "modulate:a", 1.0, 0.16)
 
 		await tween.finished
-		await get_tree().create_timer(0.35).timeout
-
-func _stop_active_timed_tweens() -> void:
-	pass
 
 func _stop_active_tweens() -> void:
 	for tween in active_tweens:

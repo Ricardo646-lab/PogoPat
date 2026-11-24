@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://ccai7q3hitj3r"]
+
+[ext_resource type="Script" uid="uid://qsv4y0y8cxx5" path="res://Scripts/MovingPlatform.gd" id="1_mp"]
+[ext_resource type="AudioStream" uid="uid://br3xmnebmrimw" path="res://OGG Sounds/moving-platform.ogg" id="2_p0h8k"]
+
+[node name="MovingPlatform" type="AnimatableBody2D" unique_id=1789403798]
+script = ExtResource("1_mp")
+
+[node name="MovingPlatformSound" type="AudioStreamPlayer2D" parent="." unique_id=2091758104]
+stream = ExtResource("2_p0h8k")
+volume_db = -10.0
+pitch_scale = 3.0
+autoplay = true

@@ -26,53 +26,25 @@ func _ready() -> void:
 	update_level_state()
 
 func _on_mouse_entered() -> void:
-	if not disabled and hover_sound:
-		audio_player.stream = hover_sound
-		audio_player.play()
+	if not disabled:
+		AudioManager.hover_button_sound.play()
 
 func _gui_input(event: InputEvent) -> void:
 	if disabled and (event is InputEventMouseButton or event is InputEventScreenTouch) and event.pressed:
-		if locked_sound:
-			audio_player.stream = locked_sound
-			audio_player.play()
+		AudioManager.locked_button_sound.play()
 
 func update_level_state() -> void:
-	var is_unlocked = true
-	var gm = null
-	
-	if has_node("/root/GameManager"):
-		gm = get_node("/root/GameManager")
-			
-	if target_level_number > 1 and gm != null:
-		var prev_level_name = "Level" + str(target_level_number - 1)
-		if not ("level_stars" in gm and gm.level_stars.has(prev_level_name) and gm.level_stars[prev_level_name] > 0):
-			is_unlocked = false
-			
-	disabled = not is_unlocked
+	disabled = not GameManager.is_unlocked(target_level_number)
 	queue_redraw()
 
 func _on_button_pressed() -> void:
 	if not disabled:
-
-		if click_sound:
-			audio_player.stream = click_sound
-			audio_player.play()
-			# Wacht heel even (0.5 seconde) zodat het geluid te horen is voordat de scène wisselt
-			await get_tree().create_timer(0.5).timeout
-
-		var scene_path = "res://Scenes/Level" + str(target_level_number) + ".tscn"
-		if ResourceLoader.exists(scene_path):
-			get_tree().change_scene_to_file(scene_path)
+		AudioManager.clicked_button_sound.play()
+		await get_tree().create_timer(0.5).timeout
+		GameManager.play_level(target_level_number)
 
 func _draw() -> void:
-	var level_name = "Level" + str(target_level_number)
-	var current_stars = 0
-	var gm = null
-	
-	if has_node("/root/GameManager"):
-		gm = get_node("/root/GameManager")
-		if "level_stars" in gm and gm.level_stars.has(level_name):
-			current_stars = gm.level_stars[level_name]
+	var current_stars = GameManager.get_stars(target_level_number)
 
 	# --- 1. TEKEN HET LEVELNUMMER (Grotere lettergrootte: 30) ---
 	var font = ThemeDB.fallback_font

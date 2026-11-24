@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://6o48mosevj7e"]
+
+[ext_resource type="Script" uid="uid://dqett1oy3503s" path="res://Scripts/AudioManager.gd" id="1_hhrx1"]
+[ext_resource type="AudioStream" uid="uid://dx7achimpobuw" path="res://Wav Sounds/SimpleWhooshSound.wav" id="2_v72tj"]
+[ext_resource type="AudioStream" uid="uid://c6bav3cp0fj0k" path="res://Wav Sounds/SimpleWhooshSoundReverse.wav" id="3_mctoy"]
+[ext_resource type="AudioStream" uid="uid://brq7m6wrup3g8" path="res://Wav Sounds/bounce-pogo-stick.wav" id="4_uh8h6"]
+[ext_resource type="AudioStream" uid="uid://dsm31ajqsoae8" path="res://Wav Sounds/snapping-stick1.wav" id="5_os1x2"]
+[ext_resource type="AudioStream" uid="uid://csa1q4cjewe5l" path="res://Wav Sounds/victory.wav" id="6_ex3j2"]
+[ext_resource type="AudioStream" uid="uid://di3gowc8y7tlx" path="res://Wav Sounds/Charging-Sound.wav" id="7_3wl5e"]
+[ext_resource type="AudioStream" uid="uid://ckkdsbaywtcx" path="res://OGG Sounds/Charging--Loop-Sound.ogg" id="8_3yq88"]
+[ext_resource type="AudioStream" uid="uid://cm605l31d1k2b" path="res://Wav Sounds/mini-jump.wav" id="9_8ltcg"]
+[ext_resource type="AudioStream" uid="uid://b54krgardf704" path="res://Wav Sounds/Star_Sound_Effect.wav" id="10_f7thf"]
+[ext_resource type="AudioStream" uid="uid://cohd3l4l4ejew" path="res://OGG Sounds/Level-Selector-Background-Music.ogg" id="11_x78ut"]
+[ext_resource type="AudioStream" uid="uid://cvl1r2ldkosgh" path="res://Wav Sounds/Select-Disable-Sound.wav" id="12_mctoy"]
+[ext_resource type="AudioStream" uid="uid://bbnq8dg8drobx" path="res://Wav Sounds/Select-Sound.wav" id="13_uh8h6"]
+
+[node name="AudioManager" type="Node2D" unique_id=803284289]
+script = ExtResource("1_hhrx1")
+
+[node name="WooshOut" type="AudioStreamPlayer" parent="." unique_id=409466905]
+stream = ExtResource("2_v72tj")
+pitch_scale = 2.0
+
+[node name="WooshBack" type="AudioStreamPlayer" parent="." unique_id=843801349]
+stream = ExtResource("3_mctoy")
+pitch_scale = 2.0
+
+[node name="PogostickSound" type="AudioStreamPlayer" parent="." unique_id=892504067]
+stream = ExtResource("4_uh8h6")
+pitch_scale = 2.0
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="." unique_id=1630764989]
+process_mode = 3
+stream = ExtResource("5_os1x2")
+volume_db = -2.0
+pitch_scale = 1.22
+
+[node name="VictorySound" type="AudioStreamPlayer" parent="." unique_id=1044068693]
+process_mode = 3
+stream = ExtResource("6_ex3j2")
+volume_db = 0.5
+pitch_scale = 2.0
+
+[node name="ChargeSound" type="AudioStreamPlayer" parent="." unique_id=1327179120]
+stream = ExtResource("7_3wl5e")
+pitch_scale = 3.0
+
+[node name="ChargeLoopSound" type="AudioStreamPlayer" parent="." unique_id=248703957]
+stream = ExtResource("8_3yq88")
+
+[node name="MiniJumpSound" type="AudioStreamPlayer" parent="." unique_id=2145708868]
+stream = ExtResource("9_8ltcg")
+volume_db = -25.0
+pitch_scale = 2.05
+
+[node name="StarSound" type="AudioStreamPlayer" parent="." unique_id=192993132]
+process_mode = 3
+stream = ExtResource("10_f7thf")
+volume_db = 8.0
+pitch_scale = 1.25
+
+[node name="LevelBackgroundMusic" type="AudioStreamPlayer" parent="." unique_id=1232589245]
+stream = ExtResource("11_x78ut")
+volume_db = -15.0
+pitch_scale = 1.5
+parameters/looping = true
+
+[node name="LockedButtonSound" type="AudioStreamPlayer" parent="." unique_id=685737250]
+stream = ExtResource("12_mctoy")
+
+[node name="ClickedButtonSound" type="AudioStreamPlayer" parent="." unique_id=1847107365]
+stream = ExtResource("13_uh8h6")
+
+[node name="HoverButtonSound" type="AudioStreamPlayer" parent="." unique_id=928379654]
+stream = ExtResource("13_uh8h6")

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="PogoPat"
-run/main_scene="uid://0rr5kof28ufw"
+run/main_scene="res://Scenes/Game.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [autoload]
@@ -19,6 +19,8 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 PokiSDK="*uid://c72j1j6g10y8w"
 GameManager="*uid://citn2ia4bo8kc"
 Spark="*uid://c04tpeyg1jjnc"
+AudioManager="*uid://6o48mosevj7e"
+<<<<<<<HEADSpark="*uid://c04tpeyg1jjnc"
 
 [display]
 
@@ -31,7 +33,7 @@ project/assembly_name="PogoPete"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/poki-sdk/plugin.cfg", "res://addons/saltmire_spark/plugin.cfg")
+enabled=PackedStringArray("res://addons/poki-sdk/plugin.cfg")
 
 [input]
 

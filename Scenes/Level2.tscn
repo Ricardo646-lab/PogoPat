@@ -1,25 +1,25 @@
-[gd_scene format=4 uid="uid://cnvd2tjmvtkjl"]
+[gd_scene format=4 uid="uid://v6i6cv886a83"]
 
 [ext_resource type="Texture2D" uid="uid://crjelkojdbk0w" path="res://Sprites/platformerPack_industrial_tilesheet@2.png" id="1_ms0wi"]
 [ext_resource type="Script" uid="uid://48oqg8dhfpum" path="res://Scripts/camera_intro.gd" id="2_2jwna"]
 [ext_resource type="Script" uid="uid://ootodj23xmnh" path="res://Scripts/character_body_2d.gd" id="2_5awjf"]
-[ext_resource type="AudioStream" uid="uid://ditch41a86cw5" path="res://Sounds/SimpleWhooshSound.mp3" id="3_xx40l"]
+[ext_resource type="AudioStream" path="res://Sounds/SimpleWhooshSound.mp3" id="3_xx40l"]
 [ext_resource type="Texture2D" uid="uid://t63i3nqoy2m7" path="res://Sprites/barA_pill_under.png" id="4_62f1r"]
-[ext_resource type="Texture2D" uid="uid://c5ovb715pqo80" path="res://Sprites/buttonleft1.png" id="4_ehjmi"]
-[ext_resource type="AudioStream" uid="uid://dip3rujcmejmr" path="res://Sounds/SimpleWhooshSoundReverse.mp3" id="4_utdxf"]
+[ext_resource type="Texture2D" path="res://Sprites/buttonleft1.png" id="4_ehjmi"]
+[ext_resource type="AudioStream" path="res://Sounds/SimpleWhooshSoundReverse.mp3" id="4_utdxf"]
 [ext_resource type="Texture2D" uid="uid://b2wohh2ioas32" path="res://Sprites/barA_pill_progress.png" id="5_1je60"]
-[ext_resource type="Texture2D" uid="uid://bp2n6cou0qgtk" path="res://Sprites/buttonright1.png" id="5_p4u3k"]
-[ext_resource type="Texture2D" uid="uid://cs8s4sxwuwf8c" path="res://Sprites/buttonjump1.png" id="6_70df5"]
+[ext_resource type="Texture2D" path="res://Sprites/buttonright1.png" id="5_p4u3k"]
+[ext_resource type="Texture2D" path="res://Sprites/buttonjump1.png" id="6_70df5"]
 [ext_resource type="Script" uid="uid://b25jt4oqueh7f" path="res://Scripts/ProgressBar.gd" id="6_ycmr1"]
 [ext_resource type="Texture2D" uid="uid://bcu3mp8qalj24" path="res://Sprites/FinishFlag.png" id="8_p4u3k"]
 [ext_resource type="Texture2D" uid="uid://dx6k7nv3ckkly" path="res://Sprites/Sky.jpg" id="9_70df5"]
-[ext_resource type="AudioStream" uid="uid://brq7m6wrup3g8" path="res://Sounds/bounce-pogo-stick.wav" id="10_8wk15"]
-[ext_resource type="Script" uid="uid://dg8jx1tmkbrfr" path="res://Scripts/level_label.gd" id="10_ejprb"]
-[ext_resource type="AudioStream" uid="uid://c1t00iogwkltm" path="res://Sounds/victory.mp3" id="11_bgqvi"]
-[ext_resource type="AudioStream" uid="uid://dqht20xuh26od" path="res://Sounds/Charging-Sound.mp3" id="12_6cjmx"]
-[ext_resource type="AudioStream" uid="uid://c5ihrw4q4ou3f" path="res://Sounds/Charging--Loop-Sound.mp3" id="13_s6bta"]
+[ext_resource type="AudioStream" path="res://Sounds/bounce-pogo-stick.wav" id="10_8wk15"]
+[ext_resource type="Script" path="res://Scripts/level_label.gd" id="10_ejprb"]
+[ext_resource type="AudioStream" path="res://Sounds/victory.mp3" id="11_bgqvi"]
+[ext_resource type="AudioStream" path="res://Sounds/Charging-Sound.mp3" id="12_6cjmx"]
+[ext_resource type="AudioStream" path="res://Sounds/Charging--Loop-Sound.mp3" id="13_s6bta"]
 [ext_resource type="Script" uid="uid://lgi5ahmmmvkd" path="res://Scripts/timer_label.gd" id="14_2jwna"]
-[ext_resource type="AudioStream" uid="uid://b1wq20mtjgwyg" path="res://Sounds/mini-jump.mp3" id="14_s6bta"]
+[ext_resource type="AudioStream" path="res://Sounds/mini-jump.mp3" id="14_s6bta"]
 [ext_resource type="Script" uid="uid://wcd4rgj7pjuv" path="res://Scripts/settings_button.gd" id="15_2jwna"]
 [ext_resource type="Script" uid="uid://bh20rythjx2i4" path="res://Scripts/stars_ui.gd" id="15_sgc6j"]
 
@@ -603,7 +603,6 @@ texture = ExtResource("8_p4u3k")
 position = Vector2(358, 154)
 scale = Vector2(0.75, 0.75)
 script = ExtResource("2_5awjf")
-death_sounds = null
 auto_hop_force = -150.0
 spin_acceleration = 12.0
 max_spin_speed = 5.0

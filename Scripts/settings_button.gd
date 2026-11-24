@@ -30,4 +30,4 @@ func _draw() -> void:
 	draw_arc(center, ring_radius, 0, TAU, 64, gear_color, ring_thickness, true)
 
 func _on_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/LevelSelector.tscn")
+	GameManager.open_selector()
