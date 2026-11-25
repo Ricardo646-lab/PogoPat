@@ -66,6 +66,7 @@ position = Vector2(-4, -38.666668)
 shape = SubResource("CapsuleShape2D_4kscp")
 
 [node name="JumpChargeBar" type="TextureProgressBar" parent="Player" unique_id=2072709324]
+z_index = 2
 offset_left = -205.33334
 offset_top = -161.33334
 offset_right = -141.33334
@@ -76,6 +77,7 @@ texture_progress = ExtResource("5_ffsx8")
 script = ExtResource("6_dl4b5")
 
 [node name="DeathEffect" type="Node2D" parent="Player" unique_id=1208535131]
+z_index = 2
 script = ExtResource("7_dl4b5")
 
 [node name="SkyBackgroundLayer" type="CanvasLayer" parent="." unique_id=747764572]
