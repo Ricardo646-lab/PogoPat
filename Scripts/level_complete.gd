@@ -150,7 +150,7 @@ func _play_star_animation_sequential(earned_states: Array[bool]) -> void:
 		tween.parallel().tween_property(holder, "rotation", 0.0, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		tween.parallel().tween_property(holder, "modulate:a", 1.0, 0.14)
 
-		await get_tree().create_timer(0.4).timeout
+		await get_tree().create_timer(0.2).timeout
 
 
 func _stop_active_tweens() -> void:
